@@ -1,0 +1,126 @@
+.register-container {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid #ffd5d5;
+  border-radius: 10px;
+  text-align: center;
+  font-family: sans-serif;
+  background-color: #ffefef;
+}
+
+.register-container h2 {
+  color: #ff6b6b;
+  font-size: 30px;
+  font-weight: normal;
+  margin-bottom: 20px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+.input-group.email-group {
+  margin-bottom: 10px;
+}
+.input-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.input-header img {
+  width: 24px;
+  height: 24px;
+}
+.level-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: 100%;
+  padding: 10px 45px 10px 45px;
+  font-size: 16px;
+  background-color: #ffd6d6;
+  border: none;
+  border-radius: 50px;
+  box-sizing: border-box;
+
+  background-image: url("../assets/level.png"), url("../assets/arrow-down.png");
+  background-repeat: no-repeat, no-repeat;
+  background-position: 15px center, calc(100% - 15px) center;
+  background-size: 20px, 14px;
+}
+
+.level-select:focus {
+  outline: none;
+}
+.register-form input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #ffd6d6;
+  border: none;
+  border-radius: 50px;
+  box-sizing: border-box;
+}
+
+.register-form input:focus,
+.register-form select:focus {
+  border: none;
+  outline: none;
+}
+
+.register-form button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 50px;
+  border: none;
+  background-color: #ff6b6b;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.register-form button[type="submit"]:hover {
+  background-color: #e65555;
+}
+
+.login-button {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 50px;
+  border: none;
+  background-color: #ff6b6b;
+  color: white;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.login-button:hover {
+  background-color: #e65555;
+}
+
+.login-icons {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  gap: 40px;
+}
+
+.login-icons img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
