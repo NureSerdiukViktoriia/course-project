@@ -1,7 +1,7 @@
 .register-container {
   max-width: 400px;
   margin: 40px auto;
-  padding: 20px;
+  padding: 20px 30px;
   border: 1px solid #ffd5d5;
   border-radius: 10px;
   text-align: center;
@@ -11,9 +11,9 @@
 
 .register-container h2 {
   color: #ff6b6b;
-  font-size: 30px;
-  font-weight: normal;
-  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 18px;
 }
 
 .register-form {
@@ -25,48 +25,50 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
+
 .input-group.email-group {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
+
 .input-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 5px;
+  gap: 8px;
+  margin-bottom: 4px;
 }
 
 .input-header img {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
 }
+
 .level-select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-
   width: 100%;
-  padding: 10px 45px 10px 45px;
-  font-size: 16px;
+  padding: 10px 40px 10px 40px;
+  font-size: 15px;
   background-color: #ffd6d6;
   border: none;
   border-radius: 50px;
   box-sizing: border-box;
-
   background-image: url("../assets/level.png"), url("../assets/arrow-down.png");
   background-repeat: no-repeat, no-repeat;
   background-position: 15px center, calc(100% - 15px) center;
-  background-size: 20px, 14px;
+  background-size: 18px, 12px;
 }
 
 .level-select:focus {
   outline: none;
 }
+
 .register-form input {
   width: 100%;
-  padding: 10px;
-  font-size: 16px;
+  padding: 8px;
+  font-size: 15px;
   background-color: #ffd6d6;
   border: none;
   border-radius: 50px;
@@ -106,6 +108,7 @@
   transition: background-color 0.3s ease;
   width: 100%;
   box-sizing: border-box;
+  margin-top: 10px;
 }
 
 .login-button:hover {
@@ -115,12 +118,12 @@
 .login-icons {
   display: flex;
   justify-content: center;
-  margin-top: 15px;
-  gap: 40px;
+  margin-top: 20px;
+  gap: 30px;
 }
 
 .login-icons img {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   cursor: pointer;
 }
