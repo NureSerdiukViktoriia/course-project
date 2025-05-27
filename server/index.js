@@ -4,14 +4,15 @@ const cors = require("cors");
 
 const sequelize = require("./db");
 const authRouter = require("./routes/auth");
-
+const userRoutes = require("./routes/user");
 const app = express();
 const PORT = 3001;
 
 app.use(cors());
 app.use(bodyParser.json());
-
+app.use("/user", userRoutes);
 app.use(authRouter);
+
 
 const start = async () => {
   try {

@@ -1,6 +1,8 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const User = require("../models/User");
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 
@@ -59,6 +61,41 @@ router.post("/register", async (req, res) => {
       error: "Помилка сервера при реєстрації користувача",
       details: err.message,
     });
+  }
+});
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(401).json({ error: "Невірна пошта або пароль" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(401).json({ error: "Невірна пошта або пароль" });
+    }
+
+    const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
+      expiresIn: "1h",
+    });
+
+    res.status(200).json({
+      message: "Успішний вхід",
+      token,
+      user: {
+        id: user.id,
+        first_name: user.first_name,
+        second_name: user.second_name,
+        email: user.email,
+      },
+    });
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ error: "Помилка сервера під час входу" });
   }
 });
 
