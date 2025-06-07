@@ -29,13 +29,52 @@ const Register = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const validateForm = () => {
+    const nameRegex = /^[a-zA-Zа-яА-ЯіїєґІЇЄҐ'-\s]+$/;
+
+    if (!formData.first_name.trim()) {
+      return "Введіть ім'я";
+    }
+    if (!nameRegex.test(formData.first_name)) {
+      return "Ім'я може містити лише літери";
+    }
+
+    if (!formData.second_name.trim()) {
+      return "Введіть прізвище";
+    }
+    if (!nameRegex.test(formData.second_name)) {
+      return "Прізвище може містити лише літери";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      return "Введіть коректний email";
+    }
+
+    const phoneRegex = /^[0-9+()\-\s]+$/;
+    if (!phoneRegex.test(formData.phone)) {
+      return "Введіть коректний номер телефону";
+    }
+
+    if (formData.password.length < 6) {
+      return "Пароль повинен містити мінімум 6 символів";
+    }
+
+    if (!formData.level) {
+      return "Будь ласка, оберіть рівень";
+    }
+
+    return null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
-    if (!formData.level) {
-      setError("Будь ласка, оберіть рівень");
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
@@ -70,7 +109,7 @@ const Register = () => {
   return (
     <div className="register-container">
       <h2>Реєстрація</h2>
-      <form className="register-form" onSubmit={handleSubmit}>
+      <form className="register-form" onSubmit={handleSubmit} noValidate>
         <div className="input-group">
           <div className="input-header">
             <img src={userIcon} alt="Name icon" />
@@ -81,7 +120,6 @@ const Register = () => {
             name="first_name"
             value={formData.first_name}
             onChange={handleChange}
-            required
           />
         </div>
 
@@ -95,7 +133,6 @@ const Register = () => {
             name="second_name"
             value={formData.second_name}
             onChange={handleChange}
-            required
           />
         </div>
 
@@ -109,7 +146,6 @@ const Register = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            required
           />
         </div>
 
@@ -122,10 +158,8 @@ const Register = () => {
             type="tel"
             name="phone"
             pattern="[0-9+()-\s]*"
-            placeholder=""
             value={formData.phone}
             onChange={handleChange}
-            required
           />
         </div>
 
@@ -139,7 +173,6 @@ const Register = () => {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            required
           />
         </div>
 
@@ -149,7 +182,6 @@ const Register = () => {
             name="level"
             value={formData.level}
             onChange={handleChange}
-            required
           >
             <option value="">Оберіть рівень</option>
             <option value="початковий">Початковий</option>
@@ -158,7 +190,11 @@ const Register = () => {
           </select>
         </div>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && (
+          <p style={{ color: "red", marginTop: "10px", marginBottom: "10px" }}>
+            {error}
+          </p>
+        )}
         {success && <p style={{ color: "green" }}>{success}</p>}
 
         <button type="submit">Зареєструватися</button>

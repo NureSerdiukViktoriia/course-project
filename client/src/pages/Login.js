@@ -12,9 +12,26 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const validateForm = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return "Введіть коректний email";
+    }
+    if (password.length < 6) {
+      return "Пароль повинен містити мінімум 6 символів";
+    }
+    return null;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:3001/login", {
@@ -26,6 +43,7 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
+        localStorage.setItem("token", data.token);
         navigate("/home");
       } else {
         setError(data.error || "Невірні дані");
@@ -45,10 +63,9 @@ const Login = () => {
             <p>Пошта</p>
           </div>
           <input
-            type="email"
+            type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
           />
         </div>
 
@@ -61,11 +78,14 @@ const Login = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
         </div>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && (
+          <p style={{ color: "red", marginTop: "10px", marginBottom: "10px" }}>
+            {error}
+          </p>
+        )}
 
         <button type="submit">Увійти</button>
       </form>

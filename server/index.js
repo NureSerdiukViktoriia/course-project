@@ -9,10 +9,10 @@ const app = express();
 const PORT = 3001;
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use("/user", userRoutes);
 app.use(authRouter);
-
 
 const start = async () => {
   try {

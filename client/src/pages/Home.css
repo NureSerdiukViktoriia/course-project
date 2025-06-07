@@ -126,13 +126,6 @@
   margin: 10px 0 0 0;
 }
 
-
-
-
-
-
-
-
 .recommended-exercises {
   padding: 40px 20px;
   text-align: center;
@@ -168,18 +161,12 @@
   font-size: 18px;
 }
 
-.mini-exercises {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 100%;
-  margin-bottom: 25px;
-}
-
 .mini-exercise {
   display: flex;
   align-items: center;
   gap: 15px;
+  justify-content: flex-start;
+  margin-bottom: 15px;
 }
 
 .mini-exercise img {
@@ -193,12 +180,13 @@
 .mini-exercise p {
   font-size: 16px;
   color: #ffffff;
+  text-align: left;
+  margin: 0;
 }
-
 .exercise-card button {
   padding: 12px 30px;
   font-size: 1rem;
-  background-color: #EF9999;
+  background-color: #ef9999;
   border: none;
   border-radius: 30px;
   color: white;
@@ -208,5 +196,5 @@
 }
 
 .exercise-card button:hover {
-  background-color: #EF7676;
+  background-color: #ef7676;
 }

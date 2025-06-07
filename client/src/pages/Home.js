@@ -1,5 +1,7 @@
 import React from "react";
 import "./Home.css";
+import Footer from "../components/Footer.js";
+import Header from "../components/Header.js";
 
 import HomePicture from "../assets/HomePicture.png";
 import WhyPicture1 from "../assets/WhyPicture1.png";
@@ -13,18 +15,7 @@ import NewWords3 from "../assets/newWords3.png";
 const Home = () => {
   return (
     <div className="home-wrapper">
-      <header className="header">
-        <nav>
-          <div>
-            <a href="#">Головна</a>
-            <a href="#">Вивчення слів</a>
-          </div>
-          <div>
-            <a href="#">Профіль</a>
-            <a href="#">Чат-бот</a>
-          </div>
-        </nav>
-      </header>
+      <Header />
 
       <section className="header-container">
         <div>
@@ -76,7 +67,7 @@ const Home = () => {
               </div>
             </div>
 
-            <button>Почати вправу</button>
+            <button>Розпочати</button>
           </div>
 
           <div className="exercise-card">
@@ -97,10 +88,11 @@ const Home = () => {
               </div>
             </div>
 
-            <button>Почати вправу</button>
+            <button>Розпочати</button>
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   );
 };

@@ -1,0 +1,121 @@
+.profile-wrapper {
+  font-family: "Sofia Sans", "Manrope", sans-serif;
+  background-color: #efb7b7;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-right {
+  background-color: white;
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  width: 100%;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-form label {
+  font-weight: 600;
+  color: #222;
+  font-size: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-form input,
+.profile-form select {
+  padding: 10px 15px;
+  font-size: 1rem;
+  border: 2px solid #4383c5;
+  border-radius: 8px;
+  transition: border-color 0.3s;
+}
+
+.profile-form input:focus,
+.profile-form select:focus {
+  outline: none;
+  border-color: #2073c5;
+}
+
+.save-btn {
+  padding: 12px 30px;
+  font-size: 1rem;
+  background-color: #4383c5;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: center;
+}
+
+.save-btn:hover {
+  background-color: #2073c5;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 30px;
+  gap: 15px;
+}
+
+.logout-btn {
+  padding: 12px 30px;
+  font-size: 1rem;
+  background-color: #2980b9;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #1f6391;
+}
+
+.delete-account-btn {
+  padding: 12px 30px;
+  font-size: 1rem;
+  background-color: #e74c3c;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-account-btn:hover {
+  background-color: #c0392b;
+}
+
+.error {
+  color: #e74c3c;
+  font-weight: 600;
+  margin-top: 10px;
+  background: #fdecea;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #e74c3c;
+}
+
+.success {
+  color: #27ae60;
+  font-weight: 600;
+  margin-top: 10px;
+  background: #e9f7ef;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #27ae60;
+}
