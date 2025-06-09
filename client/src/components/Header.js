@@ -8,7 +8,7 @@ const Header = ({ hideProfileTabs }) => {
         <a href="/home">Головна</a>
         <a href="#">Вивчення слів</a>
         <a href="/profile">Профіль</a>
-        <a href="/language-buddy">Language Buddy</a>
+        <a href="/languageBuddy">Language Buddy</a>
       </nav>
     </header>
   );
