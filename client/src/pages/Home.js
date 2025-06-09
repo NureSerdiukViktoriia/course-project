@@ -2,7 +2,7 @@ import React from "react";
 import "./Home.css";
 import Footer from "../components/Footer.js";
 import Header from "../components/Header.js";
-
+import { useNavigate } from 'react-router-dom';
 import HomePicture from "../assets/HomePicture.png";
 import WhyPicture1 from "../assets/WhyPicture1.png";
 import WhyPicture2 from "../assets/WhyPicture2.png";
@@ -13,6 +13,11 @@ import NewWords2 from "../assets/newWords2.png";
 import NewWords3 from "../assets/newWords3.png";
 
 const Home = () => {
+  const navigate = useNavigate();
+
+  const startTest = () => {
+    navigate("/testLevel");
+  };
   return (
     <div className="home-wrapper">
       <Header />
@@ -88,7 +93,7 @@ const Home = () => {
               </div>
             </div>
 
-            <button>Розпочати</button>
+            <button onClick={startTest}>Розпочати</button>
           </div>
         </div>
       </section>
