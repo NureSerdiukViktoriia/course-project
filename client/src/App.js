@@ -7,6 +7,8 @@ import Profile from "./pages/Profile.js";
 import ChangePassword from "./pages/ChangePassword.js";
 import TestLevel from "./pages/TestLevel.js";
 import EasyTest from "./pages/EasyTest.js";
+import IntermediateTest from "./pages/IntermediateTest.js";
+import AdvancedTest from "./pages/AdvancedTest.js";
 import LanguageBuddy from "./pages/LanguageBuddy.js";
 import "./style.css";
 
@@ -22,6 +24,8 @@ function App() {
         <Route path="/testLevel" element={<TestLevel />} />
         <Route path="/easyTest" element={<EasyTest />} />
         <Route path="/languageBuddy" element={<LanguageBuddy />} />
+        <Route path="/intermediateTest" element={<IntermediateTest />} />
+        <Route path="/advancedTest" element={<AdvancedTest />} />
         <Route path="*" element={<Register />} />
       </Routes>
     </Router>

@@ -4,9 +4,54 @@ import Header from "../components/Header.js";
 import "./EasyTest.css";
 const easyTestData = [
   {
-    question: 'Оберіть правильний варіант перекладу слова: "apple" – це…',
+    question: 'Оберіть правильний варіант перекладу слова: "apple"',
     options: ["апельсин", "яблуко", "груша", "лимон"],
     correctAnswerIndex: 1,
+  },
+  {
+    question: 'Оберіть правильний варіант перекладу слова: "cat"',
+    options: ["собака", "кіт", "птах", "риба"],
+    correctAnswerIndex: 1,
+  },
+  {
+    question: 'Оберіть правильний варіант перекладу слова: "water"',
+    options: ["молоко", "сік", "вода", "чай"],
+    correctAnswerIndex: 2,
+  },
+  {
+    question: 'Оберіть правильний варіант перекладу слова: "book"',
+    options: ["ручка", "зошит", "книга", "олівець"],
+    correctAnswerIndex: 2,
+  },
+  {
+    question: 'Оберіть правильний варіант перекладу слова: "hello"',
+    options: ["до побачення", "добрий день", "дякую", "будь ласка"],
+    correctAnswerIndex: 1,
+  },
+  {
+    question: 'Оберіть правильний варіант перекладу слова: "house"',
+    options: ["школа", "будинок", "магазин", "лікарня"],
+    correctAnswerIndex: 1,
+  },
+  {
+    question: 'Оберіть правильний варіант перекладу слова: "sun"',
+    options: ["місяць", "зірка", "сонце", "хмара"],
+    correctAnswerIndex: 2,
+  },
+  {
+    question: 'Оберіть правильний варіант перекладу слова: "table"',
+    options: ["стілець", "стіл", "ліжко", "шафа"],
+    correctAnswerIndex: 1,
+  },
+  {
+    question: 'Оберіть правильний варіант перекладу слова: "goodbye"',
+    options: ["привіт", "до побачення", "вибачте", "так"],
+    correctAnswerIndex: 1,
+  },
+  {
+    question: 'Оберіть правильний варіант перекладу слова: "friend"',
+    options: ["ворог", "сусід", "друг", "колега"],
+    correctAnswerIndex: 2,
   },
 ];
 const EasyTest = () => {
@@ -31,8 +76,8 @@ const EasyTest = () => {
       {!showResult ? (
         <>
           <h2>
-            Легкий тест <br />
-            Питання {currentQuestion + 1} з {easyTestData.length}
+            Тест початкового рівня <br />
+           <p className="easy-test-question"> Питання {currentQuestion + 1} з {easyTestData.length}</p>
           </h2>
           <p className="question-text">{easyTestData[currentQuestion].question}</p>
           <div className="options-container">

@@ -55,7 +55,11 @@
   width: 100%;
   max-width: 100%;
 }
-
+.easy-test-question{
+  font-size:20px;
+  color:white;
+  font-weight:100;
+}
 
 .options-container button:hover {
   background-color: #db8c8c;
