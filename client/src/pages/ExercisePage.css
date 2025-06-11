@@ -147,6 +147,37 @@
     background-color: var(--disabled-bg);
     cursor: not-allowed;
 }
+.add-to-dictionary-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px; 
+}
+
+.add-to-dict-btn {
+    background-color: #f0f0f0; 
+    color: var(--text-dark, #333);
+    border: 1px solid #ddd;
+    border-radius: 20px; 
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease-in-out;
+}
+
+.add-to-dict-btn:hover {
+    background-color: #e0e0e0;
+    border-color: #ccc;
+    transform: translateY(-2px); 
+}
+
+.add-to-dict-btn i {
+    color: var(--correct-bg, #85B897); 
+    font-size: 18px;
+}
 .word-display-box {
     background-color: var(--elements-bg, #9AB5D2); 
     color: var(--text-light, #fff);
