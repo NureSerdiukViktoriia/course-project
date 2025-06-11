@@ -1,8 +1,8 @@
 .header {
   padding: 20px;
-  text-align: center;
   width: 100%;
   max-width: 1200px;
+  margin: 0 auto;
 }
 
 .header nav {
@@ -11,14 +11,14 @@
   align-items: center;
 }
 
-.header nav div {
+.nav-left,
+.nav-right {
   display: flex;
   gap: 20px;
+  align-items: center;
 }
-
 .header nav a {
-  color: black;
-  margin: 0 15px;
+  color: #333;
   text-decoration: none;
   font-weight: bold;
   font-size: 18px;
@@ -27,4 +27,11 @@
 
 .header nav a:hover {
   color: #4383c5;
+}
+
+.profile-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
 }

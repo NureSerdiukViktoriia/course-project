@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Footer from "../components/Footer.js";
-import Header from "../components/Header.js";
+import iconProfile from "../assets/userr.png";
 import "./EasyTest.css";
 const easyTestData = [
   {
@@ -72,14 +72,32 @@ const EasyTest = () => {
 
   return (
     <div className="test-level-wrapper">
-      <Header />
+      <header className="header">
+        <nav>
+          <div className="nav-left">
+            <a href="/home">Головна</a>
+            <a href="/testLevel">Міні-тести</a>
+          </div>
+          <div className="nav-right">
+            <a href="/languageBuddy">Language Buddy</a>
+            <a href="/profile">
+              <img src={iconProfile} alt="Profile" className="profile-icon" />
+            </a>
+          </div>
+        </nav>
+      </header>
       {!showResult ? (
         <>
           <h2>
             Тест початкового рівня <br />
-           <p className="easy-test-question"> Питання {currentQuestion + 1} з {easyTestData.length}</p>
+            <p className="easy-test-question">
+              {" "}
+              Питання {currentQuestion + 1} з {easyTestData.length}
+            </p>
           </h2>
-          <p className="question-text">{easyTestData[currentQuestion].question}</p>
+          <p className="question-text">
+            {easyTestData[currentQuestion].question}
+          </p>
           <div className="options-container">
             {easyTestData[currentQuestion].options.map((option, idx) => (
               <button key={idx} onClick={() => handleAnswer(idx)}>

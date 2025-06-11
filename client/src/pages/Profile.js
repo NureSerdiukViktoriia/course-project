@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import { Link } from "react-router-dom";
+
 import Footer from "../components/Footer";
 import "./Profile.css";
 
@@ -169,7 +171,14 @@ const Profile = () => {
 
   return (
     <div className="profile-wrapper">
-      <Header />
+          <header className="header">
+            <nav>
+              <div className="nav-left">
+                <a href="/home">Головна</a>
+                <a href="#">Вивчення слів</a>
+              </div>
+            </nav>
+          </header>
       <div className="profile-right">
         <form onSubmit={handleSubmit} className="profile-form" noValidate>
           <label>

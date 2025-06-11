@@ -18,6 +18,9 @@ const Home = () => {
   const startTest = () => {
     navigate("/testLevel");
   };
+    const goToLanguageBuddy = () => {
+    navigate('/languageBuddy');
+  };
   return (
     <div className="home-wrapper">
       <Header />
@@ -29,7 +32,7 @@ const Home = () => {
         <div className="study-text">
           <h1>Почни вивчати іноземні слова з нуля: весело та ефективно!</h1>
           <p>Індивідуальний план, трекінг прогресу, нові слова щодня.</p>
-          <button>Спробувати безкоштовно</button>
+           <button onClick={goToLanguageBuddy}>Спробувати безкоштовно</button>
         </div>
       </section>
 
