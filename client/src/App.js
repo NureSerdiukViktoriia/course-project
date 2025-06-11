@@ -10,6 +10,10 @@ import EasyTest from "./pages/EasyTest.js";
 import IntermediateTest from "./pages/IntermediateTest.js";
 import AdvancedTest from "./pages/AdvancedTest.js";
 import LanguageBuddy from "./pages/LanguageBuddy.js";
+import WordsPage from './pages/WordsPage.js';
+import MultipleChoiceTest from './pages/MultipleChoiceTest.js';
+import SentenceBuilder from './pages/SentenceBuilder.js'; 
+import TranslateWord from './pages/TranslateWord.js';
 import "./style.css";
 
 function App() {
@@ -26,6 +30,10 @@ function App() {
         <Route path="/languageBuddy" element={<LanguageBuddy />} />
         <Route path="/intermediateTest" element={<IntermediateTest />} />
         <Route path="/advancedTest" element={<AdvancedTest />} />
+        <Route path="/words" element={<WordsPage />} />
+        <Route path="/exercise/multiple-choice" element={<MultipleChoiceTest />} />
+        <Route path="/exercise/sentence-builder" element={<SentenceBuilder />} />
+        <Route path="/exercise/translate-word" element={<TranslateWord />} />
         <Route path="*" element={<Register />} />
       </Routes>
     </Router>

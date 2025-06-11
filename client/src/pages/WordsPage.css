@@ -1,0 +1,131 @@
+.words-home-page {
+    --page-bg: rgba(222, 103, 103, 0.47);
+    --card-bg: rgba(67, 131, 197, 0.52);
+    --button-bg: #EF9999;
+    --text-dark: #1d1b1b;
+    --text-light: #F0F0F0;
+    --font-primary: 'Sofia Sans', sans-serif;
+    font-family: var(--font-primary);
+    background-color: var(--page-bg);
+    color: var(--text-dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-header-words {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    flex-shrink: 0;
+}
+.header-nav-words {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    font-size: 18px;
+}
+.app-name-header-words {
+    font-weight: 700;
+}
+.nav-link-words {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.header-profile-words {
+    cursor: pointer;
+}
+.header-profile-words img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+}
+
+.words-home-content {
+    text-align: center;
+    padding: 30px 20px;
+    flex-grow: 1;
+}
+.main-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+.subtitle {
+    font-size: 18px;
+    color: var(--text-dark);
+    opacity: 0.8;
+    max-width: 600px;
+    margin: 0 auto 50px;
+    line-height: 1.6;
+}
+
+.exercise-cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    
+}
+
+.exercise-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    padding: 25px;
+    width: 300px;
+    color: var(--text-light);
+    text-align: left;
+    transition: transform 0.2s ease-in-out;
+}
+.exercise-card:hover {
+    transform: translateY(-5px);
+}
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+.card-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+.exercise-card h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #000;
+    margin: 0;
+}
+.exercise-card p {
+    font-size: 15px;    
+    line-height: 1.5;
+    opacity: 0.9;
+    margin: 10px 0; 
+}
+.exercise-card button {
+    background-color: var(--button-bg);
+    color: var(--text-dark);
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: var(--font-primary);
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: auto;
+}
+.exercise-card button:hover {
+    filter: brightness(0.95);
+}
+.exercise-card button i {
+    margin-left: 8px;
+}

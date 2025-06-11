@@ -8,7 +8,7 @@ const Header = ({ hideProfileTabs }) => {
       <nav>
         <div className="nav-left">
           <a href="/home">Головна</a>
-          <a href="#">Вивчення слів</a>
+          <a href="/words">Вивчення слів</a>
         </div>
         <div className="nav-right">
           <a href="/languageBuddy">Language Buddy</a>

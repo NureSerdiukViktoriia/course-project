@@ -1,11 +1,11 @@
 :root {
-    --bg-main: #EF9999;
+    --bg-main: #f0b8b8;
     --bg-sidebar: rgba(67, 131, 197, 0.66);
     --bg-chat-panel: #EADFEA;
     --color-blue-buttons: #5F8BC3;
     --color-user-msg: #EFB7B7;
     --color-pink-buttons: #EF9999;
-    --text-dark: #333;
+    --text-dark: #1d1c1c;
     --text-light: #fff;
     --font-primary: 'Sofia Sans', sans-serif;
 }
