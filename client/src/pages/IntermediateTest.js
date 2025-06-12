@@ -1,93 +1,77 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Footer from "../components/Footer.js";
 import iconProfile from "../assets/userr.png";
 import "./EasyTest.css";
-const intermediateTestData = [
-  {
-    question:
-      'Оберіть правильний варіант, щоб заповнити пропуск: "I ____ to the store yesterday."',
-    options: ["go", "goes", "went", "going"],
-    correctAnswerIndex: 2,
-  },
-  {
-    question:
-      'Оберіть найбільш підходящу відповідь на запитання: "How was your weekend?"',
-    options: ["It is good.", "It was good.", "It will be good.", "It good."],
-    correctAnswerIndex: 1,
-  },
-  {
-    question:
-      'Оберіть правильну форму дієслова: "She ____ (read) a book right now."',
-    options: ["reads", "is reading", "read", "has read"],
-    correctAnswerIndex: 1,
-  },
-  {
-    question:
-      'Оберіть найбільш підходящий переклад речення: "Could you please pass me the salt?"',
-    options: [
-      "Можеш передати мені сіль?",
-      "Чи могли б ви передати мені сіль?",
-      "Передайте мені сіль.",
-      "Передай мені сіль, будь ласка.",
-    ],
-    correctAnswerIndex: 1,
-  },
-  {
-    question: 'Оберіть правильний прийменник: "The cat is ____ the table."',
-    options: ["in", "on", "under", "at"],
-    correctAnswerIndex: 1,
-  },
-  {
-    question: 'Оберіть синонім до слова "happy":',
-    options: ["sad", "angry", "joyful", "tired"],
-    correctAnswerIndex: 2,
-  },
-  {
-    question:
-      'Оберіть правильний варіант: "He ____ (study) English for five years."',
-    options: ["studies", "studied", "has studied", "is studying"],
-    correctAnswerIndex: 2,
-  },
-  {
-    question: 'Завершіть діалог: "I\'m really hungry." "____"',
-    options: ["Me too.", "So I am.", "I am also.", "I am too much."],
-    correctAnswerIndex: 0,
-  },
-  {
-    question:
-      'Оберіть правильний варіант: "If I ____ (have) more time, I would travel more."',
-    options: ["have", "had", "will have", "would have"],
-    correctAnswerIndex: 1,
-  },
-  {
-    question:
-      'Оберіть найбільш підходящу відповідь: "What do you do for a living?"',
-    options: [
-      "I live in a city.",
-      "I am a student.",
-      "I like to read books.",
-      "I am fine, thank you.",
-    ],
-    correctAnswerIndex: 1,
-  },
-];
+
 const IntermediateTest = () => {
+  const [easyTestData, setEasyTestData] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [timeLeft, setTimeLeft] = useState(420);
+  const timerId = useRef(null);
+
+  useEffect(() => {
+    fetch("http://localhost:3001/api/miniTest/intermediate")
+      .then((res) => {
+        if (!res.ok) throw new Error("Помилка при завантаженні даних");
+        return res.json();
+      })
+      .then((data) => {
+        setEasyTestData(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (showResult) {
+      clearInterval(timerId.current);
+      return;
+    }
+    timerId.current = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timerId.current);
+          setShowResult(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timerId.current);
+  }, [showResult]);
 
   const handleAnswer = (selectedIndex) => {
-    if (
-      selectedIndex === intermediateTestData[currentQuestion].correctAnswerIndex
-    ) {
+    if (selectedIndex === easyTestData[currentQuestion].correctAnswerIndex) {
       setScore(score + 1);
     }
-    if (currentQuestion + 1 < intermediateTestData.length) {
+    if (currentQuestion + 1 < easyTestData.length) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
+      clearInterval(timerId.current);
       setShowResult(true);
     }
   };
+
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = (seconds % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  };
+
+  if (loading) return <p>Завантаження питань...</p>;
+  if (error) return <p>Помилка: {error}</p>;
+  if (easyTestData.length === 0) return <p>Питань немає</p>;
 
   return (
     <div className="test-level-wrapper">
@@ -105,39 +89,40 @@ const IntermediateTest = () => {
           </div>
         </nav>
       </header>
+
       {!showResult ? (
         <>
+          <div className="timer">{formatTime(timeLeft)}</div>
+
           <h2>
             Тест середнього рівня <br />
             <p className="easy-test-question">
-              {" "}
-              Питання {currentQuestion + 1} з {intermediateTestData.length}
+              Питання {currentQuestion + 1} з {easyTestData.length}
             </p>
           </h2>
           <p className="question-text">
-            {intermediateTestData[currentQuestion].question}
+            {easyTestData[currentQuestion].question}
           </p>
           <div className="options-container">
-            {intermediateTestData[currentQuestion].options.map(
-              (option, idx) => (
-                <button key={idx} onClick={() => handleAnswer(idx)}>
-                  {option}
-                </button>
-              )
-            )}
+            {easyTestData[currentQuestion].options.map((option, idx) => (
+              <button key={idx} onClick={() => handleAnswer(idx)}>
+                {option}
+              </button>
+            ))}
           </div>
         </>
       ) : (
         <div className="result-container">
           <h2>Тест завершено!</h2>
           <p>
-            Ваш результат: {score} з {intermediateTestData.length}
+            Ваш результат: {score} з {easyTestData.length}
           </p>
           <button
             onClick={() => {
               setCurrentQuestion(0);
               setScore(0);
               setShowResult(false);
+              setTimeLeft(420);
             }}
           >
             Пройти знову

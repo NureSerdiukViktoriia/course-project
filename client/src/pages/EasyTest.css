@@ -55,18 +55,34 @@
   width: 100%;
   max-width: 100%;
 }
-.easy-test-question{
-  font-size:20px;
-  color:white;
-  font-weight:100;
+.easy-test-question {
+  font-size: 20px;
+  color: white;
+  font-weight: 100;
 }
 
 .options-container button:hover {
   background-color: #db8c8c;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
 }
-
-
+.timer {
+  font-size: 18px;
+  font-weight: 700;
+  color: #db8c8c;
+  text-align: left;
+  margin-bottom: 5px;
+  padding: 6px 12px;
+  border: 2px solid #db8c8c;
+  border-radius: 10px;
+  width: fit-content;
+  max-width: 90%;
+  margin-left: 20px;
+  margin-right: auto;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 3px 8px rgba(219, 140, 140, 0.5);
+  font-family: "Sofia Sans", "Manrope", sans-serif;
+  user-select: none;
+}
 
 .result-container {
   text-align: center;

@@ -13,10 +13,10 @@ const TestPage = () => {
   const easytest = () => {
     navigate("/easyTest");
   };
-   const intermediatetest = () => {
+  const intermediatetest = () => {
     navigate("/intermediateTest");
   };
-     const advancedtest = () => {
+  const advancedtest = () => {
     navigate("/advancedTest");
   };
   return (
@@ -32,11 +32,11 @@ const TestPage = () => {
       <div className="test-info">
         <div className="test-detail">
           <img src={TimeIcon} alt="time" />
-          <span>7 хвилин</span>
+          <span>10 питань</span>
         </div>
         <div className="test-detail">
           <img src={QuestionIcon} alt="questions" />
-          <span>10 питань</span>
+          <span>7 хвилин</span>
         </div>
       </div>
       <div className="difficulty-header">
@@ -54,7 +54,6 @@ const TestPage = () => {
           <h4>Середній (B1–B2)</h4>
           <p>Ситуаційні діалоги, словосполучення, базова граматика</p>
           <button onClick={intermediatetest}>Почати</button>
-          
         </div>
         <div className="difficulty-card">
           <h4>Просунутий (C1–C2)</h4>

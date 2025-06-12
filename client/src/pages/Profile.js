@@ -171,35 +171,40 @@ const Profile = () => {
 
   return (
     <div className="profile-wrapper">
-          <header className="header">
-            <nav>
-              <div className="nav-left">
-                <a href="/home">Головна</a>
-                <a href="#">Вивчення слів</a>
-              </div>
-            </nav>
-          </header>
+      <header className="header">
+        <nav>
+          <div className="nav-left">
+            <a href="/home">Головна</a>
+            <a href="#">Вивчення слів</a>
+            <a href="#">Словник</a>
+          </div>
+        </nav>
+      </header>
+      <h2 className="profile-user">Профіль користувача</h2>
       <div className="profile-right">
         <form onSubmit={handleSubmit} className="profile-form" noValidate>
-          <label>
-            Ім'я:
-            <input
-              type="text"
-              name="first_name"
-              value={editData.first_name}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
-            Прізвище:
-            <input
-              type="text"
-              name="last_name"
-              value={editData.last_name}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
+          <div className="row-fields">
+            <label>
+              Ім'я:
+              <input
+                type="text"
+                name="first_name"
+                value={editData.first_name}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Прізвище:
+              <input
+                type="text"
+                name="last_name"
+                value={editData.last_name}
+                onChange={handleChange}
+              />
+            </label>
+          </div>
+
+          <label className="full-width">
             Email:
             <input
               type="email"
@@ -208,57 +213,64 @@ const Profile = () => {
               onChange={handleChange}
             />
           </label>
-          <label>
-            Телефон:
-            <input
-              type="tel"
-              name="phone"
-              value={editData.phone}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
-            Рівень:
-            <select name="level" value={editData.level} onChange={handleChange}>
-              <option value="">-- Виберіть рівень --</option>
-              {levels.map((lvl) => (
-                <option key={lvl} value={lvl}>
-                  {lvl}
-                </option>
-              ))}
-            </select>
-          </label>
+
+          <div className="row-fields">
+            <label>
+              Телефон:
+              <input
+                type="tel"
+                name="phone"
+                value={editData.phone}
+                onChange={handleChange}
+              />
+            </label>
+            <label>
+              Рівень:
+              <select
+                name="level"
+                value={editData.level}
+                onChange={handleChange}
+              >
+                <option value="">-- Виберіть рівень --</option>
+                {levels.map((lvl) => (
+                  <option key={lvl} value={lvl}>
+                    {lvl}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
 
           {message && (
             <p className={message.type === "error" ? "error" : "success"}>
               {message.text}
             </p>
           )}
-
+          <button onClick={goToChangePassword} className="change-password-btn">
+            Змінити пароль
+          </button>
           <button type="submit" className="save-btn">
             Зберегти зміни
           </button>
         </form>
-
-        <div className="profile-actions" style={{ marginTop: "20px" }}>
-          <button onClick={goToChangePassword}>Змінити пароль</button>
-
-          <button onClick={handleLogout} className="logout-btn">
-            Вийти з акаунту
-          </button>
-          <button
-            onClick={handleDeleteAccount}
-            className="delete-account-btn"
-            style={{
-              marginLeft: "10px",
-              backgroundColor: "#e74c3c",
-              color: "#fff",
-            }}
-          >
-            Видалити акаунт
-          </button>
-        </div>
       </div>
+      <div className="profile-actions" style={{ marginTop: "20px" }}>
+        <button onClick={handleLogout} className="logout-btn">
+          Вийти з акаунту
+        </button>
+        <button
+          onClick={handleDeleteAccount}
+          className="delete-account-btn"
+          style={{
+            marginLeft: "10px",
+            backgroundColor: "#e74c3c",
+            color: "#fff",
+          }}
+        >
+          Видалити акаунт
+        </button>
+      </div>
+
       <Footer />
     </div>
   );

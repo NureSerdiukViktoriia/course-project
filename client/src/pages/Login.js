@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import emailIcon from "../assets/email.png";
 import passwordIcon from "../assets/password.png";
-import facebookIcon from "../assets/facebook.png";
-import googleIcon from "../assets/google.png";
 import "../pages/Register.css";
 
 const Login = () => {
@@ -98,11 +96,6 @@ const Login = () => {
       >
         Зареєструватися
       </button>
-
-      <div className="login-icons">
-        <img src={facebookIcon} alt="Facebook login" />
-        <img src={googleIcon} alt="Google login" />
-      </div>
     </div>
   );
 };

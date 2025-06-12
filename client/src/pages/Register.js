@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 import emailIcon from "../assets/email.png";
 import passwordIcon from "../assets/password.png";
-import facebookIcon from "../assets/facebook.png";
-import googleIcon from "../assets/google.png";
 import userIcon from "../assets/user.png";
 import phoneIcon from "../assets/phone.png";
 
@@ -208,11 +206,6 @@ const Register = () => {
       >
         Увійти
       </button>
-
-      <div className="login-icons">
-        <img src={facebookIcon} alt="Facebook login" />
-        <img src={googleIcon} alt="Google login" />
-      </div>
     </div>
   );
 };

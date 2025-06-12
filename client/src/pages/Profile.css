@@ -6,14 +6,35 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 }
+
 .profile-right {
   background-color: white;
-  padding: 30px 40px;
+  padding: 30px 30px 20px 30px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-width: 500px;
   width: 100%;
+}
+.profile-user {
+  margin: 10px;
+}
+.change-password-btn {
+  padding: 12px 30px;
+  font-size: 1rem;
+  background-color: #9096d2;
+  border: none;
+  border-radius: 30px;
+  color: white;
+  cursor: pointer;
+  margin: 0 auto;
+  width: 180px;
+  transition: background-color 0.3s;
+}
+
+.change-password-btn:hover {
+  background-color: #8287be;
 }
 
 .profile-form {
@@ -22,12 +43,28 @@
   gap: 20px;
 }
 
-.profile-form label {
+.row-fields {
+  display: flex;
+  gap: 20px;
+}
+
+.row-fields label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   font-weight: 600;
   color: #222;
   font-size: 1.1rem;
+  gap: 6px;
+}
+
+.profile-form label.full-width {
+  width: 100%;
   display: flex;
   flex-direction: column;
+  font-weight: 600;
+  color: #222;
+  font-size: 1.1rem;
   gap: 8px;
 }
 
@@ -56,6 +93,7 @@
   cursor: pointer;
   transition: background-color 0.3s;
   align-self: center;
+  max-width: 200px;
 }
 
 .save-btn:hover {

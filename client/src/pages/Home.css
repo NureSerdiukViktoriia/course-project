@@ -51,23 +51,23 @@
   border-radius: 12px;
 }
 
-.study-text {
+.study-text-home {
   max-width: 500px;
 }
 
-.study-text h1 {
+.study-text-home h1 {
   font-size: 2.5rem;
   margin-bottom: 15px;
   color: #222;
 }
 
-.study-text p {
+.study-text-home p {
   font-size: 1.2rem;
   margin-bottom: 25px;
   color: #666;
 }
 
-.study-text button {
+.study-text-home button {
   padding: 12px 30px;
   font-size: 1rem;
   background-color: #4383c5;
@@ -78,7 +78,7 @@
   transition: background-color 0.3s;
 }
 
-.study-text button:hover {
+.study-text-home button:hover {
   background-color: #2073c5;
 }
 
@@ -93,14 +93,14 @@
   color: #222;
 }
 
-.cards {
+.cards-home {
   display: flex;
   justify-content: center;
   gap: 60px;
   flex-wrap: wrap;
 }
 
-.card {
+.card-home {
   background-color: white;
   padding: 15px;
   width: 220px;
@@ -109,42 +109,42 @@
   transition: transform 0.3s;
 }
 
-.card:hover {
+.card-home:hover {
   transform: translateY(-10px);
 }
 
-.card img {
+.card-home img {
   max-width: 100px;
   height: auto;
   margin: 0 auto;
 }
 
-.card p {
+.card-home p {
   font-weight: 600;
   color: #4383c5;
   font-size: 1.1rem;
   margin: 10px 0 0 0;
 }
 
-.recommended-exercises {
+.recommended-exercises-home {
   padding: 40px 20px;
   text-align: center;
 }
 
-.recommended-exercises h2 {
+.recommended-exercises-home h2 {
   font-size: 28px;
   margin-bottom: 30px;
   color: #222;
 }
 
-.exercise-cards {
+.exercise-cards-home {
   display: flex;
   justify-content: center;
   gap: 80px;
   flex-wrap: wrap;
 }
 
-.exercise-card {
+.exercise-card-home {
   background-color: #4383c5;
   padding: 25px 20px;
   width: 280px;
@@ -156,13 +156,13 @@
   min-height: 350px;
 }
 
-.exercise-card h3 {
+.exercise-card-home h3 {
   margin-bottom: 20px;
   color: #ffffff;
   font-size: 18px;
 }
 
-.mini-exercise {
+.mini-exercise-home {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -170,7 +170,7 @@
   margin-bottom: 15px;
 }
 
-.mini-exercise img {
+.mini-exercise-home img {
   width: 50px;
   height: 50px;
   border-radius: 10px;
@@ -178,13 +178,13 @@
   box-shadow: 0 2px 8px rgba(67, 131, 197, 0.3);
 }
 
-.mini-exercise p {
+.mini-exercise-home p {
   font-size: 16px;
   color: #ffffff;
   text-align: left;
   margin: 0;
 }
-.exercise-card button {
+.exercise-card-home button {
   padding: 12px 30px;
   font-size: 1rem;
   background-color: #ef9999;
@@ -197,7 +197,6 @@
   align-self: center;
 }
 
-
-.exercise-card button:hover {
+.exercise-card-home button:hover {
   background-color: #ef7676;
 }

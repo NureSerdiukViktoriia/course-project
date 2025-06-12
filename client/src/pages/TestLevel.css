@@ -91,7 +91,7 @@
   justify-content: center;
   gap: 15px;
   margin-top: 30px;
-  margin-bottom:30px;
+  margin-bottom: 30px;
 }
 
 .difficulty-header img {
@@ -105,7 +105,6 @@
   margin: 0;
 }
 
-
 .difficulty-options {
   display: flex;
   justify-content: center;
@@ -115,7 +114,7 @@
 }
 
 .difficulty-card {
-  background-color: #959CBE;
+  background-color: #959cbe;
   padding: 20px;
   border-radius: 12px;
   width: 260px;
@@ -125,6 +124,7 @@
   flex-direction: column;
   justify-content: space-between;
   min-height: 200px;
+  margin: 0 0 30px 0;
 }
 
 .difficulty-card h4 {
@@ -141,18 +141,18 @@
 
 .difficulty-card button {
   padding: 5px 10px;
-  background-color: #EF9999;
+  background-color: #ef9999;
   color: black;
   border: none;
   width: 100px;
-  margin:0 auto;
+  margin: 0 auto;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .difficulty-card button:hover {
-  background-color: #DB8C8C;
+  background-color: #db8c8c;
 }
 
 .test-level-wrapper > Footer {

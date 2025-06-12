@@ -1,63 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Footer from "../components/Footer.js";
 import iconProfile from "../assets/userr.png";
 import "./EasyTest.css";
-const easyTestData = [
-  {
-    question: 'Оберіть правильний варіант перекладу слова: "apple"',
-    options: ["апельсин", "яблуко", "груша", "лимон"],
-    correctAnswerIndex: 1,
-  },
-  {
-    question: 'Оберіть правильний варіант перекладу слова: "cat"',
-    options: ["собака", "кіт", "птах", "риба"],
-    correctAnswerIndex: 1,
-  },
-  {
-    question: 'Оберіть правильний варіант перекладу слова: "water"',
-    options: ["молоко", "сік", "вода", "чай"],
-    correctAnswerIndex: 2,
-  },
-  {
-    question: 'Оберіть правильний варіант перекладу слова: "book"',
-    options: ["ручка", "зошит", "книга", "олівець"],
-    correctAnswerIndex: 2,
-  },
-  {
-    question: 'Оберіть правильний варіант перекладу слова: "hello"',
-    options: ["до побачення", "добрий день", "дякую", "будь ласка"],
-    correctAnswerIndex: 1,
-  },
-  {
-    question: 'Оберіть правильний варіант перекладу слова: "house"',
-    options: ["школа", "будинок", "магазин", "лікарня"],
-    correctAnswerIndex: 1,
-  },
-  {
-    question: 'Оберіть правильний варіант перекладу слова: "sun"',
-    options: ["місяць", "зірка", "сонце", "хмара"],
-    correctAnswerIndex: 2,
-  },
-  {
-    question: 'Оберіть правильний варіант перекладу слова: "table"',
-    options: ["стілець", "стіл", "ліжко", "шафа"],
-    correctAnswerIndex: 1,
-  },
-  {
-    question: 'Оберіть правильний варіант перекладу слова: "goodbye"',
-    options: ["привіт", "до побачення", "вибачте", "так"],
-    correctAnswerIndex: 1,
-  },
-  {
-    question: 'Оберіть правильний варіант перекладу слова: "friend"',
-    options: ["ворог", "сусід", "друг", "колега"],
-    correctAnswerIndex: 2,
-  },
-];
+
 const EasyTest = () => {
+  const [easyTestData, setEasyTestData] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const [timeLeft, setTimeLeft] = useState(420);
+
+  useEffect(() => {
+    fetch("http://localhost:3001/api/miniTest/beginner")
+      .then((res) => {
+        if (!res.ok) throw new Error("Помилка при завантаженні даних");
+        return res.json();
+      })
+      .then((data) => {
+        setEasyTestData(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (showResult) return;
+
+    if (timeLeft === 0) {
+      setShowResult(true);
+      return;
+    }
+
+    const timerId = setTimeout(() => {
+      setTimeLeft(timeLeft - 1);
+    }, 1000);
+
+    return () => clearTimeout(timerId);
+  }, [timeLeft, showResult]);
 
   const handleAnswer = (selectedIndex) => {
     if (selectedIndex === easyTestData[currentQuestion].correctAnswerIndex) {
@@ -69,6 +54,16 @@ const EasyTest = () => {
       setShowResult(true);
     }
   };
+
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
+  };
+
+  if (loading) return <p>Завантаження питань...</p>;
+  if (error) return <p>Помилка: {error}</p>;
+  if (easyTestData.length === 0) return <p>Питань немає</p>;
 
   return (
     <div className="test-level-wrapper">
@@ -86,12 +81,13 @@ const EasyTest = () => {
           </div>
         </nav>
       </header>
+
       {!showResult ? (
         <>
+          <div className="timer">Час: {formatTime(timeLeft)}</div>
           <h2>
             Тест початкового рівня <br />
             <p className="easy-test-question">
-              {" "}
               Питання {currentQuestion + 1} з {easyTestData.length}
             </p>
           </h2>
@@ -117,12 +113,14 @@ const EasyTest = () => {
               setCurrentQuestion(0);
               setScore(0);
               setShowResult(false);
+              setTimeLeft(420);
             }}
           >
             Пройти знову
           </button>
         </div>
       )}
+
       <Footer />
     </div>
   );

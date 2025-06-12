@@ -5,7 +5,8 @@ const cors = require("cors");
 const sequelize = require("./db");
 const authRouter = require("./routes/auth");
 const userRoutes = require("./routes/user");
-const exercisesRouter = require("./routes/exercises"); 
+const exercisesRouter = require("./routes/exercises");
+const miniTestRouter = require("./routes/miniTest");
 const app = express();
 const PORT = 3001;
 
@@ -13,8 +14,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/user", userRoutes);
-app.use('/api/auth', authRouter);
-app.use('/api/exercises', exercisesRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/exercises", exercisesRouter);
+app.use("/api/miniTest", miniTestRouter);
 
 const start = async () => {
   try {
