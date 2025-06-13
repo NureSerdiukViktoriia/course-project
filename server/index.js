@@ -8,6 +8,7 @@ const userRoutes = require("./routes/user");
 const exercisesRouter = require("./routes/exercises");
 const miniTestRouter = require("./routes/miniTest");
 const dictionaryRouter = require("./routes/dictionary");
+const chatRouter = require('./routes/chat');
 const app = express();
 const PORT = 3001;
 
@@ -19,6 +20,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/exercises", exercisesRouter);
 app.use("/api/miniTest", miniTestRouter);
 app.use("/api/dictionary", dictionaryRouter);
+app.use('/api/chat', chatRouter);
 
 const start = async () => {
   try {

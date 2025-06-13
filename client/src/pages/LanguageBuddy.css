@@ -264,6 +264,115 @@
     font-weight: 700;
     margin: 20px 0;
 }
+.topic-btn.active {
+    background-color: #5F8BC3; 
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.typing-indicator {
+    padding: 10px 20px;
+    font-style: italic;
+    color: #777;
+    text-align: left;
+}
+.topic-btn.active {
+    background-color: #5F8BC3;
+    transform: scale(1.03);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+.new-topic-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.start-practice-btn {
+    width: 100%;
+    background-color: #8DCDA4; 
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 700;
+    font-family: var(--font-primary);
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.2s;
+}
+
+.start-practice-btn:hover {
+    background-color: #7ab891;
+    transform: scale(1.02);
+}
+
+.request-task-btn {
+    width: 100%;
+    background-color: #ff7350; 
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 20px 0;
+    transition: all 0.2s;
+}
+
+.request-task-btn:hover:not(:disabled) {
+    background-color: #ff9b82;
+}
+
+.request-task-btn:disabled {
+    background-color: #ffadad;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.bot-message h1, .bot-message h2, .bot-message h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.bot-message strong, .bot-message b {
+    color: #fff; 
+    font-weight: 700;
+}
+
+.bot-message em, .bot-message i {
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.bot-message ul, .bot-message ol {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+.bot-message p {
+    margin: 0 0 10px 0; 
+}
+.bot-message p:last-child {
+    margin-bottom: 0;
+}
+.reset-topic-btn {
+    width: 100%;
+    background-color: #E79494;
+    color: #333;
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 20px 0;
+    transition: all 0.2s;
+}
+
+.reset-topic-btn:hover {
+    filter: brightness(0.95);
+}
 @media (max-width: 992px) {
     .main-container {
         flex-direction: column;
