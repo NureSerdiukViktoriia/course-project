@@ -207,14 +207,6 @@
     box-shadow: 0 0 0 2px var(--elements-bg, #9AB5D2); 
 }
 
-.input-field.correct-input {
-    border-color: var(--correct-bg, #30e46f);
-}
-
-.input-field.incorrect-input {
-    border-color: var(--incorrect-bg, #f52d2d);
-}
-
 .action-buttons {
     display: flex;
     justify-content: center;
@@ -222,7 +214,7 @@
 }
 
 .check-btn {
-    background-color: var(--elements-bg, #9AB5D2);
+    background-color: #F57C5F; 
     color: var(--text-light, #fff);
     border: none;
     border-radius: 12px;
@@ -234,9 +226,8 @@
     font-family: var(--font-primary, 'Sofia Sans', sans-serif);
 }
 
-.check-btn:disabled {
-    background-color: var(--disabled-bg, #ccc);
-    cursor: not-allowed;
+.check-btn:hover {
+    background-color: #ffa089; 
 }
 
 .next-btn {
@@ -290,4 +281,19 @@
 .input-field-inline:focus {
     outline: none;
     box-shadow: 0 0 0 2px var(--page-bg, #EAC6C6); 
+}
+
+.correct-input {
+    background-color: #e8f5e9 !important; 
+    border-color: var(--correct-bg, #85B897) !important; 
+    color: #388e3c !important; 
+    outline-color: var(--correct-bg, #85B897) !important;
+}
+
+
+.incorrect-input {
+    background-color: #f5e8e8 !important; 
+    border-color: var(--incorrect-bg, #ff00004d) !important; 
+    color: #ff0000 !important;
+    outline-color: var(--incorrect-bg, #D65A5A) !important;
 }

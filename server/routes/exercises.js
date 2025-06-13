@@ -3,7 +3,6 @@ const router = express.Router();
 const { Sequelize } = require('sequelize');
 const Question = require('../models/Question');
 const User = require('../models/User'); 
-const UserDictionary = require('../models/UserDictionary');
 
 const authenticate = require('../middleware/auth');
 
@@ -38,33 +37,57 @@ router.get('/multiple-choice', authenticate, async (req, res) => {
     }
 });
 
-router.post('/dictionary/add', authenticate, async (req, res) => {
+router.get('/sentence-builder', authenticate, async (req, res) => {
     try {
-        const userId = req.user.id;
-        const { word, translation } = req.body;
-
-        if (!word) {
-            return res.status(400).json({ error: "Слово не предоставлено" });
+        const user = await User.findByPk(req.user.id);
+        if (!user) {
+            return res.status(404).json({ error: "Пользователь не найден" });
         }
         
-        const [newWord, created] = await UserDictionary.findOrCreate({
-            where: { userId: userId, word: word },
-            defaults: {
-                userId: userId,
-                word: word,
-                translation: translation || null
-            }
+        const userLevel = user.level;
+        const limit = 10;
+
+        const tasks = await Question.findAll({
+            where: {
+                exercise_type: 'sentence_builder',
+                difficulty_level: userLevel
+            },
+            order: [ Sequelize.fn('RANDOM') ],
+            limit: limit
         });
 
-        if (!created) {
-            return res.status(409).json({ message: "Это слово уже есть в вашем словаре" });
-        }
-
-        res.status(201).json({ message: "Слово успешно добавлено", newWord });
+        res.json({ tasks });
 
     } catch (err) {
-        console.error("Error adding to dictionary:", err);
-        res.status(500).json({ error: "Ошибка сервера при добавлении слова" });
+        console.error("Error fetching sentence builder tasks:", err);
+        res.status(500).json({ error: "Ошибка сервера" });
+    }
+});
+
+router.get('/translate-word', authenticate, async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id);
+        if (!user) {
+            return res.status(404).json({ error: "Пользователь не найден" });
+        }
+        
+        const userLevel = user.level;
+        const limit = 10;
+
+        const tasks = await Question.findAll({
+            where: {
+                exercise_type: 'translate_word',
+                difficulty_level: userLevel
+            },
+            order: [ Sequelize.fn('RANDOM') ],
+            limit: limit
+        });
+
+        res.json({ tasks });
+
+    } catch (err) {
+        console.error("Error fetching translate word tasks:", err);
+        res.status(500).json({ error: "Ошибка сервера" });
     }
 });
 

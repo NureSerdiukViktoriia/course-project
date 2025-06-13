@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './ExercisePage.css'; 
 import iconProfile from '../assets/userr.png'; 
@@ -18,38 +18,56 @@ const AppHeader = ({ onProfileClick }) => (
     </header>
 );
 
-const tasks = [
-    {
-        id: 1,
-        scrambled: "I / to / school / go",
-        correctAnswer: "I go to school."
-    },
-    {
-        id: 2,
-        scrambled: "is / name / what / your / ?",
-        correctAnswer: "What is your name?"
-    },
-];
-
-const totalTasks = 10;
-
-const SentenceBuilder = () => {
+    const SentenceBuilder = () => {
     const navigate = useNavigate();
     const handleProfileNavigation = () => navigate('/profile');
+
+    const [tasks, setTasks] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [inputValue, setInputValue] = useState('');
     const [isChecked, setIsChecked] = useState(false);
     const [isCorrect, setIsCorrect] = useState(null);
     const [score, setScore] = useState(0);
 
-    const currentTask = tasks[currentIndex];
+    useEffect(() => {
+        const fetchTasks = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                setError("Доступ заборонено.");
+                setIsLoading(false);
+                return;
+            }
+            try {
+                const response = await fetch('http://localhost:3001/api/exercises/sentence-builder', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) throw new Error('Не вдалося завантажити завдання.');
+                const data = await response.json();
+                if (data.tasks && data.tasks.length > 0) {
+                    setTasks(data.tasks);
+                } else {
+                    throw new Error('Для вашого рівня ще немає завдань цього типу.');
+                }
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchTasks();
+    }, []);
 
     const handleCheckAnswer = () => {
-        const formattedInput = inputValue.trim().replace(/\.$/, "") + "."; 
-        
-        if (formattedInput.toLowerCase() === currentTask.correctAnswer.toLowerCase()) {
+        const currentTask = tasks[currentIndex];
+        const formattedInput = inputValue.trim().replace(/[.?]$/, "");
+        const formattedAnswer = currentTask.correct_answer.trim().replace(/[.?]$/, "");
+
+        if (formattedInput.toLowerCase() === formattedAnswer.toLowerCase()) {
             setIsCorrect(true);
-            setScore(prev => prev + 15); 
+            setScore(prev => prev + 15);
         } else {
             setIsCorrect(false);
         }
@@ -64,8 +82,14 @@ const SentenceBuilder = () => {
             setIsCorrect(null);
         } else {
             alert(`Вправа завершена! Ваш результат: ${score} балів`);
+            navigate('/words');
         }
     };
+    
+    if (isLoading) return <div>Завантаження...</div>;
+    if (error) return <div>Помилка: {error}</div>;
+
+    const currentTask = tasks[currentIndex];
 
     return (
         <div className="exercise-page">
@@ -77,15 +101,15 @@ const SentenceBuilder = () => {
                 </div>
 
                 <div className="progress-bar">
-                    <div className="progress" style={{ width: `${((currentIndex + 1) / totalTasks) * 100}%` }}></div>
+                    <div className="progress" style={{ width: `${((currentIndex + 1) / tasks.length) * 100}%` }}></div>
                 </div>
                 <div className="stats">
-                    <span>Речення {currentIndex + 1} з {totalTasks}</span>
+                    <span>Речення {currentIndex + 1} з {tasks.length}</span>
                     <span>Бали: {score}</span>
                 </div>
 
                 <div className="word-display-box">
-                    {currentTask.scrambled}
+                    {currentTask.question_text}
                 </div>
 
                 <input

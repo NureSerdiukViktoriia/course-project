@@ -8,6 +8,16 @@ const UserDictionary = sequelize.define('UserDictionary', {
         primaryKey: true,
         autoIncrement: true
     },
+
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'user_id', 
+        references: {
+            model: User,
+            key: 'id'
+        }
+    },
     word: {
         type: DataTypes.STRING,
         allowNull: false
@@ -19,10 +29,11 @@ const UserDictionary = sequelize.define('UserDictionary', {
     tableName: 'user_dictionary',
     timestamps: true,
     createdAt: 'added_at',
-    updatedAt: false
+    updatedAt: false,
+    freezeTableName: true 
 });
 
-UserDictionary.belongsTo(User, { foreignKey: 'user_id' });
-User.hasMany(UserDictionary, { foreignKey: 'user_id' });
+User.hasMany(UserDictionary, { foreignKey: 'userId' });
+UserDictionary.belongsTo(User, { foreignKey: 'userId' });
 
 module.exports = UserDictionary;
