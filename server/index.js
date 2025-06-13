@@ -7,6 +7,7 @@ const authRouter = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const exercisesRouter = require("./routes/exercises");
 const miniTestRouter = require("./routes/miniTest");
+const dictionaryRouter = require("./routes/dictionary");
 const app = express();
 const PORT = 3001;
 
@@ -17,6 +18,7 @@ app.use("/user", userRoutes);
 app.use("/api/auth", authRouter);
 app.use("/api/exercises", exercisesRouter);
 app.use("/api/miniTest", miniTestRouter);
+app.use("/api/dictionary", dictionaryRouter);
 
 const start = async () => {
   try {
