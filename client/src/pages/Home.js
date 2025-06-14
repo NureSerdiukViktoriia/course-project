@@ -21,6 +21,10 @@ const Home = () => {
   const goToLanguageBuddy = () => {
     navigate("/languageBuddy");
   };
+  const goToWords = () => {
+    navigate("/words");
+  };
+
   return (
     <div className="home-wrapper">
       <Header />
@@ -75,7 +79,7 @@ const Home = () => {
               </div>
             </div>
 
-            <button>Розпочати</button>
+            <button onClick={goToWords}>Розпочати</button>
           </div>
 
           <div className="exercise-card-home">

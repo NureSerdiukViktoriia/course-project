@@ -52,50 +52,54 @@ const Login = () => {
   };
 
   return (
-    <div className="register-container">
-      <h2>Вхід</h2>
-      <form className="register-form" onSubmit={handleSubmit}>
-        <div className="input-group email-group">
-          <div className="input-header">
-            <img src={emailIcon} alt="Email icon" />
-            <p>Пошта</p>
+    <div className="login-screen">
+      <div className="register-container">
+        <h2>Вхід</h2>
+        <form className="register-form" onSubmit={handleSubmit}>
+          <div className="input-group email-group">
+            <div className="input-header">
+              <img src={emailIcon} alt="Email icon" />
+              <p>Пошта</p>
+            </div>
+            <input
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
 
-        <div className="input-group">
-          <div className="input-header">
-            <img src={passwordIcon} alt="Password icon" />
-            <p>Пароль</p>
+          <div className="input-group">
+            <div className="input-header">
+              <img src={passwordIcon} alt="Password icon" />
+              <p>Пароль</p>
+            </div>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
 
-        {error && (
-          <p style={{ color: "red", marginTop: "10px", marginBottom: "10px" }}>
-            {error}
-          </p>
-        )}
+          {error && (
+            <p
+              style={{ color: "red", marginTop: "10px", marginBottom: "10px" }}
+            >
+              {error}
+            </p>
+          )}
 
-        <button type="submit">Увійти</button>
-      </form>
+          <button type="submit">Увійти</button>
+        </form>
 
-      <p>Ще немає облікового запису?</p>
-      <button
-        className="login-button"
-        onClick={() => navigate("/register")}
-        type="button"
-      >
-        Зареєструватися
-      </button>
+        <p className="register-account">Ще немає облікового запису?</p>
+        <button
+          className="login-button"
+          onClick={() => navigate("/register")}
+          type="button"
+        >
+          Зареєструватися
+        </button>
+      </div>
     </div>
   );
 };

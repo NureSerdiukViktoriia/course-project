@@ -174,7 +174,7 @@ const Profile = () => {
         <nav>
           <div className="nav-left">
             <a href="/home">Головна</a>
-            <a href="#">Вивчення слів</a>
+            <a href="/words">Вивчення слів</a>
             <a href="/dictionary">Словник</a>
           </div>
         </nav>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./ChangePassword.css";
 import Footer from "../components/Footer.js";
 import Header from "../components/Header.js";
@@ -9,6 +10,7 @@ const ChangePassword = ({ onSuccess, onError }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
   const validate = () => {
     if (!oldPassword || !newPassword || !confirmPassword) {
       setMessage("Всі поля повинні бути заповнені");
@@ -58,10 +60,9 @@ const ChangePassword = ({ onSuccess, onError }) => {
   return (
     <div className="change-password-wrapper">
       <Header />
+      <h3 className="change-password-text">Змінити пароль</h3>
       <div className="change-password-container">
         <form className="change-password-form" onSubmit={handleSubmit}>
-          <h3>Змінити пароль</h3>
-
           <label>
             Старий пароль
             <input
@@ -100,6 +101,13 @@ const ChangePassword = ({ onSuccess, onError }) => {
 
           <button type="submit" className="save-btn">
             Зберегти
+          </button>
+          <button
+            type="button"
+            className="back-btn-account"
+            onClick={() => navigate("/profile")}
+          >
+            Назад
           </button>
         </form>
       </div>

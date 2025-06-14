@@ -1,3 +1,16 @@
+.register-screen {
+  background-color: #efb7b7;
+  padding: 20px 30px;
+}
+.login-screen {
+  background-color: #efb7b7;
+  padding: 124px 30px;
+}
+.register-account {
+  text-align: left;
+  font-size: 14px;
+  margin: 10px 0 0 15px;
+}
 .register-container {
   max-width: 400px;
   margin: 40px auto;

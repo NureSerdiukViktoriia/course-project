@@ -105,107 +105,111 @@ const Register = () => {
   };
 
   return (
-    <div className="register-container">
-      <h2>Реєстрація</h2>
-      <form className="register-form" onSubmit={handleSubmit} noValidate>
-        <div className="input-group">
-          <div className="input-header">
-            <img src={userIcon} alt="Name icon" />
-            <p>Ім'я</p>
+    <div className="register-screen">
+      <div className="register-container">
+        <h2>Реєстрація</h2>
+        <form className="register-form" onSubmit={handleSubmit} noValidate>
+          <div className="input-group">
+            <div className="input-header">
+              <img src={userIcon} alt="Name icon" />
+              <p>Ім'я</p>
+            </div>
+            <input
+              type="text"
+              name="first_name"
+              value={formData.first_name}
+              onChange={handleChange}
+            />
           </div>
-          <input
-            type="text"
-            name="first_name"
-            value={formData.first_name}
-            onChange={handleChange}
-          />
-        </div>
 
-        <div className="input-group">
-          <div className="input-header">
-            <img src={userIcon} alt="Surname icon" />
-            <p>Прізвище</p>
+          <div className="input-group">
+            <div className="input-header">
+              <img src={userIcon} alt="Surname icon" />
+              <p>Прізвище</p>
+            </div>
+            <input
+              type="text"
+              name="second_name"
+              value={formData.second_name}
+              onChange={handleChange}
+            />
           </div>
-          <input
-            type="text"
-            name="second_name"
-            value={formData.second_name}
-            onChange={handleChange}
-          />
-        </div>
 
-        <div className="input-group email-group">
-          <div className="input-header">
-            <img src={emailIcon} alt="Email icon" />
-            <p>Пошта</p>
+          <div className="input-group email-group">
+            <div className="input-header">
+              <img src={emailIcon} alt="Email icon" />
+              <p>Пошта</p>
+            </div>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+            />
           </div>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-        </div>
 
-        <div className="input-group">
-          <div className="input-header">
-            <img src={phoneIcon} alt="Phone icon" />
-            <p>Номер телефону</p>
+          <div className="input-group">
+            <div className="input-header">
+              <img src={phoneIcon} alt="Phone icon" />
+              <p>Номер телефону</p>
+            </div>
+            <input
+              type="tel"
+              name="phone"
+              pattern="[0-9+()-\s]*"
+              value={formData.phone}
+              onChange={handleChange}
+            />
           </div>
-          <input
-            type="tel"
-            name="phone"
-            pattern="[0-9+()-\s]*"
-            value={formData.phone}
-            onChange={handleChange}
-          />
-        </div>
 
-        <div className="input-group">
-          <div className="input-header">
-            <img src={passwordIcon} alt="Password icon" />
-            <p>Пароль</p>
+          <div className="input-group">
+            <div className="input-header">
+              <img src={passwordIcon} alt="Password icon" />
+              <p>Пароль</p>
+            </div>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
           </div>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </div>
 
-        <div className="input-group">
-          <select
-            className="level-select"
-            name="level"
-            value={formData.level}
-            onChange={handleChange}
-          >
-            <option value="">Оберіть рівень</option>
-            <option value="початковий">Початковий</option>
-            <option value="середній">Середній</option>
-            <option value="просунутий">Просунутий</option>
-          </select>
-        </div>
+          <div className="input-group">
+            <select
+              className="level-select"
+              name="level"
+              value={formData.level}
+              onChange={handleChange}
+            >
+              <option value="">Оберіть рівень</option>
+              <option value="початковий">Початковий</option>
+              <option value="середній">Середній</option>
+              <option value="просунутий">Просунутий</option>
+            </select>
+          </div>
 
-        {error && (
-          <p style={{ color: "red", marginTop: "10px", marginBottom: "10px" }}>
-            {error}
-          </p>
-        )}
-        {success && <p style={{ color: "green" }}>{success}</p>}
+          {error && (
+            <p
+              style={{ color: "red", marginTop: "10px", marginBottom: "10px" }}
+            >
+              {error}
+            </p>
+          )}
+          {success && <p style={{ color: "green" }}>{success}</p>}
 
-        <button type="submit">Зареєструватися</button>
-      </form>
+          <button type="submit">Зареєструватися</button>
+        </form>
 
-      <p>Вже є обліковий запис?</p>
-      <button
-        className="login-button"
-        onClick={() => navigate("/login")}
-        type="button"
-      >
-        Увійти
-      </button>
+        <p className="register-account">Вже є обліковий запис?</p>
+        <button
+          className="login-button"
+          onClick={() => navigate("/login")}
+          type="button"
+        >
+          Увійти
+        </button>
+      </div>
     </div>
   );
 };
