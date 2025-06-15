@@ -1,10 +1,7 @@
-.register-screen {
+.register-screen, .login-screen {
   background-color: #efb7b7;
   padding: 20px 30px;
-}
-.login-screen {
-  background-color: #efb7b7;
-  padding: 124px 30px;
+  min-height: 100vh;
 }
 .register-account {
   text-align: left;
