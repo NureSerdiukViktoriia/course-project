@@ -26,7 +26,7 @@ const User = sequelize.define(
       allowNull: false,
     },
     level: {
-      type: DataTypes.ENUM("початковий", "середній", "просунутий"),
+      type: DataTypes.ENUM("Початковий", "Середній", "Просунутий"),
       allowNull: false,
     },
   },

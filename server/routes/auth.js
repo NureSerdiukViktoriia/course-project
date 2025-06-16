@@ -28,11 +28,14 @@ router.post("/register", async (req, res) => {
   }
 
   const allowedLevels = ["початковий", "середній", "просунутий"];
-  if (!allowedLevels.includes(level)) {
+  if (!allowedLevels.includes(level.toLowerCase())) {
     return res
       .status(400)
       .json({ error: "Неправильне значення рівня (level)" });
   }
+
+  const formattedLevel =
+    level.charAt(0).toUpperCase() + level.slice(1).toLowerCase();
 
   try {
     const existingUser = await User.findOne({ where: { email } });
@@ -50,7 +53,7 @@ router.post("/register", async (req, res) => {
       email,
       phone,
       password: hashedPassword,
-      level,
+      level: formattedLevel,
     });
 
     console.log("User registered successfully:", user.id);
