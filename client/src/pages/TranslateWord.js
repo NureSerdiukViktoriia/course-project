@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './ExercisePage.css'; 
 import iconProfile from '../assets/userr.png'; 
-import iconTranslate from '../assets/www.png'; 
+import iconTranslate from '../assets/www.png';
+import Notification from '../components/Notification';
 
 const AppHeader = ({ onProfileClick }) => (
     <header className="app-header-words">
@@ -18,7 +19,7 @@ const AppHeader = ({ onProfileClick }) => (
     </header>
 );
 
-    const TranslateWord = () => {
+const TranslateWord = () => {
     const navigate = useNavigate();
     const handleProfileNavigation = () => navigate('/profile');
 
@@ -32,7 +33,21 @@ const AppHeader = ({ onProfileClick }) => (
     const [isCorrect, setIsCorrect] = useState(null);
     const [score, setScore] = useState(0);
 
+    const [notification, setNotification] = useState({
+        message: "",
+        type: "",
+        onConfirm: null,
+    });
+
+    const hideNotification = () => {
+        if (notification.onConfirm) {
+            notification.onConfirm();
+        }
+        setNotification({ message: "", type: "", onConfirm: null });
+    };
+
     useEffect(() => {
+        document.body.style.backgroundColor = "#f0b8b8";
         const fetchTasks = async () => {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -58,6 +73,9 @@ const AppHeader = ({ onProfileClick }) => (
             }
         };
         fetchTasks();
+                  return () => {
+      document.body.style.backgroundColor = '';
+       };
     }, []);
 
     const handleCheckAnswer = () => {
@@ -76,8 +94,11 @@ const AppHeader = ({ onProfileClick }) => (
             setCurrentIndex(prev => prev + 1);
             setInputValue(''); setIsChecked(false); setIsCorrect(null);
         } else {
-            alert(`Вправа завершена! Ваш результат: ${score} балів`);
-            navigate('/words');
+            setNotification({
+                message: `Вправа завершена! Ваш результат: ${score} балів`,
+                type: 'info',
+                onConfirm: () => navigate('/words'),
+            });
         }
     };
 
@@ -91,9 +112,12 @@ const AppHeader = ({ onProfileClick }) => (
             });
             const result = await response.json();
             if (!response.ok) throw new Error(result.message || 'Не вдалося додати слово');
-            alert(`Слово "${word}" успішно додано!`);
+            setNotification({
+                message: `Слово "${word}" успішно додано!`,
+                type: 'success',
+            });
         } catch (err) {
-            alert(err.message);
+            setNotification({ message: err.message, type: 'error' });
         }
     };
     
@@ -105,6 +129,12 @@ const AppHeader = ({ onProfileClick }) => (
 
     return (
         <div className="exercise-page">
+            <Notification
+                message={notification.message}
+                type={notification.type}
+                onClose={hideNotification}
+            />
+
             <AppHeader onProfileClick={handleProfileNavigation} />
             <div className="exercise-content">
                 <div className="task-header">

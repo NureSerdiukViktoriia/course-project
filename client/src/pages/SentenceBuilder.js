@@ -33,6 +33,7 @@ const AppHeader = ({ onProfileClick }) => (
     const [score, setScore] = useState(0);
 
     useEffect(() => {
+        document.body.style.backgroundColor = "#f0b8b8";
         const fetchTasks = async () => {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -58,6 +59,9 @@ const AppHeader = ({ onProfileClick }) => (
             }
         };
         fetchTasks();
+                  return () => {
+      document.body.style.backgroundColor = '';
+       };
     }, []);
 
     const handleCheckAnswer = () => {

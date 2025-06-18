@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./ExercisePage.css";
 import iconChoice from "../assets/communication.png";
 import iconProfile from "../assets/userr.png";
+import Notification from "../components/Notification";
 
 const AppHeader = ({ onProfileClick }) => (
   <header className="app-header-words">
@@ -31,7 +32,21 @@ const MultipleChoiceTest = () => {
   const [isCorrect, setIsCorrect] = useState(null);
   const [score, setScore] = useState(0);
 
+  const [notification, setNotification] = useState({
+    message: "",
+    type: "",
+    onConfirm: null,
+  });
+
+  const hideNotification = () => {
+    if (notification.onConfirm) {
+      notification.onConfirm();
+    }
+    setNotification({ message: "", type: "", onConfirm: null });
+  };
+
   useEffect(() => {
+    document.body.style.backgroundColor = "#f0b8b8";
     const fetchQuestions = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -66,6 +81,9 @@ const MultipleChoiceTest = () => {
       }
     };
     fetchQuestions();
+          return () => {
+      document.body.style.backgroundColor = '';
+       };
   }, []);
 
   const handleAnswerSelect = (option) => {
@@ -86,14 +104,21 @@ const MultipleChoiceTest = () => {
       setSelectedAnswer(null);
       setIsCorrect(null);
     } else {
-      alert(`Тест завершен! Ваш результат: ${score} балів`);
-      navigate("/words");
+      setNotification({
+        message: `Тест завершен! Ваш результат: ${score} балів`,
+        type: "info",
+        onConfirm: () => navigate("/words"),
+      });
     }
   };
+
   const handleAddToDictionary = async (word, translation) => {
     const token = localStorage.getItem("token");
     if (!word) {
-      alert("Немає слова для додавання.");
+      setNotification({
+        message: "Немає слова для додавання.",
+        type: "error",
+      });
       return;
     }
     try {
@@ -109,9 +134,12 @@ const MultipleChoiceTest = () => {
       if (!response.ok) {
         throw new Error(result.message || "Не вдалося додати слово");
       }
-      alert(`Слово "${word}" успішно додано!`);
+      setNotification({
+        message: `Слово "${word}" успішно додано!`,
+        type: "success",
+      });
     } catch (err) {
-      alert(err.message);
+      setNotification({ message: err.message, type: "error" });
     }
   };
 
@@ -123,6 +151,12 @@ const MultipleChoiceTest = () => {
 
   return (
     <div className="exercise-page">
+      <Notification
+        message={notification.message}
+        type={notification.type}
+        onClose={hideNotification}
+      />
+      
       <AppHeader onProfileClick={handleProfileNavigation} />
       <div className="exercise-content">
         <div className="task-header">
