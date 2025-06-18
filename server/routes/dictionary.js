@@ -8,7 +8,8 @@ router.get("/", authenticate, async (req, res) => {
     const id = req.user.id;
 
     const words = await UserDictionary.findAll({
-      where: { user_id: id },
+      where: { userId: id },
+
       attributes: ["id", "word", "translation"],
     });
     res.json(words);
@@ -20,37 +21,39 @@ router.get("/", authenticate, async (req, res) => {
   }
 });
 
-router.post('/add', authenticate, async (req, res) => {
-    try {
-        const userId = req.user.id;
-        const { word, translation } = req.body;
+router.post("/add", authenticate, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { word, translation } = req.body;
+    console.log("translation:", translation);
 
-        if (!word) {
-            return res.status(400).json({ message: "Слово не може бути порожнім" });
-        }
-
-        const [newWord, created] = await UserDictionary.findOrCreate({
-        where: { 
-            userId: userId, 
-            word: word 
-        },
-        defaults: {
-            userId: userId, 
-            word: word,
-            translation: translation || null
-            }
-        });
-
-        if (!created) {
-            return res.status(409).json({ message: "Це слово вже є у вашому словнику" });
-        }
-
-        res.status(201).json({ message: "Слово успішно додано!", word: newWord });
-
-    } catch (err) {
-        console.error("Error adding to dictionary:", err);
-        res.status(500).json({ error: "Помилка сервера при додаванні слова" });
+    if (!word) {
+      return res.status(400).json({ message: "Слово не може бути порожнім" });
     }
+
+    const [newWord, created] = await UserDictionary.findOrCreate({
+      where: {
+        userId: userId,
+        word: word,
+      },
+      defaults: {
+        userId: userId,
+        word: word,
+        translation: translation,
+      },
+    });
+
+    if (!created) {
+      return res
+        .status(409)
+        .json({ message: "Це слово вже є у вашому словнику" });
+    }
+
+    res.status(201).json({ message: "Слово успішно додано!", word: newWord });
+  } catch (err) {
+    console.error("Error adding to dictionary:", err);
+    res.status(500).json({ error: "Помилка сервера при додаванні слова" });
+  }
 });
 
 module.exports = router;
