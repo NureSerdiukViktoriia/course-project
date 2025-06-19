@@ -49,7 +49,7 @@ const Register = () => {
       return "Введіть коректний email";
     }
 
-    const phoneRegex = /^[0-9+()\-\s]+$/;
+    const phoneRegex = /^[+()\-0-9\s]{6,15}$/;
     if (!phoneRegex.test(formData.phone)) {
       return "Введіть коректний номер телефону";
     }
