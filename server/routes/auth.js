@@ -9,7 +9,8 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
   console.log("Received /register request with body:", req.body);
 
-  const { first_name, second_name, email, phone, password, level } = req.body;
+  const { first_name, second_name, email, phone, password, level, inviteCode } =
+    req.body;
 
   if (!first_name || !second_name || !email || !phone || !password || !level) {
     return res
@@ -43,6 +44,11 @@ router.post("/register", async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    let role = "user";
+
+    if (String(inviteCode) === String(process.env.ADMIN_CODE)) {
+      role = "admin";
+    }
 
     const user = await User.create({
       first_name,
@@ -51,10 +57,11 @@ router.post("/register", async (req, res) => {
       phone,
       password: hashedPassword,
       level,
+      role,
     });
 
     console.log("User registered successfully:", user.id);
-    res.status(201).json({ id: user.id });
+    res.status(201).json({ id: user.id, role: user.role });
   } catch (err) {
     console.error("Register error details:", err);
     res.status(500).json({
@@ -79,9 +86,13 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Невірна пошта або пароль" });
     }
 
-    const token = jwt.sign({ id: user.id }, process.env.SECRET_KEY, {
-      expiresIn: "1h",
-    });
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: "1h",
+      },
+    );
 
     res.status(200).json({
       message: "Успішний вхід",

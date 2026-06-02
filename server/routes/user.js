@@ -14,6 +14,7 @@ router.get("/", authenticate, async (req, res) => {
         "email",
         "phone",
         "level",
+        "role",
       ],
     });
 

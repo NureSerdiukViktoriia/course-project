@@ -17,10 +17,12 @@ const Register = () => {
     phone: "",
     password: "",
     level: "",
+    inviteCode: "",
   });
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [showInvite, setShowInvite] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -94,6 +96,7 @@ const Register = () => {
           phone: "",
           password: "",
           level: "",
+          inviteCode: "",
         });
         setTimeout(() => navigate("/login"), 2000);
       } else {
@@ -187,6 +190,26 @@ const Register = () => {
               <option value="середній">Середній</option>
               <option value="просунутий">Просунутий</option>
             </select>
+          </div>
+
+          <div className="input-group">
+            <div
+              className="input-code"
+              onClick={() => setShowInvite(!showInvite)}
+              style={{ cursor: "pointer" }}
+            >
+              <p>У мене є код</p>
+            </div>
+
+            {showInvite && (
+              <input
+                type="text"
+                name="inviteCode"
+                value={formData.inviteCode}
+                onChange={handleChange}
+                placeholder="Введіть код"
+              />
+            )}
           </div>
 
           {error && (

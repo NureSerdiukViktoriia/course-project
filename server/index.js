@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -28,6 +29,7 @@ const start = async () => {
     console.log("Connection has been established successfully!");
 
     await sequelize.sync();
+    //  await sequelize.sync({ alter: true });
 
     console.log("All models were synchronized successfully.");
 
