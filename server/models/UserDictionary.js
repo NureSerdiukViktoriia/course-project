@@ -9,7 +9,7 @@ const UserDictionary = sequelize.define('UserDictionary', {
         autoIncrement: true
     },
 
-    userId: {
+    user_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         field: 'user_id', 
@@ -33,7 +33,7 @@ const UserDictionary = sequelize.define('UserDictionary', {
     freezeTableName: true 
 });
 
-User.hasMany(UserDictionary, { foreignKey: 'userId' });
-UserDictionary.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(UserDictionary, { foreignKey: 'user_id' });
+UserDictionary.belongsTo(User, { foreignKey: 'user_id' });
 
 module.exports = UserDictionary;

@@ -15,6 +15,7 @@ import MultipleChoiceTest from './pages/MultipleChoiceTest.js';
 import SentenceBuilder from './pages/SentenceBuilder.js'; 
 import TranslateWord from './pages/TranslateWord.js';
 import Dictionary from './pages/Dictionary.js';
+import Modules from './pages/Modules.js';
 import "./style.css";
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
         <Route path="/exercise/translate-word" element={<TranslateWord />} />
         <Route path="/dictionary" element={<Dictionary />} />
         <Route path="*" element={<Register />} />
+        <Route path="/modules" element={<Modules />} />
       </Routes>
     </Router>
   );

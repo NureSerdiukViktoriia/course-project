@@ -5,10 +5,10 @@ const router = express.Router();
 
 router.get("/", authenticate, async (req, res) => {
   try {
-    const id = req.user.id;
+    const user_id = req.user.id;
 
     const words = await UserDictionary.findAll({
-      where: { userId: id },
+      where: { user_id },
 
       attributes: ["id", "word", "translation"],
     });
@@ -23,7 +23,7 @@ router.get("/", authenticate, async (req, res) => {
 
 router.post("/add", authenticate, async (req, res) => {
   try {
-    const userId = req.user.id;
+    const user_id = req.user.id;
     const { word, translation } = req.body;
     console.log("translation:", translation);
 
@@ -33,13 +33,13 @@ router.post("/add", authenticate, async (req, res) => {
 
     const [newWord, created] = await UserDictionary.findOrCreate({
       where: {
-        userId: userId,
-        word: word,
+        user_id,
+        word,
       },
       defaults: {
-        userId: userId,
-        word: word,
-        translation: translation,
+        user_id,
+        word,
+        translation,
       },
     });
 
