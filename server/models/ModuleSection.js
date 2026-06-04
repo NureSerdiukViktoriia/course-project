@@ -32,10 +32,10 @@ const ModuleSection = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    modules_id: {
+    module_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      field: "modules_id",
+      field: "module_id",
       references: {
         model: Modules,
         key: "id",
@@ -47,6 +47,7 @@ const ModuleSection = sequelize.define(
     timestamps: false,
   },
 );
-Modules.hasMany(ModuleSection, { foreignKey: "modules_id" });
-ModuleSection.belongsTo(Modules, { foreignKey: "modules_id" });
+Modules.hasMany(ModuleSection, { foreignKey: "module_id" });
+ModuleSection.belongsTo(Modules, { foreignKey: "module_id" });
+
 module.exports = ModuleSection;

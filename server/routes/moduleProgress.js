@@ -1,5 +1,5 @@
 const express = require("express");
-const ModuleSection = require("../models/ModuleSection.js");
+const ModuleProgress = require("../models/ModuleProgress.js");
 const { Sequelize } = require("sequelize");
 const router = express.Router();
 

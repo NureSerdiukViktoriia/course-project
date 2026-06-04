@@ -22,7 +22,7 @@ const Modules = sequelize.define(
       allowNull: false,
     },
     level: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM("A1", "A2", "B1", "B2", "C1"),
       allowNull: false,
     },
   },

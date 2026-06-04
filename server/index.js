@@ -10,8 +10,10 @@ const exercisesRouter = require("./routes/exercises");
 const miniTestRouter = require("./routes/miniTest");
 const dictionaryRouter = require("./routes/dictionary");
 const chatRouter = require("./routes/chat");
-const modules = require("./routes/modules");
-const moduleSection = require("./routes/moduleSection");
+const modulesRouter = require("./routes/modules");
+const moduleSectionRouter = require("./routes/moduleSection");
+const moduleProgressRouter = require("./routes/moduleProgress");
+const moduleSectionProgressRouter = require("./routes/moduleSectionProgress");
 const app = express();
 const PORT = 3001;
 
@@ -24,14 +26,16 @@ app.use("/api/exercises", exercisesRouter);
 app.use("/api/miniTest", miniTestRouter);
 app.use("/api/dictionary", dictionaryRouter);
 app.use("/api/chat", chatRouter);
+app.use("/api/modules", modulesRouter);
+app.use("/uploads", express.static("uploads"));
 
 const start = async () => {
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully!");
 
-     await sequelize.sync();
-     // await sequelize.sync({ alter: true });
+    await sequelize.sync();
+    // await sequelize.sync({ alter: true });
 
     console.log("All models were synchronized successfully.");
 
