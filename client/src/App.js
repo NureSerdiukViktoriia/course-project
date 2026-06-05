@@ -17,6 +17,8 @@ import TranslateWord from './pages/TranslateWord.js';
 import Dictionary from './pages/Dictionary.js';
 import Modules from './pages/Modules.js';
 import "./style.css";
+import MatchingExercise from "./pages/MatchingExercise";
+import ListeningExercise from "./pages/ListeningExercise";
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
         <Route path="/dictionary" element={<Dictionary />} />
         <Route path="*" element={<Register />} />
         <Route path="/modules" element={<Modules />} />
+        <Route path="/exercise/matching" element={<MatchingExercise />} />
+        <Route path="/exercise/listening" element={<ListeningExercise />} />
       </Routes>
     </Router>
   );

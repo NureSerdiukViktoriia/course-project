@@ -91,4 +91,56 @@ router.get('/translate-word', authenticate, async (req, res) => {
     }
 });
 
+router.get('/listening', authenticate, async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id);
+        if (!user) {
+            return res.status(404).json({ error: "Пользователь не найден" });
+        }
+
+        const userLevel = user.level;
+        const limit = 10;
+
+        const tasks = await Question.findAll({
+            where: {
+                exercise_type: 'listening',
+                difficulty_level: userLevel
+            },
+            order: [Sequelize.fn('RANDOM')],
+            limit: limit
+        });
+
+        res.json({ tasks });
+    } catch (err) {
+        console.error("Error fetching listening tasks:", err);
+        res.status(500).json({ error: "Ошибка сервера" });
+    }
+});
+
+router.get('/matching', authenticate, async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id);
+        if (!user) {
+            return res.status(404).json({ error: "Пользователь не найден" });
+        }
+
+        const userLevel = user.level;
+        const limit = 10;
+
+        const tasks = await Question.findAll({
+            where: {
+                exercise_type: 'matching',
+                difficulty_level: userLevel
+            },
+            order: [Sequelize.fn('RANDOM')],
+            limit: limit
+        });
+
+        res.json({ tasks });
+    } catch (err) {
+        console.error("Error fetching matching tasks:", err);
+        res.status(500).json({ error: "Ошибка сервера" });
+    }
+});
+
 module.exports = router;
