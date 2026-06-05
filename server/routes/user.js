@@ -42,7 +42,7 @@ router.put("/", authenticate, async (req, res) => {
     user.second_name = second_name ?? user.second_name;
     user.email = email ?? user.email;
     user.phone = phone ?? user.phone;
-    user.level = level ?? user.level;
+    user.level = level?.toLowerCase() ?? user.level;
 
     await user.save();
 

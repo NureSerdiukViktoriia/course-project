@@ -15,7 +15,7 @@ router.post('/', authenticate, async (req, res) => {
             return res.status(404).json({ error: "Пользователь не найден" });
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+        const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
         let instruction = `You are Lexi, an English tutor. Your response MUST be ONLY in English. The user's level is ${user.level}.`;
 

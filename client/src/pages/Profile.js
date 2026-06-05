@@ -5,7 +5,11 @@ import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import "./Profile.css";
 
-const levels = ["Початковий", "Середній", "Просунутий"];
+const levels = [
+  { label: "Початковий", value: "початковий" },
+  { label: "Середній", value: "середній" },
+  { label: "Просунутий", value: "просунутий" },
+];
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -123,6 +127,7 @@ const Profile = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+    
       body: JSON.stringify(editData),
     })
       .then((res) => {
@@ -232,8 +237,8 @@ const Profile = () => {
               >
                 <option value="">-- Виберіть рівень --</option>
                 {levels.map((lvl) => (
-                  <option key={lvl} value={lvl}>
-                    {lvl}
+                  <option key={lvl.value} value={lvl.label}>
+                    {lvl.label}
                   </option>
                 ))}
               </select>
