@@ -2,17 +2,22 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import pencilIcon from "../assets/pencil.png";
+import deleteIcon from "../assets/delete.png";
 import "./Modules.css";
 
 const Modules = () => {
   const [modules, setModules] = useState([]);
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
   const [image, setImage] = useState(null);
   const [level, setLevel] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-
+  const [moduleMessage, setModuleMessage] = useState(null);
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -25,16 +30,47 @@ const Modules = () => {
       .then((data) => setUser(data));
   }, []);
 
-  const handleCreate = () => {
+  const validate = () => {
+    if (!editMode && !image) {
+      setModuleMessage({ type: "error", text: "Завантажте зображення" });
+      return false;
+    }
+    if (!title.trim()) {
+      setModuleMessage({ type: "error", text: "Назва не може бути порожньою" });
+      return false;
+    }
+
+    if (!description.trim()) {
+      setModuleMessage({ type: "error", text: "Опис не може бути порожнім" });
+      return false;
+    }
+
+    if (!level) {
+      setModuleMessage({ type: "error", text: "Оберіть рівень" });
+      return false;
+    }
+
+    setModuleMessage(null);
+    return true;
+  };
+
+  const handleSave = () => {
+    if (!validate()) return;
     const formData = new FormData();
 
     formData.append("title", title);
     formData.append("description", description);
     formData.append("level", level);
-    formData.append("image", image);
+    if (image) {
+      formData.append("image", image);
+    }
 
-    fetch("http://localhost:3001/api/modules", {
-      method: "POST",
+    const url = editMode
+      ? `http://localhost:3001/api/modules/${editingId}`
+      : "http://localhost:3001/api/modules";
+    const method = editMode ? "PUT" : "POST";
+    fetch(url, {
+      method,
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -45,8 +81,23 @@ const Modules = () => {
       setTitle("");
       setDescription("");
       setImage(null);
+      setPreviewImage(null);
       setLevel("");
+      setModuleMessage(null);
+      setEditMode(false);
+      setEditingId(null);
     });
+  };
+  const openCreateModal = () => {
+    setEditMode(false);
+    setEditingId(null);
+    setTitle("");
+    setDescription("");
+    setLevel("");
+    setImage(null);
+    setPreviewImage(null);
+    setModuleMessage(null);
+    setOpen(true);
   };
   const fetchModules = () => {
     const token = localStorage.getItem("token");
@@ -68,49 +119,106 @@ const Modules = () => {
   return (
     <div className="module-wrapper">
       <Header />
-      <div class="newModule">
+
+      <main className="modules-container">
         {modules.length === 0 ? (
           <p>Курсів немає</p>
         ) : (
           modules.map((m) => (
-            <div key={m.id}>
-              <h3>{m.title}</h3>
+            <div className="new-module" key={m.id}>
               <img
                 src={`http://localhost:3001/uploads/${m.image}`}
                 alt={m.title}
-              ></img>
-              <p>{m.description}</p>
-              <p>{m.level}</p>
+              />
+
+              <div className="title-row">
+                <h3>{m.title}</h3>
+                <p>{m.level}</p>
+              </div>
+              <div className="description">
+                <p>{m.description}</p>
+              </div>
+              <button className="module-learn">Почати вивчати</button>
+              {isAdmin && (
+                <div className="admin-actions">
+                  <button
+                    className="edit-button"
+                    onClick={() => {
+                      setEditMode(true);
+                      setEditingId(m.id);
+                      setTitle(m.title);
+                      setDescription(m.description);
+                      setLevel(m.level);
+                      setPreviewImage(
+                        `http://localhost:3001/uploads/${m.image}`,
+                      );
+                      setOpen(true);
+                    }}
+                  >
+                    <img src={pencilIcon} alt="Edit" />
+                  </button>
+
+                  <button className="delete-button">
+                    <img src={deleteIcon} alt="Delete" />
+                  </button>
+                </div>
+              )}
             </div>
           ))
         )}
-      </div>
+      </main>
+
       {isAdmin && (
-        <button onClick={() => setOpen(true)}>+ Додати модуль</button>
+        <button onClick={openCreateModal} className="add-module-button">
+          + Додати модуль
+        </button>
       )}
       {open && (
-        <div className="modal-wrapper">
-          <div className="modal">
-            <h3>Новий модуль</h3>
+        <div className="modal-wrapper" onClick={() => setOpen(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h3>{editMode ? "Редагувати курс" : "Новий курс"}</h3>
+            {moduleMessage && (
+              <div className={`moduleMessage ${moduleMessage.type}`}>
+                {moduleMessage.text}
+              </div>
+            )}
+            <label className="new-file">
+              Завантажити зображення
+              <input
+                key={previewImage}
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setImage(file);
+                  setPreviewImage(URL.createObjectURL(file));
+                }}
+              />
+            </label>
 
+            {previewImage && (
+              <div className="preview-wrapper">
+                <img src={previewImage} alt="preview" className="preview-img" />
+              </div>
+            )}
             <input
               placeholder="Назва"
               className="input"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => setImage(e.target.files[0])}
-            />
-            <input
+
+            <textarea
               placeholder="Опис"
-              className="input"
+              className="textarea input-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            <select onChange={(e) => setLevel(e.target.value)}>
+            <select
+              className="select-level"
+              value={level}
+              onChange={(e) => setLevel(e.target.value)}
+            >
               <option value="">Вибери рівень</option>
               <option value="A1">A1</option>
               <option value="A2">A2</option>
@@ -119,13 +227,13 @@ const Modules = () => {
               <option value="C1">C1</option>
             </select>
 
-            <button className="save-button" onClick={handleCreate}>
+            <button className="save-button" onClick={handleSave}>
               Зберегти
             </button>
 
-            <button className="close-button" onClick={() => setOpen(false)}>
+            {/* <button className="close-button" onClick={() => setOpen(false)}>
               Закрити
-            </button>
+            </button> */}
           </div>
         </div>
       )}

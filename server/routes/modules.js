@@ -50,6 +50,32 @@ router.post(
     }
   },
 );
+router.put(
+  "/:id",
+  authenticate,
+  isAdmin,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const module = await Modules.findByPk(id);
+      if (!module) {
+        return res.status(404).json({ error: "Модуль не знайдено" });
+      }
+      const { title, description, level } = req.body;
+      module.title = title;
+      module.description = description;
+      module.level = level;
+      if (req.file) {
+        module.image = req.file.filename;
+      }
+      await module.save();
+      res.json(module);
+    } catch (err) {
+      res.status(500).json({ error: "Помилка редагування модуля" });
+    }
+  },
+);
 
 router.delete("/:id", authenticate, isAdmin, async (req, res) => {
   try {
