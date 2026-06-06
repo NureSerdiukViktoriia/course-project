@@ -344,4 +344,16 @@
     margin-top: 30px;
     margin-bottom: 30px;
 }
+
+.finish-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.finish-container .next-btn {
+    width: 250px;
+}
 }

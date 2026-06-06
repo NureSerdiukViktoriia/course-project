@@ -29,6 +29,7 @@ const MatchingExercise = () => {
   const [selectedLeft, setSelectedLeft] = useState(null);
   const [matchedPairs, setMatchedPairs] = useState([]);
   const [wrongPair, setWrongPair] = useState(false);
+  const [score, setScore] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -102,6 +103,7 @@ const MatchingExercise = () => {
         ...prev,
         { left: selectedLeft, right: translation },
       ]);
+      setScore((prev) => prev + 10);
       setSelectedLeft(null);
       setWrongPair(false);
     } else {
@@ -121,6 +123,21 @@ const MatchingExercise = () => {
           <img src={iconMatching} alt="Зіставлення слів" className="task-icon" />
           <h1>Зіставлення слів</h1>
         </div>
+      <div className="progress-bar">
+        <div
+          className="progress"
+          style={{
+            width: `${(matchedPairs.length / tasks.length) * 100}%`,
+          }}
+        ></div>
+      </div>
+
+      <div className="stats">
+        <span>
+          Знайдено пар: {matchedPairs.length} з {tasks.length}
+        </span>
+        <span>Бали: {score}</span>
+      </div>
 
         <p className="question-text">
           Натисни англійське слово, а потім його український переклад.
@@ -161,15 +178,13 @@ const MatchingExercise = () => {
           </div>
         </div>
 
-        <h2 className="result-text">
-          Знайдено пар: {matchedPairs.length} з {tasks.length}
-        </h2>
-
-        {matchedPairs.length === tasks.length && (
-          <button className="next-btn" onClick={() => navigate("/words")}>
-            Завершити
-          </button>
-        )}
+      {matchedPairs.length === tasks.length && (
+      <div className="action-buttons" style={{ marginTop: "30px" }}>
+        <button className="next-btn" onClick={() => navigate("/words")}>
+          Завершити
+        </button>
+      </div>
+      )}
       </div>
     </div>
   );
