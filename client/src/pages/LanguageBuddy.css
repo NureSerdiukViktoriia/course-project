@@ -382,3 +382,39 @@
         min-height: 70vh;
     }
 }
+
+.voice-btn {
+    border: none;
+    background-color: #ef9999;
+    color: #1d1b1b;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+    flex-shrink: 0;
+}
+
+.voice-btn.listening {
+    background-color: #5bd36a;
+    animation: pulse 1s infinite;
+}
+
+.voice-btn:disabled,
+.send-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

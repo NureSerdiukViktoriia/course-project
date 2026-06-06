@@ -116,13 +116,65 @@ const prompts = [
     'Is it correct to say "I goed to school"?'
 ];
 
-const ChatInput = ({ onSendMessage }) => {
+const ChatInput = ({ onSendMessage, isBotTyping, chatLanguage }) => {
     const [inputValue, setInputValue] = useState('');
+    const [isListening, setIsListening] = useState(false);
+    const recognitionRef = useRef(null);
+
+    useEffect(() => {
+        const SpeechRecognition =
+            window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) return;
+
+        const recognition = new SpeechRecognition();
+        recognition.lang =
+        chatLanguage === "ukrainian"
+            ? "uk-UA"
+            : "en-US";
+        recognition.interimResults = false;
+        recognition.continuous = false;
+
+        recognition.onresult = (event) => {
+            const spokenText = event.results[0][0].transcript;
+            setInputValue(spokenText);
+            onSendMessage(spokenText);
+        };
+
+        recognition.onerror = () => {
+            setIsListening(false);
+        };
+
+        recognition.onend = () => {
+            setIsListening(false);
+        };
+
+        recognitionRef.current = recognition;
+    }, [onSendMessage]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!inputValue.trim()) return;
+
         onSendMessage(inputValue);
         setInputValue('');
     };
+
+    const handleVoiceInput = () => {
+        if (!recognitionRef.current) {
+            alert("Ваш браузер не підтримує голосове введення.");
+            return;
+        }
+
+        if (isListening) {
+            recognitionRef.current.stop();
+            setIsListening(false);
+        } else {
+            recognitionRef.current.start();
+            setIsListening(true);
+        }
+    };
+
     return (
         <div className="chat-input-area">
             <div className="prompt-suggestions">
@@ -132,16 +184,28 @@ const ChatInput = ({ onSendMessage }) => {
                     </button>
                 ))}
             </div>
+
             <form className="chat-form" onSubmit={handleSubmit}>
                 <div className="input-wrapper">
                     <input
                         type="text"
-                        placeholder="Введи текст або запитай про граматику..."
+                        placeholder="Введи текст або натисни мікрофон..."
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
                     />
                 </div>
-                <button type="submit" className="send-btn">
+
+                <button
+                    type="button"
+                    className={`voice-btn ${isListening ? "listening" : ""}`}
+                    onClick={handleVoiceInput}
+                    disabled={isBotTyping}
+                    title="Голосове введення"
+                >
+                    <i className="fas fa-microphone"></i>
+                </button>
+
+                <button type="submit" className="send-btn" disabled={isBotTyping}>
                     <i className="fas fa-paper-plane"></i>
                 </button>
             </form>
@@ -159,6 +223,7 @@ const LanguageBuddy = () => {
     const [selectedTopic, setSelectedTopic] = useState(null);
     const [difficulty, setDifficulty] = useState('початковий');
     const [isBotTyping, setIsBotTyping] = useState(false);
+    const [chatLanguage, setChatLanguage] = useState("english");
 
     const handleSendMessage = async (text, isTaskRequest = false) => {
         if (!text.trim() || isBotTyping) return;
@@ -179,7 +244,9 @@ const LanguageBuddy = () => {
                 body: JSON.stringify({
                     message: text,
                     topic: selectedTopic,
-                    level: difficulty
+                    level: difficulty,
+                    language: chatLanguage
+
                 })
             });
             
@@ -187,7 +254,26 @@ const LanguageBuddy = () => {
 
             const data = await response.json();
             const botMessage = { id: Date.now() + 1, text: data.reply, sender: 'bot' };
+            if (data.language) {
+                setChatLanguage(data.language);
+            }
             setMessages(prev => [...prev, botMessage]);
+
+            if (!data.reply.includes("AI тимчасово") && !data.reply.includes("AI сервіс")) {
+                window.speechSynthesis.cancel();
+
+                const cleanReply = data.reply.replace(/[*_`#>-]/g, "");
+                const utterance = new SpeechSynthesisUtterance(cleanReply);
+
+                utterance.lang =
+                    data.language === "ukrainian"
+                        ? "uk-UA"
+                        : "en-US";
+
+                utterance.rate = 0.9;
+
+                window.speechSynthesis.speak(utterance);
+            }
 
         } catch (error) {
             const errorMessage = { id: Date.now() + 1, text: 'Вибачте, сталася помилка.', sender: 'bot' };
@@ -205,7 +291,7 @@ const LanguageBuddy = () => {
     return (
         <div className="language-buddy-page">
             <AppHeader onProfileClick={handleProfileNavigation} />
-            <h1 className="page-title">AI Language Buddy</h1>
+            <h1 className="page-title">AI Learning Assistant</h1>
             <main className="main-container">
                 <ChatSidebar 
                     onTopicSelect={setSelectedTopic}
@@ -217,7 +303,11 @@ const LanguageBuddy = () => {
                 <section className="chat-panel">
                     <MessageList messages={messages} />
                     {isBotTyping && <div className="typing-indicator">LexiLearn друкує...</div>}
-                    <ChatInput onSendMessage={handleSendMessage} />
+                    <ChatInput
+                        onSendMessage={handleSendMessage}
+                        isBotTyping={isBotTyping}
+                        chatLanguage={chatLanguage}
+                    />
                 </section>
             </main>
              <Footer />

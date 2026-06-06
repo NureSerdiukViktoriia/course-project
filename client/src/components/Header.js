@@ -12,7 +12,7 @@ const Header = ({ hideProfileTabs }) => {
           <a href="/modules">Курси</a>
         </div>
         <div className="nav-right">
-          <a href="/languageBuddy">Language Buddy</a>
+          <a href="/languageBuddy">AI Learning Assistant</a>
           <a href="/profile">
             <img src={iconProfile} alt="Profile" className="profile-icon" />
           </a>

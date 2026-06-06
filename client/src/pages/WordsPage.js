@@ -17,7 +17,7 @@ const AppHeader = ({ onProfileClick }) => (
                 <span>Головна</span>
             </Link>
             <Link to="/languageBuddy" className="nav-link-words">
-                    Language Buddy
+                    AI Learning Assistant
             </Link>
         </div>
         <div className="header-profile" onClick={onProfileClick}>
