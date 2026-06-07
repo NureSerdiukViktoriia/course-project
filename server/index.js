@@ -27,6 +27,7 @@ app.use("/api/miniTest", miniTestRouter);
 app.use("/api/dictionary", dictionaryRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api/modules", modulesRouter);
+app.use("/api/modules", moduleSectionRouter);
 app.use("/uploads", express.static("uploads"));
 
 const start = async () => {

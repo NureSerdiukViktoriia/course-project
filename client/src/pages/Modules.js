@@ -12,6 +12,7 @@ const Modules = () => {
   const [open, setOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [image, setImage] = useState(null);
   const [level, setLevel] = useState("");
@@ -138,7 +139,12 @@ const Modules = () => {
               <div className="description">
                 <p>{m.description}</p>
               </div>
-              <button className="module-learn">Почати вивчати</button>
+              <button
+                className="module-learn"
+                onClick={() => navigate(`/modules/${m.id}`)}
+              >
+                Почати вивчати
+              </button>
               {isAdmin && (
                 <div className="admin-actions">
                   <button
@@ -158,7 +164,10 @@ const Modules = () => {
                     <img src={pencilIcon} alt="Edit" />
                   </button>
 
-                  <button className="delete-button">
+                  <button
+                    className="delete-button"
+                    onClick={() => setDeleteId(m.id)}
+                  >
                     <img src={deleteIcon} alt="Delete" />
                   </button>
                 </div>
@@ -230,10 +239,35 @@ const Modules = () => {
             <button className="save-button" onClick={handleSave}>
               Зберегти
             </button>
+          </div>
+        </div>
+      )}
 
-            {/* <button className="close-button" onClick={() => setOpen(false)}>
-              Закрити
-            </button> */}
+      {deleteId && (
+        <div className="modal-wrapper">
+          <div className="modal">
+            <h3>Видалити курс?</h3>
+
+            <button
+              className="save-button"
+              onClick={() => {
+                fetch(`http://localhost:3001/api/modules/${deleteId}`, {
+                  method: "DELETE",
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                }).then(() => {
+                  fetchModules();
+                  setDeleteId(null);
+                });
+              }}
+            >
+              Так, видалити
+            </button>
+
+            <button className="cancel-button" onClick={() => setDeleteId(null)}>
+              Скасувати
+            </button>
           </div>
         </div>
       )}
