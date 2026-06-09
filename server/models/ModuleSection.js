@@ -30,12 +30,11 @@ const ModuleSection = sequelize.define(
     },
     media: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     module_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      field: "module_id",
       references: {
         model: Modules,
         key: "id",

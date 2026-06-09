@@ -112,3 +112,27 @@
     white-space: nowrap;
   }
 }
+
+.radio-group {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  color: black;
+}
+
+input[type="radio"] {
+  appearance: auto !important;
+  -webkit-appearance: radio !important;
+  width: 16px;
+  height: 16px;
+  margin-right: 6px;
+  accent-color: #4a90e2;
+}
