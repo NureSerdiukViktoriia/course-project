@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const OpenAI = require('openai');
 const authenticate = require('../middleware/auth');
 const User = require('../models/User');
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const openai = new OpenAI({
+    apiKey: process.env.OPENROUTER_API_KEY,
+    baseURL: 'https://openrouter.ai/api/v1',
+});
 
 router.post('/', authenticate, async (req, res) => {
     const { message, topic, level, language } = req.body;
@@ -16,19 +19,18 @@ router.post('/', authenticate, async (req, res) => {
             return res.status(404).json({ error: "Пользователь не найден" });
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
         let instruction = `
             You are Lexi, a friendly AI language tutor.
 
             Current conversation language: ${language || "english"}.
+            Current user level: ${level || "beginner"}.
 
             Rules:
             - Reply in the current conversation language.
             - If the user asks to switch to another language, switch to that language.
-            - When switching language, remember it for the rest of the conversation.
             - Correct grammar mistakes and explain them.
             - Help the user practice speaking and writing.
+            - Use simple and clear explanations.
 
             At the end of every reply write:
 
@@ -51,14 +53,17 @@ router.post('/', authenticate, async (req, res) => {
             instruction += ` The user sent a message. Continue the conversation naturally.`;
         }
 
-        const prompt = `${instruction}\n\nUser's message: "${message}"\n\nYour response:`;
+        const completion = await openai.chat.completions.create({
+            model: "openai/gpt-4o-mini",
+            messages: [
+                { role: "system", content: instruction },
+                { role: "user", content: message }
+            ],
+        });
 
-        const result = await model.generateContent(prompt);
-        const botResponse = result.response.text();
-        
-        const fullResponse = result.response.text();
+        const fullResponse = completion.choices[0].message.content;
 
-        let newLanguage = language || "english";
+        let newLanguage = language || "ukrainian";
 
         if (fullResponse.includes("[LANGUAGE: ukrainian]")) {
             newLanguage = "ukrainian";
@@ -79,21 +84,7 @@ router.post('/', authenticate, async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Google Gemini API error:', error);
-
-        if (error.status === 429) {
-            return res.json({
-                reply: 'AI тимчасово перевантажений. Спробуйте через хвилину.',
-                language: language || "english"
-            });
-        }
-
-        if (error.status === 503) {
-            return res.json({
-                reply: 'AI сервіс тимчасово недоступний. Спробуйте пізніше.',
-                language: language || "english"
-            });
-        }
+        console.error('OpenRouter API error:', error);
 
         return res.json({
             reply: 'Сталася помилка при зверненні до AI.',

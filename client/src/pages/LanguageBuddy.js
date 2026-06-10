@@ -138,7 +138,7 @@ const ChatInput = ({ onSendMessage, isBotTyping, chatLanguage }) => {
         recognition.onresult = (event) => {
             const spokenText = event.results[0][0].transcript;
             setInputValue(spokenText);
-            onSendMessage(spokenText);
+            onSendMessage(spokenText, false, true);
         };
 
         recognition.onerror = () => {
@@ -224,8 +224,9 @@ const LanguageBuddy = () => {
     const [difficulty, setDifficulty] = useState('початковий');
     const [isBotTyping, setIsBotTyping] = useState(false);
     const [chatLanguage, setChatLanguage] = useState("english");
+    const [isSpeaking, setIsSpeaking] = useState(false);
 
-    const handleSendMessage = async (text, isTaskRequest = false) => {
+    const handleSendMessage = async (text, isTaskRequest = false, isVoiceRequest = false) => {
         if (!text.trim() || isBotTyping) return;
 
         if (!isTaskRequest) {
@@ -259,18 +260,35 @@ const LanguageBuddy = () => {
             }
             setMessages(prev => [...prev, botMessage]);
 
-            if (!data.reply.includes("AI тимчасово") && !data.reply.includes("AI сервіс")) {
+            if (isVoiceRequest && !data.reply.includes("AI тимчасово") && !data.reply.includes("AI сервіс")) {
                 window.speechSynthesis.cancel();
 
                 const cleanReply = data.reply.replace(/[*_`#>-]/g, "");
                 const utterance = new SpeechSynthesisUtterance(cleanReply);
 
-                utterance.lang =
-                    data.language === "ukrainian"
-                        ? "uk-UA"
-                        : "en-US";
+                const voices = window.speechSynthesis.getVoices();
+
+                let selectedVoice = null;
+
+                if (data.language === "ukrainian") {
+                    selectedVoice = voices.find(voice => voice.lang === "uk-UA");
+                    utterance.lang = "uk-UA";
+                } else {
+                    selectedVoice = voices.find(voice => voice.lang === "en-US");
+                    utterance.lang = "en-US";
+                }
+
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                }
 
                 utterance.rate = 0.9;
+
+                setIsSpeaking(true);
+
+                utterance.onend = () => {
+                    setIsSpeaking(false);
+                };
 
                 window.speechSynthesis.speak(utterance);
             }
@@ -308,6 +326,17 @@ const LanguageBuddy = () => {
                         isBotTyping={isBotTyping}
                         chatLanguage={chatLanguage}
                     />
+                    {isSpeaking && (
+                        <button
+                            className="stop-speaking-btn"
+                            onClick={() => {
+                                window.speechSynthesis.cancel();
+                                setIsSpeaking(false);
+                            }}
+                        >
+                            ⏹ Зупинити озвучення
+                        </button>
+                    )}
                 </section>
             </main>
              <Footer />
