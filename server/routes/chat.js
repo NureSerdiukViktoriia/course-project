@@ -28,6 +28,12 @@ router.post('/', authenticate, async (req, res) => {
             IMPORTANT:
             Before answering, always check the user's message for grammar mistakes.
 
+            Only correct grammar mistakes when the user is writing
+            in the language they are learning (English).
+
+            If the user writes in Ukrainian, do not provide corrections.
+            Simply answer the question.
+
             If there are mistakes, ALWAYS respond using this format:
 
             Correction:
@@ -68,9 +74,28 @@ router.post('/', authenticate, async (req, res) => {
         }
 
         if (message.includes("Please give me a simple language exercise")) {
-            instruction += ` The user requested an exercise. Provide a simple, short language task.`;
+            instruction += `
+                The user requested an exercise.
+                Do NOT use Correction / Explanation / Answer format.
+                Create only a language exercise according to the selected topic and level.
+                Make the exercise harder if the level is advanced.
+            `;
         } else {
-            instruction += ` The user sent a message. Continue the conversation naturally.`;
+            instruction += `
+                The user sent a message.
+                If the user writes in English and makes mistakes, use this format:
+
+                Correction:
+                corrected sentence
+
+                Explanation:
+                short explanation
+
+                Answer:
+                answer to the user's question
+
+                If the user writes in Ukrainian, do not correct Ukrainian grammar. Just answer normally.
+            `;
         }
 
         const completion = await openai.chat.completions.create({

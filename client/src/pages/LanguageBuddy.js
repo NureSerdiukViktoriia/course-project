@@ -314,7 +314,7 @@ const LanguageBuddy = () => {
     };
 
     const handleRequestTask = () => {
-        const requestText = `Please give me a simple language exercise about the topic "${selectedTopic}" for a user with level "${difficulty}".`;
+        const requestText = `Please create a language exercise about the topic "${selectedTopic}" for the "${difficulty}" level. Do not correct this message. Only give the exercise.`;
         handleSendMessage(requestText, true); 
     };
 
@@ -332,7 +332,7 @@ const LanguageBuddy = () => {
                 />
                 <section className="chat-panel">
                     <MessageList messages={messages} />
-                    {isBotTyping && <div className="typing-indicator">LexiLearn друкує...</div>}
+                    {isBotTyping && <div className="typing-indicator">AI Learning Assistant друкує...</div>}
                     <ChatInput
                         onSendMessage={handleSendMessage}
                         isBotTyping={isBotTyping}
