@@ -14,7 +14,6 @@ const modulesRouter = require("./routes/modules");
 const moduleSectionRouter = require("./routes/moduleSection");
 const moduleProgressRouter = require("./routes/moduleProgress");
 const moduleSectionProgressRouter = require("./routes/moduleSectionProgress");
-const sectionTaskRouter = require("./routes/sectionTask");
 const app = express();
 const PORT = 3001;
 
