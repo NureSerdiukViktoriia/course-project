@@ -137,10 +137,11 @@ const ChatInput = ({ onSendMessage, isBotTyping, chatLanguage }) => {
 
         recognition.onresult = (event) => {
             const spokenText = event.results[0][0].transcript;
-            setInputValue(spokenText);
-            onSendMessage(spokenText, false, true);
-        };
 
+            onSendMessage(spokenText, false, true);
+
+            setInputValue('');
+        };
         recognition.onerror = () => {
             setIsListening(false);
         };
@@ -150,7 +151,7 @@ const ChatInput = ({ onSendMessage, isBotTyping, chatLanguage }) => {
         };
 
         recognitionRef.current = recognition;
-    }, [onSendMessage]);
+    }, [onSendMessage, chatLanguage]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -264,8 +265,19 @@ const LanguageBuddy = () => {
                 window.speechSynthesis.cancel();
 
                 const cleanReply = data.reply.replace(/[*_`#>-]/g, "");
+                
                 const utterance = new SpeechSynthesisUtterance(cleanReply);
-
+                if (data.language === "ukrainian") {
+                    setMessages(prev => [
+                        ...prev,
+                        {
+                            id: Date.now() + 2,
+                            text: "🔇 Українське озвучення недоступне на цьому пристрої.",
+                            sender: "bot"
+                        }
+                    ]);
+                    return;
+                }
                 const voices = window.speechSynthesis.getVoices();
 
                 let selectedVoice = null;

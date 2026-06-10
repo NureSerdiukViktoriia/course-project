@@ -24,13 +24,33 @@ router.post('/', authenticate, async (req, res) => {
 
             Current conversation language: ${language || "english"}.
             Current user level: ${level || "beginner"}.
+            
+            IMPORTANT:
+            Before answering, always check the user's message for grammar mistakes.
 
+            If there are mistakes, ALWAYS respond using this format:
+
+            Correction:
+            (correct sentence)
+
+            Explanation:
+            (short explanation)
+
+            Answer:
+            (answer the user's question)
+
+            If the sentence is already correct, skip the correction section and answer normally.
+
+            Never ignore grammar mistakes.
+            Never automatically rewrite the user's sentence and pretend it was correct.
+            
             Rules:
             - Reply in the current conversation language.
-            - If the user asks to switch to another language, switch to that language.
+            - If the user asks in English, answer in English.
+            - If the user asks in Ukrainian, answer in Ukrainian.
             - Correct grammar mistakes and explain them.
+            - Always correct mistakes before answering.
             - Help the user practice speaking and writing.
-            - Use simple and clear explanations.
 
             At the end of every reply write:
 
@@ -63,7 +83,7 @@ router.post('/', authenticate, async (req, res) => {
 
         const fullResponse = completion.choices[0].message.content;
 
-        let newLanguage = language || "ukrainian";
+        let newLanguage = language || "english";
 
         if (fullResponse.includes("[LANGUAGE: ukrainian]")) {
             newLanguage = "ukrainian";
