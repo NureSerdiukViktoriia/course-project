@@ -66,7 +66,7 @@
 }
 
 .card h3 {
-  margin: 0 0 6px;
+  text-align:center;
   font-size: 18px;
 }
 
@@ -135,4 +135,68 @@ input[type="radio"] {
   height: 16px;
   margin-right: 6px;
   accent-color: #4a90e2;
+}
+
+
+
+.admin-panel {
+  margin: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-panel h3 {
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.admin-panel button {
+  padding: 10px;
+  border: none;
+  background: #ef7a7e;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.admin-panel button:hover {
+  background: #e85f66;
+}
+
+.admin-panel input,
+.admin-panel textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.admin-panel textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.admin-panel input:focus,
+.admin-panel textarea:focus {
+  border-color: #ef7a7e;
+  box-shadow: 0 0 0 2px rgba(239, 122, 126, 0.2);
+}
+
+.admin-panel .actions {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-panel .actions button {
+  flex: 1;
+}
+
+.module-body {
+  align-items: flex-start;
 }
