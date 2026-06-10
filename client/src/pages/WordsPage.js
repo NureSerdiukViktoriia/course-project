@@ -8,6 +8,7 @@ import iconTranslate from '../assets/www.png';
 import iconProfile from '../assets/userr.png'; 
 import iconMatching from '../assets/matching.png';
 import iconListening from '../assets/listening.png';
+import iconFlashcards from '../assets/flashcards.png';
 
 const AppHeader = ({ onProfileClick }) => (
     <header className="app-header-words">
@@ -56,6 +57,12 @@ const exercises = [
         title: "Зіставлення слів", 
         description: "Знайди правильні пари англійських слів та перекладів", 
         path: "/exercise/matching" 
+    },
+    {
+    icon: iconFlashcards,
+    title: "Флеш-картки",
+    description: "Переглядай слова, запам’ятовуй переклад та перевіряй себе",
+    path: "/exercise/flashcards"
     }
 ];
 

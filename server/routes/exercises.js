@@ -143,4 +143,25 @@ router.get('/matching', authenticate, async (req, res) => {
     }
 });
 
+router.get('/flashcards', authenticate, async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id);
+
+        const tasks = await Question.findAll({
+            where: {
+                exercise_type: 'translate_word',
+                difficulty_level: user.level
+            },
+            order: [Sequelize.fn('RANDOM')],
+            limit: 20
+        });
+
+        res.json({ tasks });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Ошибка сервера' });
+    }
+});
+
 module.exports = router;

@@ -356,4 +356,111 @@
 .finish-container .next-btn {
     width: 250px;
 }
+
+.flashcard {
+    width: 100%;
+    max-width: 650px;
+    min-height: 320px;
+    margin: 35px auto;
+    background: #6f8fc7;
+    color: white;
+    border-radius: 30px;
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.18);
+    cursor: pointer;
+    text-align: center;
+}
+
+.flashcard-emoji {
+    font-size: 60px;
+    margin-bottom: 10px;
+}
+
+.flashcard-label {
+    font-size: 20px;
+    opacity: 0.9;
+}
+
+.flashcard-word {
+    font-size: 48px;
+    margin: 15px 0;
+}
+
+.flashcard-hint {
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+.speak-btn {
+    margin-top: 20px;
+    background: #e99a9a;
+    color: #111;
+    border: none;
+    border-radius: 16px;
+    padding: 14px 24px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.dont-know-btn,
+.know-btn {
+    border: none;
+    border-radius: 16px;
+    padding: 14px 28px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.dont-know-btn {
+    background: #d96c6c;
+    color: white;
+}
+
+.know-btn {
+    background: #6cbf7d;
+    color: white;
+}
+.exercise-content .flashcard {
+    width: 100%;
+    max-width: 650px;
+    min-height: 320px;
+    margin: 35px auto;
+    background-color: #6f8fc7 !important;
+    color: white !important;
+    border-radius: 30px;
+    padding: 35px;
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.18);
+    cursor: pointer;
+    text-align: center;
+}
+
+.exercise-content .flashcard-emoji {
+    font-size: 60px;
+    margin-bottom: 10px;
+}
+
+.exercise-content .flashcard-label {
+    font-size: 20px;
+    opacity: 0.9;
+}
+
+.exercise-content .flashcard-word {
+    font-size: 48px;
+    margin: 15px 0;
+}
+
+.exercise-content .flashcard-hint {
+    font-size: 18px;
+    opacity: 0.9;
+}
 }

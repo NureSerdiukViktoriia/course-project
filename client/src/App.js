@@ -20,6 +20,7 @@ import ModuleSection from './pages/ModuleSection.js';
 import "./style.css";
 import MatchingExercise from "./pages/MatchingExercise";
 import ListeningExercise from "./pages/ListeningExercise";
+import FlashCards from "./pages/FlashCards";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
         <Route path="/modules/:id" element={<ModuleSection />} />
         <Route path="/exercise/matching" element={<MatchingExercise />} />
         <Route path="/exercise/listening" element={<ListeningExercise />} />
+        <Route path="/exercise/flashcards" element={<FlashCards />} />
       </Routes>
     </Router>
   );
