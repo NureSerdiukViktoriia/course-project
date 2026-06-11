@@ -19,7 +19,10 @@ const TestListeningTask = sequelize.define(
         key: "id",
       },
     },
-
+    category: {
+      type: DataTypes.ENUM("listening", "grammar", "vocabulary"),
+      allowNull: false,
+    },
     question: {
       type: DataTypes.TEXT,
       allowNull: false,
