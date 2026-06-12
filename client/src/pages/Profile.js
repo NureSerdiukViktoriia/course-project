@@ -11,6 +11,24 @@ const levels = [
   { label: "Просунутий", value: "просунутий" },
 ];
 
+const getXpStatus = (xp = 0) => {
+  if (xp >= 2000) return "Майстер";
+  if (xp >= 1000) return "Просунутий мовець";
+  if (xp >= 600) return "Впевнений мовець";
+  if (xp >= 300) return "Практик";
+  if (xp >= 100) return "Початківець";
+  return "Новачок";
+};
+
+const getNextXp = (xp = 0) => {
+  if (xp < 100) return 100;
+  if (xp < 300) return 300;
+  if (xp < 600) return 600;
+  if (xp < 1000) return 1000;
+  if (xp < 2000) return 2000;
+  return xp;
+};
+
 const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [editData, setEditData] = useState({
@@ -173,6 +191,11 @@ const Profile = () => {
   if (loading) return <p>Завантаження...</p>;
   if (error) return <p className="error">Помилка: {error}</p>;
 
+  const xp = userData?.xp || 0;
+  const nextXp = getNextXp(xp);
+  const status = getXpStatus(xp);
+  const progress = nextXp === xp ? 100 : Math.min((xp / nextXp) * 100, 100);
+
   return (
     <div className="profile-wrapper">
       <header className="header">
@@ -243,6 +266,31 @@ const Profile = () => {
                 ))}
               </select>
             </label>
+          </div>
+          
+          <div className="xp-card">
+            <div className="xp-row">
+              <span>XP:</span>
+              <strong>{xp}</strong>
+            </div>
+
+            <div className="xp-row">
+              <span>Статус:</span>
+              <strong>{status}</strong>
+            </div>
+
+            <div className="xp-progress-bar">
+              <div
+                className="xp-progress"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+
+            <p className="xp-text">
+              {xp >= 2000
+                ? "Максимальний статус досягнуто"
+                : `${xp} / ${nextXp} XP до наступного статусу`}
+            </p>
           </div>
 
           {message && (

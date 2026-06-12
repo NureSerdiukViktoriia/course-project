@@ -90,6 +90,17 @@ const ListeningExercise = () => {
 
     window.speechSynthesis.speak(utterance);
   };
+  
+  const addXp = async () => {
+    const token = localStorage.getItem("token");
+
+    await fetch("http://localhost:3001/user/add-xp", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  };
 
   const handleAnswerSelect = (answer) => {
     if (isAnswered) return;
@@ -100,6 +111,7 @@ const ListeningExercise = () => {
     if (answer === tasks[currentIndex].correct_answer) {
       setIsCorrect(true);
       setScore((prev) => prev + 10);
+      addXp();
     } else {
       setIsCorrect(false);
     }

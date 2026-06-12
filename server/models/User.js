@@ -34,6 +34,10 @@ const User = sequelize.define(
       allowNull: false,
       defaultValue: "user",
     },
+    xp: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
   },
   {
     timestamps: true,

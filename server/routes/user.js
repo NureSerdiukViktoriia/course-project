@@ -15,6 +15,7 @@ router.get("/", authenticate, async (req, res) => {
         "phone",
         "level",
         "role",
+        "xp",
       ],
     });
 
@@ -95,6 +96,23 @@ router.post("/change-password", authenticate, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Помилка сервера" });
+  }
+});
+
+router.post("/add-xp", authenticate, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ error: "Користувача не знайдено" });
+    }
+
+    user.xp = (user.xp || 0) + 10;
+    await user.save();
+
+    res.json({ xp: user.xp });
+  } catch (error) {
+    res.status(500).json({ error: "Помилка сервера" });
   }
 });
 
