@@ -11,6 +11,14 @@ const ModuleSection = () => {
   const [activeTab, setActiveTab] = useState("vocabulary");
   const [answers, setAnswers] = useState({});
   const [user, setUser] = useState(null);
+  const [selectedSectionId, setSelectedSectionId] = useState(null);
+  const [editingTask, setEditingTask] = useState(null);
+  const [taskForm, setTaskForm] = useState({
+    question: "",
+    answer: false,
+    options: [],
+    category: "listening",
+  });
 
   const [form, setForm] = useState({
     title: "",
@@ -25,16 +33,32 @@ const ModuleSection = () => {
     }));
   };
   useEffect(() => {
-    fetch(`http://localhost:3001/api/modules/${id}/sections`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setSections(data));
+    const load = async () => {
+      const res = await fetch(
+        `http://localhost:3001/api/modules/${id}/sections`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+
+      const data = await res.json();
+
+      const withTasks = await Promise.all(
+        data.map(async (section) => {
+          const tasks = await loadTasks(section.id);
+          return { ...section, tasks };
+        }),
+      );
+
+      setSections(withTasks);
+    };
+
+    load();
   }, [id]);
   useEffect(() => {
-    fetch("http://localhost:3001/user/", {
+    fetch("http://localhost:3001/user", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -42,7 +66,6 @@ const ModuleSection = () => {
       .then((res) => res.json())
       .then((data) => setUser(data));
   }, []);
-
   const isAdmin = user?.role === "admin";
 
   const types = ["reading", "listening", "vocabulary", "grammar", "test"];
@@ -80,6 +103,104 @@ const ModuleSection = () => {
       content: "",
       media: null,
     });
+  };
+  const saveTask = async (sectionId) => {
+    const isEdit = !!editingTask;
+
+    const url = editingTask
+      ? `http://localhost:3001/api/reading-tasks/${editingTask.id}`
+      : `http://localhost:3001/api/reading-tasks/${sectionId}`;
+
+    const method = editingTask ? "PUT" : "POST";
+
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(taskForm),
+    });
+
+    const data = await res.json();
+
+    setSections((prev) =>
+      prev.map((s) =>
+        s.id === sectionId
+          ? {
+              ...s,
+              tasks: editingTask
+                ? s.tasks.map((t) => (t.id === data.id ? data : t))
+                : [...(s.tasks || []), data],
+            }
+          : s,
+      ),
+    );
+
+    setTaskForm({
+      question: "",
+      answer: false,
+      options: [],
+      category: "listening",
+    });
+    setEditingTask(null);
+  };
+  const deleteTask = async (id) => {
+    await fetch(`http://localhost:3001/api/reading-tasks/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    setSections((prev) =>
+      prev.map((s) =>
+        s.id === selectedSectionId
+          ? {
+              ...s,
+              tasks: s.tasks?.filter((t) => t.id !== id),
+            }
+          : s,
+      ),
+    );
+  };
+  const startEdit = (task) => {
+    setEditingTask(task);
+
+    setTaskForm({
+      question: task.question,
+      answer: task.answer ?? false,
+      options: task.options ?? [],
+      category: task.category ?? "listening",
+    });
+  };
+  const loadTasks = async (sectionId) => {
+    const res = await fetch(
+      `http://localhost:3001/api/reading-tasks/${sectionId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      },
+    );
+
+    const reading = await res.json();
+
+    const res2 = await fetch(
+      `http://localhost:3001/api/test-listening-tasks/${sectionId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      },
+    );
+
+    const test = await res2.json();
+
+    return [
+      ...(Array.isArray(reading) ? reading : []),
+      ...(Array.isArray(test) ? test : []),
+    ];
   };
   return (
     <div className="module-layout">
@@ -144,11 +265,19 @@ const ModuleSection = () => {
                   <div className="text">{s.content}</div>
                 )}
 
-                {s.SectionTasks?.map((task) => (
+                {s.tasks?.map((task) => (
                   <div key={task.id}>
-                    {s.type === "reading" && (
+                    <p>{task.question}</p>
+                    {isAdmin && (
+                      <div>
+                        <button onClick={() => startEdit(task)}>Edit</button>
+                        <button onClick={() => deleteTask(task.id)}>
+                          Delete
+                        </button>
+                      </div>
+                    )}
+                    {task.answer !== undefined ? (
                       <>
-                        <p>{task.data.statement}</p>
                         <label>
                           <input
                             type="radio"
@@ -157,6 +286,7 @@ const ModuleSection = () => {
                           />
                           True
                         </label>
+
                         <label>
                           <input
                             type="radio"
@@ -166,39 +296,17 @@ const ModuleSection = () => {
                           False
                         </label>
                       </>
-                    )}
-
-                    {s.type === "listening" && (
-                      <>
-                        <p>{task.data.question}</p>
-                        {task.data.options.map((opt, i) => (
-                          <label key={i}>
-                            <input
-                              type="radio"
-                              name={task.id}
-                              onChange={() => handleAnswer(task.id, i)}
-                            />
-                            {opt}
-                          </label>
-                        ))}
-                      </>
-                    )}
-
-                    {s.type === "test" && (
-                      <>
-                        <p>{task.data.question}</p>
-                        {task.data.options.map((opt, i) => (
-                          <label key={i}>
-                            <input
-                              type="radio"
-                              name={task.id}
-                              checked={answers?.[task.id] === i}
-                              onChange={() => handleAnswer(task.id, i)}
-                            />
-                            {opt}
-                          </label>
-                        ))}
-                      </>
+                    ) : (
+                      task.options?.map((opt, i) => (
+                        <label key={i}>
+                          <input
+                            type="radio"
+                            name={task.id}
+                            onChange={() => handleAnswer(task.id, i)}
+                          />
+                          {opt}
+                        </label>
+                      ))
                     )}
                   </div>
                 ))}
@@ -241,6 +349,20 @@ const ModuleSection = () => {
           />
 
           <button onClick={createSection}>Create section</button>
+
+          <div>
+            <h3>{editingTask ? "Edit task" : "Create task"}</h3>
+
+            <input
+              placeholder="Question"
+              value={taskForm.question}
+              onChange={(e) =>
+                setTaskForm({ ...taskForm, question: e.target.value })
+              }
+            />
+
+            <button onClick={() => saveTask(activeSectionId)}>Save task</button>
+          </div>
         </div>
       )}
       <Footer />

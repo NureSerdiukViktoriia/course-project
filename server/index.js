@@ -14,7 +14,7 @@ const modulesRouter = require("./routes/modules");
 const moduleSectionRouter = require("./routes/moduleSection");
 const moduleProgressRouter = require("./routes/moduleProgress");
 const readingTaskRouter = require("./routes/readingTask");
-const testLiteningTaskRouter = require("./routes/testLiteningTask");
+const testListeningTaskRouter = require("./routes/testListeningTask");
 const moduleSectionProgressRouter = require("./routes/moduleSectionProgress");
 const app = express();
 const PORT = 3001;
@@ -30,6 +30,8 @@ app.use("/api/dictionary", dictionaryRouter);
 app.use("/api/chat", chatRouter);
 app.use("/api/modules", modulesRouter);
 app.use("/api/modules", moduleSectionRouter);
+app.use("/api/reading-tasks", readingTaskRouter);
+app.use("/api/test-listening-tasks", testListeningTaskRouter);
 app.use("/uploads", express.static("uploads"));
 
 const start = async () => {

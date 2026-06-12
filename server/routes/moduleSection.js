@@ -14,29 +14,20 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// router.get("/:id/sections", authenticate, async (req, res) => {
-//   try {
-//     const { id } = req.params;
+router.get("/:id/sections", authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
 
-//     const sections = await ModuleSection.findAll({
-//       where: { module_id: id },
-//       include: [
-//         {
-//           model: SectionTask,
-//         },
-//       ],
-//       order: [
-//         ["id", "ASC"],
-//         [SectionTask, "order", "ASC"],
-//       ],
-//     });
+    const sections = await ModuleSection.findAll({
+      where: { module_id: id },
+    });
 
-//     res.json(sections);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Помилка отримання секцій" });
-//   }
-// });
+    res.json(sections);
+  } catch (err) {
+    console.error("GET sections error:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
 router.post(
   "/:id/sections",
