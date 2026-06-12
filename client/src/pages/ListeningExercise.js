@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "./ExercisePage.css";
 import iconProfile from "../assets/userr.png";
 import iconListening from "../assets/listening.png";
+import Notification from "../components/Notification";
 
 const AppHeader = ({ onProfileClick }) => (
   <header className="app-header-words">
@@ -30,6 +31,12 @@ const ListeningExercise = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [notification, setNotification] = useState({
+    message: "",
+    type: "",
+    onConfirm: null,
+  });
+  
   const handleProfileNavigation = () => navigate("/profile");
 
   useEffect(() => {
@@ -124,16 +131,32 @@ const ListeningExercise = () => {
       setIsAnswered(false);
       setIsCorrect(null);
     } else {
-      alert(`Тест завершено! Ваш результат: ${score} балів`);
-      navigate("/words");
+      setNotification({
+        message: `Тест завершено! Ваш результат: ${score} балів`,
+        type: "info",
+        onConfirm: () => navigate("/words"),
+      });
     }
   };
 
   if (isLoading) return <div>Завантаження...</div>;
   if (error) return <div>Помилка: {error}</div>;
 
+  const hideNotification = () => {
+    if (notification.onConfirm) {
+      notification.onConfirm();
+    }
+
+    setNotification({
+      message: "",
+      type: "",
+      onConfirm: null,
+    });
+  };
+  
   const currentTask = tasks[currentIndex];
-  const options = Array.isArray(currentTask.options)
+
+  let options = Array.isArray(currentTask.options)
     ? currentTask.options
     : currentTask.options?.startsWith("[")
     ? JSON.parse(currentTask.options)
@@ -141,6 +164,11 @@ const ListeningExercise = () => {
 
   return (
     <div className="exercise-page">
+      <Notification
+        message={notification.message}
+        type={notification.type}
+        onClose={hideNotification}
+      />
       <AppHeader onProfileClick={handleProfileNavigation} />
 
         <div className="exercise-content">

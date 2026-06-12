@@ -153,7 +153,7 @@ router.get('/flashcards', authenticate, async (req, res) => {
                 difficulty_level: user.level
             },
             order: [Sequelize.fn('RANDOM')],
-            limit: 20
+            limit: 10
         });
 
         res.json({ tasks });
