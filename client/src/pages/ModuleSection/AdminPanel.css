@@ -1,0 +1,7 @@
+.modal {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.input-description::placeholder {
+  color: #000 !important;
+}

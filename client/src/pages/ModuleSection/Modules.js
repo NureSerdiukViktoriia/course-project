@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import pencilIcon from "../assets/pencil.png";
-import deleteIcon from "../assets/delete.png";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import pencilIcon from "../../assets/pencil.png";
+import deleteIcon from "../../assets/delete.png";
 import "./Modules.css";
 
 const Modules = () => {
@@ -179,7 +179,7 @@ const Modules = () => {
 
       {isAdmin && (
         <button onClick={openCreateModal} className="add-module-button">
-          + Додати модуль
+          Додати модуль
         </button>
       )}
       {open && (
