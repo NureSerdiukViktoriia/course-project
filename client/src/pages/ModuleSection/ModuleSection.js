@@ -10,7 +10,7 @@ const ModuleSection = () => {
   const { id } = useParams();
 
   const [sections, setSections] = useState([]);
-  const [activeTab, setActiveTab] = useState("vocabulary");
+  const [activeTab, setActiveTab] = useState("reading");
   const [answers, setAnswers] = useState({});
   const [results, setResults] = useState({});
   const [user, setUser] = useState(null);
