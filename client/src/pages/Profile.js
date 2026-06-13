@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import Analytics from "./Analytics";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import "./Profile.css";
@@ -145,7 +146,7 @@ const Profile = () => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-    
+
       body: JSON.stringify(editData),
     })
       .then((res) => {
@@ -208,103 +209,114 @@ const Profile = () => {
         </nav>
       </header>
       <h2 className="profile-user">Профіль користувача</h2>
-      <div className="profile-right">
-        <form onSubmit={handleSubmit} className="profile-form" noValidate>
-          <div className="row-fields">
-            <label>
-              Ім'я:
+      <div className="profile-layout">
+        <div className="profile-left">
+          <form onSubmit={handleSubmit} className="profile-form" noValidate>
+            <div className="row-fields">
+              <label>
+                Ім'я:
+                <input
+                  type="text"
+                  name="first_name"
+                  value={editData.first_name}
+                  onChange={handleChange}
+                />
+              </label>
+              <label>
+                Прізвище:
+                <input
+                  type="text"
+                  name="last_name"
+                  value={editData.last_name}
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+
+            <label className="full-width">
+              Email:
               <input
-                type="text"
-                name="first_name"
-                value={editData.first_name}
+                type="email"
+                name="email"
+                value={editData.email}
                 onChange={handleChange}
               />
             </label>
-            <label>
-              Прізвище:
-              <input
-                type="text"
-                name="last_name"
-                value={editData.last_name}
-                onChange={handleChange}
-              />
-            </label>
-          </div>
 
-          <label className="full-width">
-            Email:
-            <input
-              type="email"
-              name="email"
-              value={editData.email}
-              onChange={handleChange}
-            />
-          </label>
-
-          <div className="row-fields">
-            <label>
-              Телефон:
-              <input
-                type="tel"
-                name="phone"
-                value={editData.phone}
-                onChange={handleChange}
-              />
-            </label>
-            <label>
-              Рівень:
-              <select
-                name="level"
-                value={editData.level}
-                onChange={handleChange}
-              >
-                <option value="">-- Виберіть рівень --</option>
-                {levels.map((lvl) => (
-                  <option key={lvl.value} value={lvl.label}>
-                    {lvl.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
-          
-          <div className="xp-card">
-            <div className="xp-row">
-              <span>XP:</span>
-              <strong>{xp}</strong>
+            <div className="row-fields">
+              <label>
+                Телефон:
+                <input
+                  type="tel"
+                  name="phone"
+                  value={editData.phone}
+                  onChange={handleChange}
+                />
+              </label>
+              <label>
+                Рівень:
+                <select
+                  name="level"
+                  value={editData.level}
+                  onChange={handleChange}
+                >
+                  <option value="">-- Виберіть рівень --</option>
+                  {levels.map((lvl) => (
+                    <option key={lvl.value} value={lvl.label}>
+                      {lvl.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
             </div>
 
-            <div className="xp-row">
-              <span>Статус:</span>
-              <strong>{status}</strong>
+            <button type="submit" className="save-btn">
+              Зберегти зміни
+            </button>
+
+            <button
+              onClick={goToChangePassword}
+              className="change-password-btn"
+            >
+              Змінити пароль
+            </button>
+
+            <div className="xp-card">
+              <div className="xp-row">
+                <span>XP:</span>
+                <strong>{xp}</strong>
+              </div>
+
+              <div className="xp-row">
+                <span>Статус:</span>
+                <strong>{status}</strong>
+              </div>
+
+              <div className="xp-progress-bar">
+                <div
+                  className="xp-progress"
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+
+              <p className="xp-text">
+                {xp >= 2000
+                  ? "Максимальний статус досягнуто"
+                  : `${xp} / ${nextXp} XP до наступного статусу`}
+              </p>
             </div>
 
-            <div className="xp-progress-bar">
-              <div
-                className="xp-progress"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
+            {message && (
+              <p className={message.type === "error" ? "error" : "success"}>
+                {message.text}
+              </p>
+            )}
+          </form>
+        </div>
 
-            <p className="xp-text">
-              {xp >= 2000
-                ? "Максимальний статус досягнуто"
-                : `${xp} / ${nextXp} XP до наступного статусу`}
-            </p>
-          </div>
-
-          {message && (
-            <p className={message.type === "error" ? "error" : "success"}>
-              {message.text}
-            </p>
-          )}
-          <button onClick={goToChangePassword} className="change-password-btn">
-            Змінити пароль
-          </button>
-          <button type="submit" className="save-btn">
-            Зберегти зміни
-          </button>
-        </form>
+        <div className="profile-right-panel">
+          <Analytics userId={userData?.id} />
+        </div>
       </div>
       <div className="profile-actions" style={{ marginTop: "20px" }}>
         <button onClick={handleLogout} className="logout-btn">

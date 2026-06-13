@@ -1,0 +1,51 @@
+.analytics {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.module-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.module-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.module-body {
+  padding: 14px;
+  border-top: 1px solid #eee;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 50px;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.bar-bg {
+  height: 8px;
+  background: #eee;
+  border-radius: 6px;
+}
+
+.bar-fill {
+  height: 8px;
+  background: #4f46e5;
+  border-radius: 6px;
+}
+
+.recommendations {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
