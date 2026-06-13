@@ -20,7 +20,6 @@ const ModuleSection = sequelize.define(
         "listening",
         "reading",
         "grammar",
-        "test",
       ),
       allowNull: false,
     },

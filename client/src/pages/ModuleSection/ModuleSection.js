@@ -12,7 +12,9 @@ const ModuleSection = () => {
   const [sections, setSections] = useState([]);
   const [activeTab, setActiveTab] = useState("vocabulary");
   const [answers, setAnswers] = useState({});
+  const [results, setResults] = useState({});
   const [user, setUser] = useState(null);
+  const [progressMap, setProgressMap] = useState({});
   const [adminOpen, setAdminOpen] = useState(false);
 
   const [form, setForm] = useState({
@@ -22,7 +24,7 @@ const ModuleSection = () => {
     media: null,
   });
 
-  const types = ["reading", "listening", "vocabulary", "grammar", "test"];
+  const types = ["reading", "listening", "vocabulary", "grammar"];
   const isAdmin = user?.role === "admin";
 
   const filtered = sections.filter((s) => s.type === activeTab);
@@ -34,6 +36,55 @@ const ModuleSection = () => {
     }));
   };
 
+  const handleCheck = async (sectionId) => {
+    const section = sections.find((s) => s.id === sectionId);
+    if (!section) return;
+
+    let total = 0;
+    let correct = 0;
+
+    (section.tasks ?? []).forEach((task) => {
+      const userAnswer = answers[task.id];
+
+      if (userAnswer === undefined || userAnswer === null) return;
+
+      total++;
+
+      if (Number(userAnswer) === Number(task.correct_index)) {
+        correct++;
+      }
+    });
+
+    const score = total === 0 ? 0 : Math.round((correct / total) * 100);
+
+    await fetch("http://localhost:3001/api/progress/section", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        sectionId,
+        progress: score,
+        completed: score >= 80,
+      }),
+    });
+
+    setProgressMap((prev) => ({
+      ...prev,
+      [sectionId]: true,
+    }));
+
+    setResults((prev) => ({
+      ...prev,
+      [sectionId]: {
+        score,
+        correct,
+        wrong: total - correct,
+        total,
+      },
+    }));
+  };
   useEffect(() => {
     const load = async () => {
       const res = await fetch(
@@ -59,7 +110,23 @@ const ModuleSection = () => {
 
     load();
   }, [id]);
+  useEffect(() => {
+    const loadProgress = async () => {
+      const res = await fetch(
+        `http://localhost:3001/api/progress/module/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
 
+      const data = await res.json();
+      setProgressMap(data);
+    };
+
+    loadProgress();
+  }, [id]);
   useEffect(() => {
     fetch("http://localhost:3001/user", {
       headers: {
@@ -71,32 +138,15 @@ const ModuleSection = () => {
   }, []);
 
   const loadTasks = async (sectionId) => {
-    const res = await fetch(
-      `http://localhost:3001/api/reading-tasks/${sectionId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+    const res = await fetch(`http://localhost:3001/api/tasks/${sectionId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-    );
+    });
 
-    const reading = await res.json();
+    const data = await res.json();
 
-    const res2 = await fetch(
-      `http://localhost:3001/api/test-listening-tasks/${sectionId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      },
-    );
-
-    const test = await res2.json();
-
-    return [
-      ...(Array.isArray(reading) ? reading : []),
-      ...(Array.isArray(test) ? test : []),
-    ];
+    return Array.isArray(data) ? data : [];
   };
 
   const createSection = async () => {
@@ -122,7 +172,7 @@ const ModuleSection = () => {
     );
 
     const newSection = await res.json();
-    setSections((prev) => [...prev, newSection]);
+    setSections((prev) => [...prev, { ...newSection, tasks: [] }]);
 
     setForm({
       title: "",
@@ -186,7 +236,28 @@ const ModuleSection = () => {
                   </>
                 )}
 
-                <TaskList section={section} handleAnswer={handleAnswer} />
+                <TaskList
+                  section={section}
+                  handleAnswer={handleAnswer}
+                  answers={answers}
+                  results={results}
+                />
+                {(section.tasks?.length ?? 0) > 0 && (
+                  <button
+                    className="save-button-tasks"
+                    onClick={() => handleCheck(section.id)}
+                    disabled={progressMap[section.id]}
+                  >
+                    {progressMap[section.id] ? "Вже пройдено" : "Перевірити"}
+                  </button>
+                )}
+                {results[section.id] && (
+                  <div className="results-box">
+                    <p>Правильних: {results[section.id].correct}</p>
+                    <p>Неправильних: {results[section.id].wrong}</p>
+                    <p>Результат: {results[section.id].score}%</p>
+                  </div>
+                )}
               </div>
             ))
           )}

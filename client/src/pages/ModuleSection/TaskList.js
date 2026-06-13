@@ -1,49 +1,35 @@
 import React from "react";
 import "./TaskList.css";
 
-const TaskList = ({ section, handleAnswer }) => {
+const TaskList = ({ section, handleAnswer, answers, results }) => {
   return (
     <div className="task-list">
-      {section.tasks?.map((task) => (
-        <div className="task-card" key={task.id}>
-          <div className="task-question">{task.question}</div>
+      {section.tasks?.map((task) => {
+        const options = Array.isArray(task.options)
+          ? task.options
+          : JSON.parse(task.options || "[]");
 
-          <div className="task-options">
-            {task.answer !== undefined ? (
-              <>
-                <label className="task-option">
-                  <input
-                    type="radio"
-                    name={task.id}
-                    onChange={() => handleAnswer(task.id, true)}
-                  />
-                  True
-                </label>
+        return (
+          <div key={task.id} className="task-card">
+            <p>{task.question}</p>
 
-                <label className="task-option">
+            <div className="task-options">
+              {options.map((opt, i) => (
+                <label key={i}>
                   <input
                     type="radio"
-                    name={task.id}
-                    onChange={() => handleAnswer(task.id, false)}
-                  />
-                  False
-                </label>
-              </>
-            ) : (
-              task.options?.map((opt, i) => (
-                <label className="task-option" key={i}>
-                  <input
-                    type="radio"
-                    name={task.id}
+                    name={`task-${task.id}`}
+                    checked={answers?.[task.id] === i}
                     onChange={() => handleAnswer(task.id, i)}
+                    disabled={!!results?.[section.id]}
                   />
                   {opt}
                 </label>
-              ))
-            )}
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

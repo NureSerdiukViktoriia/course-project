@@ -2,8 +2,8 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("../db");
 const ModuleSection = require("./ModuleSection");
 
-const TestListeningTask = sequelize.define(
-  "TestListeningTask",
+const Task = sequelize.define(
+  "Task",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -19,17 +19,14 @@ const TestListeningTask = sequelize.define(
         key: "id",
       },
     },
-    category: {
-      type: DataTypes.ENUM("listening", "grammar", "vocabulary"),
-      allowNull: false,
-    },
+
     question: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       allowNull: false,
     },
 
     options: {
-      type: DataTypes.JSON,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
 
@@ -39,12 +36,12 @@ const TestListeningTask = sequelize.define(
     },
   },
   {
-    tableName: "test_listening_task",
+    tableName: "task",
     timestamps: false,
   },
 );
 
-ModuleSection.hasMany(TestListeningTask, { foreignKey: "module_section_id" });
-TestListeningTask.belongsTo(ModuleSection, { foreignKey: "module_section_id" });
+ModuleSection.hasMany(Task, { foreignKey: "module_section_id" });
+Task.belongsTo(ModuleSection, { foreignKey: "module_section_id" });
 
-module.exports = TestListeningTask;
+module.exports = Task;
