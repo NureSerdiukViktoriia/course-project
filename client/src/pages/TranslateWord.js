@@ -78,11 +78,23 @@ const TranslateWord = () => {
        };
     }, []);
 
+    const addXp = async () => {
+        const token = localStorage.getItem("token");
+
+        await fetch("http://localhost:3001/user/add-xp", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    };
+
     const handleCheckAnswer = () => {
         const currentTask = tasks[currentIndex];
         if (inputValue.trim().toLowerCase() === currentTask.correct_answer.toLowerCase()) {
             setIsCorrect(true);
             setScore(prev => prev + 10);
+            addXp();
         } else {
             setIsCorrect(false);
         }

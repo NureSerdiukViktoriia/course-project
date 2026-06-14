@@ -86,6 +86,17 @@ const MultipleChoiceTest = () => {
        };
   }, []);
 
+  const addXp = async () => {
+    const token = localStorage.getItem("token");
+
+    await fetch("http://localhost:3001/user/add-xp", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  };
+
   const handleAnswerSelect = (option) => {
     if (selectedAnswer) return;
     const currentQuestion = questions[currentIndex];
@@ -93,6 +104,7 @@ const MultipleChoiceTest = () => {
     if (option === currentQuestion.correct_answer) {
       setIsCorrect(true);
       setScore((prev) => prev + 10);
+      addXp();
     } else {
       setIsCorrect(false);
     }

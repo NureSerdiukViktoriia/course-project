@@ -81,6 +81,17 @@ const MatchingExercise = () => {
     };
   }, []);
 
+  const addXp = async () => {
+    const token = localStorage.getItem("token");
+
+    await fetch("http://localhost:3001/user/add-xp", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  };
+
   const isMatched = (word, side) => {
     return matchedPairs.some((pair) =>
       side === "left" ? pair.left === word : pair.right === word
@@ -104,6 +115,7 @@ const MatchingExercise = () => {
         { left: selectedLeft, right: translation },
       ]);
       setScore((prev) => prev + 10);
+      addXp();
       setSelectedLeft(null);
       setWrongPair(false);
     } else {

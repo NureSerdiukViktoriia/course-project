@@ -64,6 +64,17 @@ const AppHeader = ({ onProfileClick }) => (
        };
     }, []);
 
+    const addXp = async () => {
+        const token = localStorage.getItem("token");
+
+        await fetch("http://localhost:3001/user/add-xp", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+    };
+
     const handleCheckAnswer = () => {
         const currentTask = tasks[currentIndex];
         const formattedInput = inputValue.trim().replace(/[.?]$/, "");
@@ -71,7 +82,8 @@ const AppHeader = ({ onProfileClick }) => (
 
         if (formattedInput.toLowerCase() === formattedAnswer.toLowerCase()) {
             setIsCorrect(true);
-            setScore(prev => prev + 15);
+            setScore(prev => prev + 10);
+            addXp();
         } else {
             setIsCorrect(false);
         }
