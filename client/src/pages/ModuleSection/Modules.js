@@ -179,7 +179,7 @@ const Modules = () => {
 
       {isAdmin && (
         <button onClick={openCreateModal} className="add-module-button">
-          Додати модуль
+          Додати курс
         </button>
       )}
       {open && (

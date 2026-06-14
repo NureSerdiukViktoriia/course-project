@@ -44,5 +44,47 @@ router.post("/:sectionId", authenticate, isAdmin, async (req, res) => {
     res.status(500).json({ error: "server error" });
   }
 });
+router.put("/:taskId", authenticate, isAdmin, async (req, res) => {
+  try {
+    const {
+      question,
+      options,
+      correct_index,
+      answer_boolean,
+    } = req.body;
 
+    const task = await Task.findByPk(req.params.taskId);
+
+    if (!task) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+
+    await task.update({
+      question,
+      options,
+      correct_index,
+      answer_boolean,
+    });
+
+    res.json(task);
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ error: "server error" });
+  }
+});
+
+router.delete("/:taskId", authenticate, isAdmin, async (req, res) => {
+  try {
+    await Task.destroy({
+      where: {
+        id: req.params.taskId,
+      },
+    });
+
+    res.json({ success: true });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ error: "server error" });
+  }
+});
 module.exports = router;

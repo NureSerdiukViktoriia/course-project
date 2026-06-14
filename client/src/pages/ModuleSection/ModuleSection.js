@@ -21,12 +21,20 @@ const ModuleSection = () => {
   const [preview, setPreview] = useState(null);
   const [deleteSectionId, setDeleteSectionId] = useState(null);
   const [adminOpen, setAdminOpen] = useState(false);
-
   const [form, setForm] = useState({
     title: "",
     type: "reading",
     content: "",
     media: null,
+  });
+  const [taskOpen, setTaskOpen] = useState(false);
+  const [editTaskId, setEditTaskId] = useState(null);
+  const [currentSectionId, setCurrentSectionId] = useState(null);
+
+  const [taskForm, setTaskForm] = useState({
+    question: "",
+    options: ["", ""],
+    correct_index: 0,
   });
 
   const types = ["reading", "listening", "vocabulary", "grammar"];
@@ -40,7 +48,16 @@ const ModuleSection = () => {
       [taskId]: value,
     }));
   };
+  const addOption = () => {
+    setTaskForm((prev) => {
+      if (prev.options.length >= 4) return prev;
 
+      return {
+        ...prev,
+        options: [...prev.options, ""],
+      };
+    });
+  };
   const handleCheck = async (sectionId) => {
     const section = sections.find((s) => s.id === sectionId);
     if (!section) return;
@@ -89,6 +106,31 @@ const ModuleSection = () => {
         total,
       },
     }));
+  };
+  const openCreateTask = (sectionId) => {
+    setCurrentSectionId(sectionId);
+    setEditTaskId(null);
+    setTaskForm({
+      question: "",
+      options: ["", ""],
+      correct_index: 0,
+    });
+    setTaskOpen(true);
+  };
+
+  const openEditTask = (task) => {
+    setCurrentSectionId(task.module_section_id);
+    setEditTaskId(task.id);
+
+    setTaskForm({
+      question: task.question,
+      options: Array.isArray(task.options)
+        ? task.options
+        : JSON.parse(task.options || "[]"),
+      correct_index: task.correct_index,
+    });
+
+    setTaskOpen(true);
   };
   useEffect(() => {
     const load = async () => {
@@ -151,7 +193,13 @@ const ModuleSection = () => {
 
     const data = await res.json();
 
-    return Array.isArray(data) ? data : [];
+    return Array.isArray(data)
+      ? data.map((t) => ({
+          ...t,
+          options:
+            typeof t.options === "string" ? JSON.parse(t.options) : t.options,
+        }))
+      : [];
   };
 
   const saveSection = async () => {
@@ -195,6 +243,77 @@ const ModuleSection = () => {
     setForm({ title: "", type: "reading", content: "", media: null });
     setPreview(null);
     setAdminOpen(false);
+  };
+  const saveTask = async () => {
+    const url = editTaskId
+      ? `http://localhost:3001/api/tasks/${editTaskId}`
+      : `http://localhost:3001/api/tasks/${currentSectionId}`;
+
+    const method = editTaskId ? "PUT" : "POST";
+
+    const res = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        question: taskForm.question,
+        options: JSON.stringify(taskForm.options),
+        correct_index: Number(taskForm.correct_index),
+      }),
+    });
+
+    const data = await res.json();
+
+    const normalized = {
+      ...data,
+      options:
+        typeof data.options === "string"
+          ? JSON.parse(data.options)
+          : data.options,
+    };
+
+    setSections((prev) =>
+      prev.map((s) => {
+        if (s.id !== currentSectionId) return s;
+        let updatedTasks = s.tasks || [];
+        if (editTaskId) {
+          updatedTasks = (s.tasks || []).map((t) =>
+            t.id === editTaskId ? normalized : t,
+          );
+        } else {
+          updatedTasks = [...(s.tasks || []), normalized];
+        }
+
+        return {
+          ...s,
+          tasks: updatedTasks,
+        };
+      }),
+    );
+
+    setTaskOpen(false);
+    setEditTaskId(null);
+  };
+  const deleteTask = async (taskId, sectionId) => {
+    await fetch(`http://localhost:3001/api/tasks/${taskId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    setSections((prev) =>
+      prev.map((s) =>
+        s.id === sectionId
+          ? {
+              ...s,
+              tasks: (s.tasks || []).filter((t) => t.id !== taskId),
+            }
+          : s,
+      ),
+    );
   };
   return (
     <div className="module-layout">
@@ -282,12 +401,15 @@ const ModuleSection = () => {
                     )}
                   </>
                 )}
-
                 <TaskList
                   section={section}
                   handleAnswer={handleAnswer}
                   answers={answers}
                   results={results}
+                  isAdmin={isAdmin}
+                  openCreateTask={openCreateTask}
+                  openEditTask={openEditTask}
+                  deleteTask={deleteTask}
                 />
                 {(section.tasks?.length ?? 0) > 0 && (
                   <button
@@ -360,6 +482,53 @@ const ModuleSection = () => {
             >
               Скасувати
             </button>
+          </div>
+        </div>
+      )}
+      {taskOpen && (
+        <div className="modal-wrapper">
+          <div className="modal">
+            <h3>{editTaskId ? "Редагувати" : "Створити"} завдання</h3>
+
+            <input
+              value={taskForm.question}
+              onChange={(e) =>
+                setTaskForm({ ...taskForm, question: e.target.value })
+              }
+              placeholder="Питання"
+            />
+
+            {taskForm.options.map((opt, i) => (
+              <div key={i}>
+                <input
+                  value={opt}
+                  onChange={(e) => {
+                    const newOptions = [...taskForm.options];
+                    newOptions[i] = e.target.value;
+                    setTaskForm({ ...taskForm, options: newOptions });
+                  }}
+                />
+
+                <input
+                  type="radio"
+                  checked={taskForm.correct_index === i}
+                  onChange={() =>
+                    setTaskForm({ ...taskForm, correct_index: i })
+                  }
+                />
+              </div>
+            ))}
+            {taskForm.options.length < 4 && (
+              <button type="button" onClick={addOption}>
+                + Додати варіант
+              </button>
+            )}
+
+            <button onClick={saveTask}>
+              {editTaskId ? "Оновити" : "Створити"}
+            </button>
+
+            <button onClick={() => setTaskOpen(false)}>Закрити</button>
           </div>
         </div>
       )}
