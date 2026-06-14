@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
+import pencilIcon from "../../assets/pencil.png";
+import deleteIcon from "../../assets/delete.png";
 import AdminPanel from "./AdminPanel";
 import TaskList from "./TaskList";
 import "./ModuleSection.css";
@@ -15,6 +17,9 @@ const ModuleSection = () => {
   const [results, setResults] = useState({});
   const [user, setUser] = useState(null);
   const [progressMap, setProgressMap] = useState({});
+  const [editSectionId, setEditSectionId] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [deleteSectionId, setDeleteSectionId] = useState(null);
   const [adminOpen, setAdminOpen] = useState(false);
 
   const [form, setForm] = useState({
@@ -149,39 +154,48 @@ const ModuleSection = () => {
     return Array.isArray(data) ? data : [];
   };
 
-  const createSection = async () => {
+  const saveSection = async () => {
     const formData = new FormData();
 
     formData.append("title", form.title);
     formData.append("type", form.type);
     formData.append("content", form.content);
 
-    if (form.media) {
+    if (form.media instanceof File) {
       formData.append("media", form.media);
     }
 
-    const res = await fetch(
-      `http://localhost:3001/api/modules/${id}/sections`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: formData,
+    const url = editSectionId
+      ? `http://localhost:3001/api/modules/${id}/sections/${editSectionId}`
+      : `http://localhost:3001/api/modules/${id}/sections`;
+
+    const method = editSectionId ? "PUT" : "POST";
+
+    const res = await fetch(url, {
+      method,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
-    );
-
-    const newSection = await res.json();
-    setSections((prev) => [...prev, { ...newSection, tasks: [] }]);
-
-    setForm({
-      title: "",
-      type: "reading",
-      content: "",
-      media: null,
+      body: formData,
     });
-  };
 
+    const data = await res.json();
+
+    if (editSectionId) {
+      setSections((prev) =>
+        prev.map((s) =>
+          s.id === editSectionId ? { ...data, tasks: s.tasks } : s,
+        ),
+      );
+    } else {
+      setSections((prev) => [...prev, { ...data, tasks: [] }]);
+    }
+
+    setEditSectionId(null);
+    setForm({ title: "", type: "reading", content: "", media: null });
+    setPreview(null);
+    setAdminOpen(false);
+  };
   return (
     <div className="module-layout">
       <Header />
@@ -205,6 +219,39 @@ const ModuleSection = () => {
           ) : (
             filtered.map((section) => (
               <div className="card" key={section.id}>
+                {isAdmin && (
+                  <div className="admin-actions">
+                    <button
+                      className="edit-button-section"
+                      onClick={() => {
+                        setEditSectionId(section.id);
+
+                        setForm({
+                          title: section.title,
+                          type: section.type,
+                          content: section.content,
+                          media: section.media,
+                        });
+
+                        setPreview(
+                          section.media
+                            ? `http://localhost:3001/uploads/${section.media}`
+                            : null,
+                        );
+
+                        setAdminOpen(true);
+                      }}
+                    >
+                      <img src={pencilIcon} alt="Edit" />
+                    </button>
+                    <button
+                      className="delete-button-section"
+                      onClick={() => setDeleteSectionId(section.id)}
+                    >
+                      <img src={deleteIcon} alt="Delete" />
+                    </button>
+                  </div>
+                )}
                 <h3>{section.title}</h3>
                 {section.type === "vocabulary" ? (
                   <div className="vocab-list">
@@ -276,9 +323,45 @@ const ModuleSection = () => {
             types={types}
             form={form}
             setForm={setForm}
-            createSection={createSection}
+            saveSection={saveSection}
           />
         </>
+      )}
+      {deleteSectionId && (
+        <div className="modal-wrapper" onClick={() => setDeleteSectionId(null)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Видалити секцію?</h3>
+            <button
+              className="save-button"
+              onClick={async () => {
+                await fetch(
+                  `http://localhost:3001/api/modules/${id}/sections/${deleteSectionId}`,
+                  {
+                    method: "DELETE",
+                    headers: {
+                      Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    },
+                  },
+                );
+
+                setSections((prev) =>
+                  prev.filter((s) => s.id !== deleteSectionId),
+                );
+
+                setDeleteSectionId(null);
+              }}
+            >
+              Так, видалити
+            </button>
+
+            <button
+              className="cancel-button"
+              onClick={() => setDeleteSectionId(null)}
+            >
+              Скасувати
+            </button>
+          </div>
+        </div>
       )}
 
       <Footer />

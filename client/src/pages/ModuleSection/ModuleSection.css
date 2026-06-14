@@ -54,6 +54,7 @@
 
 .card {
   background: #f7d6d6;
+  position: relative;
   border-radius: 14px;
   padding: 18px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
@@ -196,4 +197,29 @@ input[type="radio"] {
   transform: none;
   box-shadow: none;
   opacity: 0.7;
+}
+.admin-actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+}
+.edit-button-section,
+.delete-button-section {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #4d4d4d;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: #c4c4c4;
+  opacity: 0.7;
+}
+.edit-button-section img,
+.delete-button-section img {
+  width: 18px;
+  height: 18px;
 }

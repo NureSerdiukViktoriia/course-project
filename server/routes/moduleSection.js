@@ -14,12 +14,12 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.get("/:id/sections", authenticate, async (req, res) => {
+router.get("/:moduleId/sections", async (req, res) => {
   try {
-    const { id } = req.params;
+    const { moduleId } = req.params;
 
     const sections = await ModuleSection.findAll({
-      where: { module_id: id },
+      where: { module_id: moduleId },
     });
 
     res.json(sections);
@@ -30,13 +30,13 @@ router.get("/:id/sections", authenticate, async (req, res) => {
 });
 
 router.post(
-  "/:id/sections",
+  "/:moduleId/sections",
   authenticate,
   isAdmin,
   upload.single("media"),
   async (req, res) => {
     try {
-      const { id } = req.params;
+      const { moduleId } = req.params;
       const { type, title, content } = req.body;
 
       if (!title || !type || !content) {
@@ -44,7 +44,7 @@ router.post(
       }
 
       const section = await ModuleSection.create({
-        module_id: id,
+        module_id: moduleId,
         type,
         title,
         content,
@@ -53,8 +53,58 @@ router.post(
 
       res.json(section);
     } catch (err) {
+      console.error("CREATE ERROR:", err);
+      res.status(500).json({ error: err.message });
+    }
+  },
+);
+
+router.delete(
+  "/:moduleId/sections/:sectionId",
+  authenticate,
+  isAdmin,
+  async (req, res) => {
+    try {
+      const { sectionId } = req.params;
+
+      await ModuleSection.destroy({
+        where: { id: sectionId },
+      });
+
+      res.json({ success: true });
+    } catch (err) {
       console.error(err);
-      res.status(500).json({ error: "Помилка створення секції" });
+      res.status(500).json({ error: "Помилка видалення секції" });
+    }
+  },
+);
+
+router.put(
+  "/:moduleId/sections/:sectionId",
+  authenticate,
+  isAdmin,
+  upload.single("media"),
+  async (req, res) => {
+    try {
+      const { sectionId } = req.params;
+      const { title, type, content } = req.body;
+
+      const section = await ModuleSection.findByPk(sectionId);
+      if (!section) {
+        return res.status(404).json({ error: "Не знайдено" });
+      }
+
+      await section.update({
+        title,
+        type,
+        content,
+        media: req.file ? req.file.filename : section.media,
+      });
+
+      res.json(section);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Помилка оновлення секції" });
     }
   },
 );
