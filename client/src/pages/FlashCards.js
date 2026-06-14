@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './ExercisePage.css';
 import iconProfile from '../assets/userr.png';
-import iconFlashcards from '../assets/puzzle.png';
+import iconFlashcards from '../assets/flashcards.png';
 import Notification from '../components/Notification';
 
 const AppHeader = ({ onProfileClick }) => (
@@ -153,62 +153,56 @@ const FlashCards = () => {
                     <span>Бали: {score}</span>
                 </div>
 
-            <div
-                className="flashcard"
-                onClick={() => setIsFlipped(!isFlipped)}
-            >
-                {!isFlipped ? (
-                    <>
-                        <div className="flashcard-emoji">🍎</div>
+            <div className="flip-card-wrapper">
+                <div
+                    className={`flip-card ${isFlipped ? "flipped" : ""}`}
+                    onClick={() => setIsFlipped(!isFlipped)}
+                >
+                    <div className="flip-card-inner">
+                        <div className="flip-card-front">
+                            <div className="card-side-label">Українська</div>
 
-                        <p className="flashcard-label">Слово</p>
+                            <h2>{currentCard.question_text}</h2>
 
-                        <h2 className="flashcard-word">
-                            {currentCard.question_text}
-                        </h2>
+                            <p>Натисни, щоб побачити переклад</p>
+                        </div>
 
-                        <p className="flashcard-hint">
-                            Натисни, щоб побачити переклад
-                        </p>
-                    </>
-                ) : (
-                    <>
-                        <p className="flashcard-label">Переклад</p>
+                        <div className="flip-card-back">
+                            <div className="card-side-label">English</div>
 
-                        <h2 className="flashcard-word">
-                            {currentCard.correct_answer}
-                        </h2>
+                            <h2>{currentCard.correct_answer}</h2>
 
-                        <button
-                            className="speak-btn"
-                            onClick={(e) => {
-                                e.stopPropagation();
+                            <button
+                                className="card-sound-btn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
 
-                                window.speechSynthesis.cancel();
+                                    window.speechSynthesis.cancel();
 
-                                const utterance = new SpeechSynthesisUtterance(
-                                    currentCard.correct_answer
-                                );
+                                    const utterance = new SpeechSynthesisUtterance(
+                                        currentCard.correct_answer
+                                    );
 
-                                utterance.lang = "en-US";
-                                utterance.rate = 0.9;
+                                    utterance.lang = "en-US";
+                                    utterance.rate = 0.9;
 
-                                window.speechSynthesis.speak(utterance);
-                            }}
-                        >
-                            🔊 Прослухати
-                        </button>
-                    </>
-                )}
+                                    window.speechSynthesis.speak(utterance);
+                                }}
+                            >
+                                🔊 Прослухати
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
                 <div className="action-buttons">
-                    <button className="dont-know-btn" onClick={handleDontKnow}>
-                        Не знав (-)
+                    <button className="flashcard-dont-btn" onClick={handleDontKnow}>
+                        Не знав
                     </button>
 
-                    <button className="know-btn" onClick={handleKnow}>
-                        Знав (+10)
+                    <button className="flashcard-know-btn" onClick={handleKnow}>
+                        Знав
                     </button>
                 </div>
             </div>
