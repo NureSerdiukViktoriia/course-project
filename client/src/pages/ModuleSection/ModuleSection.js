@@ -64,16 +64,21 @@ const ModuleSection = () => {
 
     let total = 0;
     let correct = 0;
+    let wrong = 0;
 
     (section.tasks ?? []).forEach((task) => {
       const userAnswer = answers[task.id];
 
-      if (userAnswer === undefined || userAnswer === null) return;
-
       total++;
+      if (userAnswer === undefined || userAnswer === null) {
+        wrong++;
+        return;
+      }
 
       if (Number(userAnswer) === Number(task.correct_index)) {
         correct++;
+      } else {
+        wrong++;
       }
     });
 
