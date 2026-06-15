@@ -46,10 +46,12 @@ router.post("/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     let role = "user";
 
-    if (String(inviteCode) === String(process.env.ADMIN_CODE)) {
+    if (inviteCode?.trim()) {
+      if (inviteCode.trim() !== process.env.ADMIN_CODE?.trim()) {
+        return res.status(400).json({ error: "Невірний код доступу" });
+      }
       role = "admin";
     }
-
     const user = await User.create({
       first_name,
       second_name,
