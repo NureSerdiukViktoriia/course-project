@@ -63,17 +63,16 @@ const Profile = () => {
         return res.json();
       })
       .then((data) => {
-        const levelFromApi =
-          data.level.charAt(0).toUpperCase() +
-          data.level.slice(1).toLowerCase();
+        const normalizedLevel = (data.level || "").toLowerCase();
 
         setUserData(data);
+
         setEditData({
           first_name: data.first_name || "",
           last_name: data.second_name || "",
           email: data.email || "",
           phone: data.phone || "",
-          level: levels.includes(levelFromApi) ? levelFromApi : "",
+          level: normalizedLevel,
         });
         setLoading(false);
       })
@@ -262,7 +261,7 @@ const Profile = () => {
                 >
                   <option value="">-- Виберіть рівень --</option>
                   {levels.map((lvl) => (
-                    <option key={lvl.value} value={lvl.label}>
+                    <option key={lvl.value} value={lvl.value}>
                       {lvl.label}
                     </option>
                   ))}
