@@ -3,11 +3,16 @@ import { useNavigate } from "react-router-dom";
 import "./ChangePassword.css";
 import Footer from "../components/Footer.js";
 import Header from "../components/Header.js";
+import openIcon from "../assets/OpenEye.png";
+import hideIcon from "../assets/CloseEye.png";
 
 const ChangePassword = ({ onSuccess, onError }) => {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showOld, setShowOld] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState(null);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -65,32 +70,59 @@ const ChangePassword = ({ onSuccess, onError }) => {
         <form className="change-password-form" onSubmit={handleSubmit}>
           <label>
             Старий пароль
-            <input
-              type="password"
-              value={oldPassword}
-              onChange={(e) => setOldPassword(e.target.value)}
-              required
-            />
+            <div className="password-wrapper">
+              <input
+                type={showOld ? "text" : "password"}
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                required
+              />
+
+              <img
+                src={showOld ? hideIcon : openIcon}
+                className="eye-icon"
+                onClick={() => setShowOld((prev) => !prev)}
+                alt="toggle"
+              />
+            </div>
           </label>
 
           <label>
             Новий пароль
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
+            <div className="password-wrapper">
+              <input
+                type={showNew ? "text" : "password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
+
+              <img
+                src={showNew ? hideIcon : openIcon}
+                className="eye-icon"
+                onClick={() => setShowNew((prev) => !prev)}
+                alt="toggle"
+              />
+            </div>
           </label>
 
           <label>
             Підтвердження нового пароля
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+            <div className="password-wrapper">
+              <input
+                type={showConfirm ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+
+              <img
+                src={showConfirm ? hideIcon : openIcon}
+                className="eye-icon"
+                onClick={() => setShowConfirm((prev) => !prev)}
+                alt="toggle"
+              />
+            </div>
           </label>
 
           {message && (

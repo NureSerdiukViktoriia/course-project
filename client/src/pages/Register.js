@@ -6,6 +6,8 @@ import emailIcon from "../assets/email.png";
 import passwordIcon from "../assets/password.png";
 import userIcon from "../assets/user.png";
 import phoneIcon from "../assets/phone.png";
+import openIcon from "../assets/OpenEye.png";
+import hideIcon from "../assets/CloseEye.png";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ const Register = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showInvite, setShowInvite] = useState(false);
-
+  const [showPassword, setShowPassword] = useState(false);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -170,12 +172,21 @@ const Register = () => {
               <img src={passwordIcon} alt="Password icon" />
               <p>Пароль</p>
             </div>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-            />
+            <div className="password-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+
+              <img
+                src={showPassword ? hideIcon : openIcon}
+                alt="toggle password"
+                className="eye-icon"
+                onClick={() => setShowPassword((prev) => !prev)}
+              />
+            </div>
           </div>
 
           <div className="input-group">
@@ -195,7 +206,7 @@ const Register = () => {
           <div className="input-group">
             <div
               className="input-code"
-              onClick={() => setShowInvite(!showInvite)}
+              onClick={() => setShowInvite(true)}
               style={{ cursor: "pointer" }}
             >
               <p>У мене є код</p>
@@ -203,7 +214,7 @@ const Register = () => {
 
             {showInvite && (
               <input
-                type="text"
+                type="password"
                 name="inviteCode"
                 value={formData.inviteCode}
                 onChange={handleChange}

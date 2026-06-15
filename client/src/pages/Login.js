@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import emailIcon from "../assets/email.png";
 import passwordIcon from "../assets/password.png";
+import openIcon from "../assets/OpenEye.png";
+import hideIcon from "../assets/CloseEye.png";
 import "../pages/Register.css";
 
 const Login = () => {
@@ -9,7 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
   const validateForm = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
@@ -73,11 +75,21 @@ const Login = () => {
               <img src={passwordIcon} alt="Password icon" />
               <p>Пароль</p>
             </div>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+
+            <div className="password-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <img
+                src={showPassword ? hideIcon : openIcon}
+                className="eye-icon"
+                onClick={() => setShowPassword((prev) => !prev)}
+                alt="toggle password"
+              />
+            </div>
           </div>
 
           {error && (
