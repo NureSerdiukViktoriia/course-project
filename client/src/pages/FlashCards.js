@@ -97,9 +97,20 @@ const FlashCards = () => {
         });
     };
 
-    const handleKnow = () => {
+    const handleKnow = async () => {
         setScore(prev => prev + 10);
-        addXp();
+
+        const token = localStorage.getItem("token");
+
+        await fetch("http://localhost:3001/user/flashcard-correct", {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        await addXp();
+
         handleNextCard();
     };
 

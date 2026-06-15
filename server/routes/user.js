@@ -220,4 +220,35 @@ router.post("/add-xp", authenticate, async (req, res) => {
   }
 });
 
+router.post("/flashcard-correct", authenticate, async (req, res) => {
+  try {
+    let statistics = await UserStatistics.findOne({
+      where: { user_id: req.user.id },
+    });
+
+    if (!statistics) {
+      statistics = await UserStatistics.create({
+        user_id: req.user.id,
+        flashcards_correct: 0,
+      });
+    }
+
+    statistics.flashcards_correct += 1;
+    await statistics.save();
+
+    const user = await User.findByPk(req.user.id);
+
+    await checkAchievements(user);
+
+    res.json({
+      flashcards_correct: statistics.flashcards_correct,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Помилка сервера",
+    });
+  }
+});
+
 module.exports = router;
