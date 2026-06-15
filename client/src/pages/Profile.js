@@ -42,6 +42,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
+  const [achievements, setAchievements] = useState([]);
 
   const navigate = useNavigate();
 
@@ -74,6 +75,16 @@ const Profile = () => {
           phone: data.phone || "",
           level: normalizedLevel,
         });
+
+        return fetch("http://localhost:3001/user/achievements", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        setAchievements(data);
         setLoading(false);
       })
       .catch(() => {
@@ -303,6 +314,28 @@ const Profile = () => {
                   ? "Максимальний статус досягнуто"
                   : `${xp} / ${nextXp} XP до наступного статусу`}
               </p>
+            </div>
+
+            <div className="achievements-card">
+              <h3>Досягнення</h3>
+
+              {achievements.map((achievement) => (
+                <div
+                  key={achievement.id}
+                  className={`achievement-item ${
+                    achievement.completed ? "completed" : ""
+                  }`}
+                >
+                  <div>
+                    <strong>{achievement.name}</strong>
+                    <p>{achievement.description}</p>
+                  </div>
+
+                  <span>
+                    {achievement.completed ? "Виконано" : "Не виконано"}
+                  </span>
+                </div>
+              ))}
             </div>
 
             {message && (

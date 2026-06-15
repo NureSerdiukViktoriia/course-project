@@ -3,6 +3,9 @@ const router = express.Router();
 const authenticate = require("../middleware/auth");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const Achievement = require("../models/Achievement");
+const UserAchievement = require("../models/UserAchievement");
+const UserStatistics = require("../models/UserStatistics");
 
 router.get("/", authenticate, async (req, res) => {
   try {
@@ -99,6 +102,105 @@ router.post("/change-password", authenticate, async (req, res) => {
   }
 });
 
+router.get("/achievements", authenticate, async (req, res) => {
+  try {
+    const achievements = await Achievement.findAll();
+
+    const userAchievements = await UserAchievement.findAll({
+      where: {
+        user_id: req.user.id,
+      },
+    });
+
+    const earnedIds = userAchievements.map((item) => item.achievement_id);
+
+    const result = achievements.map((achievement) => ({
+      id: achievement.id,
+      name: achievement.name,
+      description: achievement.description,
+      condition_type: achievement.condition_type,
+      condition_value: achievement.condition_value,
+      xp_reward: achievement.xp_reward,
+      completed: earnedIds.includes(achievement.id),
+    }));
+
+    res.json(result);
+  } catch (error) {
+    console.error("Achievements error:", error);
+    res.status(500).json({
+      error: "Помилка при завантаженні досягнень",
+    });
+  }
+});
+
+const checkAchievements = async (user) => {
+  const achievements = await Achievement.findAll();
+
+  const statistics = await UserStatistics.findOne({
+    where: { user_id: user.id },
+  });
+
+  for (const achievement of achievements) {
+    let isUnlocked = false;
+
+    if (
+      achievement.condition_type === "total_xp" &&
+      user.xp >= achievement.condition_value
+    ) {
+      isUnlocked = true;
+    }
+
+    if (
+      achievement.condition_type === "flashcards_correct" &&
+      statistics &&
+      statistics.flashcards_correct >= achievement.condition_value
+    ) {
+      isUnlocked = true;
+    }
+
+    if (
+      achievement.condition_type === "listening_correct" &&
+      statistics &&
+      statistics.listening_correct >= achievement.condition_value
+    ) {
+      isUnlocked = true;
+    }
+
+    if (
+      achievement.condition_type === "completed_exercise_types" &&
+      statistics &&
+      statistics.completed_exercise_types
+    ) {
+      const completedTypes = statistics.completed_exercise_types
+        .split(",")
+        .filter(Boolean);
+
+      if (completedTypes.length >= achievement.condition_value) {
+        isUnlocked = true;
+      }
+    }
+
+    if (isUnlocked) {
+      const alreadyExists = await UserAchievement.findOne({
+        where: {
+          user_id: user.id,
+          achievement_id: achievement.id,
+        },
+      });
+
+      if (!alreadyExists) {
+        await UserAchievement.create({
+          user_id: user.id,
+          achievement_id: achievement.id,
+        });
+
+        user.xp += achievement.xp_reward || 0;
+        await user.save();
+      }
+    }
+  }
+};
+
 router.post("/add-xp", authenticate, async (req, res) => {
   try {
     const user = await User.findByPk(req.user.id);
@@ -109,6 +211,8 @@ router.post("/add-xp", authenticate, async (req, res) => {
 
     user.xp = (user.xp || 0) + 10;
     await user.save();
+
+    await checkAchievements(user);
 
     res.json({ xp: user.xp });
   } catch (error) {

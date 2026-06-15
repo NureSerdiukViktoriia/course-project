@@ -3,11 +3,56 @@ const router = express.Router();
 const OpenAI = require('openai');
 const authenticate = require('../middleware/auth');
 const User = require('../models/User');
+const AiConversation = require("../models/AiConversation");
+const AiMessage = require("../models/AiMessage");
+const UserStatistics = require("../models/UserStatistics");
+const Achievement = require("../models/Achievement");
+const UserAchievement = require("../models/UserAchievement");
 
 const openai = new OpenAI({
     apiKey: process.env.OPENROUTER_API_KEY,
     baseURL: 'https://openrouter.ai/api/v1',
 });
+
+const checkAchievements = async (user) => {
+    const achievements = await Achievement.findAll();
+
+    const statistics = await UserStatistics.findOne({
+        where: { user_id: user.id },
+    });
+
+    for (const achievement of achievements) {
+        let isUnlocked = false;
+
+        if (
+            achievement.condition_type === "first_chat" &&
+            statistics &&
+            statistics.first_chat_count >= achievement.condition_value
+        ) {
+            isUnlocked = true;
+        }
+
+        if (isUnlocked) {
+            const alreadyExists = await UserAchievement.findOne({
+                where: {
+                    user_id: user.id,
+                    achievement_id: achievement.id,
+                },
+            });
+
+            if (!alreadyExists) {
+                await UserAchievement.create({
+                    user_id: user.id,
+                    achievement_id: achievement.id,
+                });
+
+                user.xp = (user.xp || 0) + (achievement.xp_reward || 0);
+                await user.save();
+            }
+        }
+    }
+};
+
 
 router.post('/', authenticate, async (req, res) => {
     const { message, topic, level, language } = req.body;
@@ -18,9 +63,15 @@ router.post('/', authenticate, async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: "Пользователь не найден" });
         }
+        
+        const conversation = await AiConversation.create({
+            user_id: user.id,
+            topic: topic || null,
+            language: language || "english",
+        });
 
         let instruction = `
-            You are Lexi, a friendly AI language tutor.
+            You are a friendly AI language tutor.
 
             Current conversation language: ${language || "english"}.
             Current user level: ${level || "beginner"}.
@@ -122,6 +173,34 @@ router.post('/', authenticate, async (req, res) => {
             .replace("[LANGUAGE: english]", "")
             .replace("[LANGUAGE: ukrainian]", "")
             .trim();
+
+        await AiMessage.create({
+            conversation_id: conversation.id,
+            sender_role: "user",
+            text_content: message,
+        });
+
+        await AiMessage.create({
+            conversation_id: conversation.id,
+            sender_role: "assistant",
+            text_content: cleanResponse,
+        });
+
+        let statistics = await UserStatistics.findOne({
+            where: { user_id: user.id },
+        });
+
+        if (!statistics) {
+            statistics = await UserStatistics.create({
+                user_id: user.id,
+                first_chat_count: 0,
+            });
+        }
+
+        statistics.first_chat_count = (statistics.first_chat_count || 0) + 1;
+        await statistics.save();
+
+        await checkAchievements(user);
 
         res.json({
             reply: cleanResponse,
