@@ -97,6 +97,21 @@ const FlashCards = () => {
         });
     };
 
+    const completeExerciseType = async () => {
+        const token = localStorage.getItem("token");
+
+        await fetch("http://localhost:3001/user/complete-exercise-type", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                exerciseType: "flashcards",
+            }),
+        });
+    };
+
     const handleKnow = async () => {
         setScore(prev => prev + 10);
 
@@ -118,11 +133,13 @@ const FlashCards = () => {
         handleNextCard();
     };
 
-    const handleNextCard = () => {
+    const handleNextCard = async () => {
         if (currentIndex < cards.length - 1) {
             setCurrentIndex(prev => prev + 1);
             setIsFlipped(false);
         } else {
+            await completeExerciseType();
+
             setNotification({
                 message: `Вправа завершена! Ваш результат: ${score} балів`,
                 type: 'info',

@@ -191,7 +191,7 @@
 }
 
 .xp-card {
-  margin-top: 25px;
+  margin-top: 10px;
   padding: 20px;
   border-radius: 18px;
   background: #f6eeee;
@@ -200,7 +200,7 @@
 .xp-row {
   display: flex;
   justify-content: space-between;
-  font-size: 20px;
+  font-size: 18px;
   margin-bottom: 12px;
 }
 
@@ -220,7 +220,7 @@
 }
 
 .xp-text {
-  margin-top: 10px;
+  margin: 12px 0 0;
   font-size: 16px;
   color: #555;
 }
@@ -234,7 +234,7 @@
 }
 
 .achievements-card h3 {
-  font-size: 28px;
+  font-size: 22px;
   margin-bottom: 22px;
 }
 
@@ -255,7 +255,7 @@
 }
 
 .achievement-item strong {
-  font-size: 20px;
+  font-size: 19px;
 }
 
 .achievement-item p {
@@ -281,4 +281,11 @@
 
 .achievement-item.completed .achievement-status {
   color: #2e9b4f;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 35px 0 15px;
+  color: #222;
 }

@@ -291,29 +291,32 @@ const Profile = () => {
               Змінити пароль
             </button>
 
-            <div className="xp-card">
-              <div className="xp-row">
-                <span>XP:</span>
-                <strong>{xp}</strong>
-              </div>
+            <div className="progress-section">
+            <h3 className="section-title">Прогрес користувача</h3>
+              <div className="xp-card">
+                <div className="xp-row">
+                  <span>XP:</span>
+                  <strong>{xp}</strong>
+                </div>
 
-              <div className="xp-row">
-                <span>Статус:</span>
-                <strong>{status}</strong>
-              </div>
+                <div className="xp-row">
+                  <span>Статус:</span>
+                  <strong>{status}</strong>
+                </div>
 
-              <div className="xp-progress-bar">
-                <div
-                  className="xp-progress"
-                  style={{ width: `${progress}%` }}
-                ></div>
-              </div>
+                <div className="xp-progress-bar">
+                  <div
+                    className="xp-progress"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
 
-              <p className="xp-text">
-                {xp >= 2000
-                  ? "Максимальний статус досягнуто"
-                  : `${xp} / ${nextXp} XP до наступного статусу`}
-              </p>
+                <p className="xp-text">
+                  {xp >= 2000
+                    ? "Максимальний статус досягнуто"
+                    : `${xp} / ${nextXp} XP до наступного статусу`}
+                </p>
+              </div>
             </div>
 
             <div className="achievements-card">

@@ -97,6 +97,21 @@ const MultipleChoiceTest = () => {
     });
   };
 
+const completeExerciseType = async () => {
+    const token = localStorage.getItem("token");
+
+    await fetch("http://localhost:3001/user/complete-exercise-type", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+            exerciseType: "multiple-choice",
+        }),
+    });
+};
+
   const handleAnswerSelect = (option) => {
     if (selectedAnswer) return;
     const currentQuestion = questions[currentIndex];
@@ -110,12 +125,14 @@ const MultipleChoiceTest = () => {
     }
   };
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = async () => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
       setSelectedAnswer(null);
       setIsCorrect(null);
     } else {
+      await completeExerciseType();
+
       setNotification({
         message: `Тест завершен! Ваш результат: ${score} балів`,
         type: "info",

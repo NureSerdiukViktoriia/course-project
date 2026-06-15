@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './ExercisePage.css'; 
 import iconProfile from '../assets/userr.png'; 
 import iconPuzzle from '../assets/puzzle.png'; 
+import Notification from "../components/Notification";
 
 const AppHeader = ({ onProfileClick }) => (
     <header className="app-header-words">
@@ -31,6 +32,12 @@ const AppHeader = ({ onProfileClick }) => (
     const [isChecked, setIsChecked] = useState(false);
     const [isCorrect, setIsCorrect] = useState(null);
     const [score, setScore] = useState(0);
+
+    const [notification, setNotification] = useState({
+        message: "",
+        type: "",
+        onConfirm: null,
+    });
 
     useEffect(() => {
         document.body.style.backgroundColor = "#f0b8b8";
@@ -75,6 +82,21 @@ const AppHeader = ({ onProfileClick }) => (
         });
     };
 
+    const completeExerciseType = async () => {
+        const token = localStorage.getItem("token");
+
+        await fetch("http://localhost:3001/user/complete-exercise-type", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                exerciseType: "sentence-builder",
+            }),
+        });
+    };
+
     const handleCheckAnswer = () => {
         const currentTask = tasks[currentIndex];
         const formattedInput = inputValue.trim().replace(/[.?]$/, "");
@@ -90,18 +112,35 @@ const AppHeader = ({ onProfileClick }) => (
         setIsChecked(true);
     };
 
-    const handleNextTask = () => {
+    const handleNextTask = async () => {
         if (currentIndex < tasks.length - 1) {
             setCurrentIndex(prev => prev + 1);
             setInputValue('');
             setIsChecked(false);
             setIsCorrect(null);
         } else {
-            alert(`Вправа завершена! Ваш результат: ${score} балів`);
-            navigate('/words');
+            await completeExerciseType();
+
+            setNotification({
+                message: `Вправа завершена! Ваш результат: ${score} балів`,
+                type: "info",
+                onConfirm: () => navigate('/words'),
+            });
         }
     };
     
+    const hideNotification = () => {
+        if (notification.onConfirm) {
+            notification.onConfirm();
+        }
+
+        setNotification({
+            message: "",
+            type: "",
+            onConfirm: null,
+        });
+    };
+
     if (isLoading) return <div>Завантаження...</div>;
     if (error) return <div>Помилка: {error}</div>;
 
@@ -110,6 +149,11 @@ const AppHeader = ({ onProfileClick }) => (
     return (
         <div className="exercise-page">
             <AppHeader onProfileClick={handleProfileNavigation} />
+            <Notification
+                message={notification.message}
+                type={notification.type}
+                onClose={hideNotification}
+            />
             <div className="exercise-content">
                 <div className="task-header">
                     <img src={iconPuzzle} alt="Побудуй речення" className="task-icon" />

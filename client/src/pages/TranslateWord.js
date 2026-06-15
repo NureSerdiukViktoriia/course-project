@@ -89,6 +89,21 @@ const TranslateWord = () => {
         });
     };
 
+    const completeExerciseType = async () => {
+        const token = localStorage.getItem("token");
+
+        await fetch("http://localhost:3001/user/complete-exercise-type", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                exerciseType: "translate-word",
+            }),
+        });
+    };
+
     const handleCheckAnswer = () => {
         const currentTask = tasks[currentIndex];
         if (inputValue.trim().toLowerCase() === currentTask.correct_answer.toLowerCase()) {
@@ -101,11 +116,13 @@ const TranslateWord = () => {
         setIsChecked(true);
     };
 
-    const handleNextTask = () => {
+    const handleNextTask = async () => {
         if (currentIndex < tasks.length - 1) {
             setCurrentIndex(prev => prev + 1);
             setInputValue(''); setIsChecked(false); setIsCorrect(null);
         } else {
+            await completeExerciseType();
+
             setNotification({
                 message: `Вправа завершена! Ваш результат: ${score} балів`,
                 type: 'info',

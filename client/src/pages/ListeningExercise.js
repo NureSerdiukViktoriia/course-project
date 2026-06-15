@@ -109,6 +109,21 @@ const ListeningExercise = () => {
     });
   };
 
+  const completeExerciseType = async () => {
+    const token = localStorage.getItem("token");
+
+    await fetch("http://localhost:3001/user/complete-exercise-type", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        exerciseType: "listening",
+      }),
+    });
+  };
+
   const handleAnswerSelect = (answer) => {
     if (isAnswered) return;
 
@@ -118,6 +133,16 @@ const ListeningExercise = () => {
     if (answer === tasks[currentIndex].correct_answer) {
       setIsCorrect(true);
       setScore((prev) => prev + 10);
+
+      const token = localStorage.getItem("token");
+
+      fetch("http://localhost:3001/user/listening-correct", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       addXp();
     } else {
       setIsCorrect(false);
@@ -131,6 +156,8 @@ const ListeningExercise = () => {
       setIsAnswered(false);
       setIsCorrect(null);
     } else {
+      completeExerciseType();
+
       setNotification({
         message: `Тест завершено! Ваш результат: ${score} балів`,
         type: "info",

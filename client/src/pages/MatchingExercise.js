@@ -92,6 +92,21 @@ const MatchingExercise = () => {
     });
   };
 
+  const completeExerciseType = async () => {
+      const token = localStorage.getItem("token");
+
+      await fetch("http://localhost:3001/user/complete-exercise-type", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+              exerciseType: "matching",
+          }),
+      });
+  };
+
   const isMatched = (word, side) => {
     return matchedPairs.some((pair) =>
       side === "left" ? pair.left === word : pair.right === word
@@ -192,7 +207,13 @@ const MatchingExercise = () => {
 
       {matchedPairs.length === tasks.length && (
       <div className="action-buttons" style={{ marginTop: "30px" }}>
-        <button className="next-btn" onClick={() => navigate("/words")}>
+        <button
+          className="next-btn"
+          onClick={async () => {
+            await completeExerciseType();
+            navigate("/words");
+          }}
+        >
           Завершити
         </button>
       </div>

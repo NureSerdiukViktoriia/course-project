@@ -251,4 +251,78 @@ router.post("/flashcard-correct", authenticate, async (req, res) => {
   }
 });
 
+router.post("/listening-correct", authenticate, async (req, res) => {
+  try {
+    let statistics = await UserStatistics.findOne({
+      where: { user_id: req.user.id },
+    });
+
+    if (!statistics) {
+      statistics = await UserStatistics.create({
+        user_id: req.user.id,
+        listening_correct: 0,
+      });
+    }
+
+    statistics.listening_correct += 1;
+    await statistics.save();
+
+    const user = await User.findByPk(req.user.id);
+
+    await checkAchievements(user);
+
+    res.json({
+      listening_correct: statistics.listening_correct,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Помилка сервера",
+    });
+  }
+});
+
+router.post(
+  "/complete-exercise-type",
+  authenticate,
+  async (req, res) => {
+    try {
+      const { exerciseType } = req.body;
+
+      let statistics = await UserStatistics.findOne({
+        where: { user_id: req.user.id },
+      });
+
+      if (!statistics) {
+        statistics = await UserStatistics.create({
+          user_id: req.user.id,
+        });
+      }
+
+      const currentTypes = statistics.completed_exercise_types
+        ? statistics.completed_exercise_types.split(",")
+        : [];
+
+      if (!currentTypes.includes(exerciseType)) {
+        currentTypes.push(exerciseType);
+
+        statistics.completed_exercise_types =
+          currentTypes.join(",");
+
+        await statistics.save();
+      }
+
+      const user = await User.findByPk(req.user.id);
+      await checkAchievements(user);
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({
+        error: "Помилка сервера",
+      });
+    }
+  }
+);
+
 module.exports = router;
