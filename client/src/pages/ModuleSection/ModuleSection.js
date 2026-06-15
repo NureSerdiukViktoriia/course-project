@@ -377,18 +377,6 @@ const ModuleSection = () => {
                   </div>
                 )}
                 <h3>{section.title}</h3>
-                {section.type === "vocabulary" ? (
-                  <div className="vocab-list">
-                    {JSON.parse(section.content).map((w, i) => (
-                      <div className="vocab-item" key={i}>
-                        {w.word} — {w.translation}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p style={{ whiteSpace: "pre-line" }}>{section.content}</p>
-                )}
-
                 {section.media && (
                   <>
                     {section.media.endsWith(".mp3") ||
@@ -406,6 +394,26 @@ const ModuleSection = () => {
                     )}
                   </>
                 )}
+                {section.type === "vocabulary" ? (
+                  <div className="vocab-list">
+                    {section.content
+                      .split("\n")
+                      .filter(Boolean)
+                      .map((line, i) => {
+                        const [word, translation] = line.split("—");
+
+                        return (
+                          <div className="vocab-item" key={i}>
+                            <span>{word?.trim()}</span>
+                            <span>{translation?.trim()}</span>
+                          </div>
+                        );
+                      })}
+                  </div>
+                ) : (
+                  <p className="text">{section.content}</p>
+                )}
+
                 <TaskList
                   section={section}
                   handleAnswer={handleAnswer}

@@ -40,7 +40,7 @@ const AdminPanel = ({ open, onClose, types, form, setForm, saveSection }) => {
         <textarea
           className="input-description"
           placeholder="Зміст"
-          value={form.content}
+          value={form.content || ""}
           onChange={(e) => setForm({ ...form, content: e.target.value })}
         />
 
