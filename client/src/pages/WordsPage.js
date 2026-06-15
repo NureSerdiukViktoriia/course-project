@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom'; 
+import Header from "../components/Header";
 import Footer from '../components/Footer.js';
 import './WordsPage.css';
 import iconChoice from '../assets/communication.png';
@@ -9,23 +10,6 @@ import iconProfile from '../assets/userr.png';
 import iconMatching from '../assets/matching.png';
 import iconListening from '../assets/listening.png';
 import iconFlashcards from '../assets/flashcards.png';
-
-const AppHeader = ({ onProfileClick }) => (
-    <header className="app-header-words">
-        <div className="header-nav-words">
-            <Link to="/home" className="nav-link-words">
-                <i className="fas fa-arrow-left"></i>
-                <span>Головна</span>
-            </Link>
-            <Link to="/languageBuddy" className="nav-link-words">
-                    AI Learning Assistant
-            </Link>
-        </div>
-        <div className="header-profile" onClick={onProfileClick}>
-                    <img src={iconProfile} alt="Profile" />
-        </div>
-    </header>
-);
 
 const exercises = [
     { 
@@ -73,7 +57,7 @@ const WordsPage = () => {
 
     return (
         <div className="words-home-page">
-            <AppHeader onProfileClick={handleProfileNavigation} />
+            <Header />
             <div className="words-home-content">
                 <h1 className="main-title">Вивчення Нових Слів</h1>
                 <p className="subtitle">

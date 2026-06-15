@@ -9,40 +9,11 @@
     --text-light: #fff;
     --font-primary: 'Sofia Sans', sans-serif;
 }
-
 .language-buddy-page {
     font-family: var(--font-primary);
     background-color: var(--bg-main);
     color: var(--text-dark);
     min-height: 100vh;
-}
-.app-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    font-size: 18px;
-    font-weight: 700; 
-}
-.header-nav {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-}
-.nav-link {
-    text-decoration: none;
-    color: var(--text-dark);
-}
-.back-link {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.header-profile img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    cursor: pointer;
 }
 .main-container {
     display: flex;

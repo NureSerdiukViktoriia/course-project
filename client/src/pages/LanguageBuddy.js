@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './LanguageBuddy.css';
+import Header from "../components/Header";
 import Footer from "../components/Footer.js";
 import iconAeroport from '../assets/aeroport.png';
 import iconRestoran from '../assets/restoran.png';
@@ -9,23 +10,6 @@ import iconProfile from '../assets/userr.png';
 import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-
-const AppHeader = ({ onProfileClick }) => (
-    <header className="app-header">
-        <div className="header-nav">
-            <Link to="/home" className="nav-link back-link">
-                <i className="fas fa-arrow-left"></i>
-                <span>Головна</span>
-            </Link>
-            <Link to="/words" className="nav-link">
-                Вивчення слів
-            </Link>
-        </div>
-        <div className="header-profile" onClick={onProfileClick}>
-            <img src={iconProfile} alt="Profile" />
-        </div>
-    </header>
-);
 
 const topics = [
     { name: 'Аеропорт', icon: iconAeroport },
@@ -320,7 +304,7 @@ const LanguageBuddy = () => {
 
     return (
         <div className="language-buddy-page">
-            <AppHeader onProfileClick={handleProfileNavigation} />
+            <Header />
             <h1 className="page-title">AI Learning Assistant</h1>
             <main className="main-container">
                 <ChatSidebar 

@@ -12,24 +12,6 @@ const levels = [
   { label: "Просунутий", value: "просунутий" },
 ];
 
-const getXpStatus = (xp = 0) => {
-  if (xp >= 2000) return "Майстер";
-  if (xp >= 1000) return "Просунутий мовець";
-  if (xp >= 600) return "Впевнений мовець";
-  if (xp >= 300) return "Практик";
-  if (xp >= 100) return "Початківець";
-  return "Новачок";
-};
-
-const getNextXp = (xp = 0) => {
-  if (xp < 100) return 100;
-  if (xp < 300) return 300;
-  if (xp < 600) return 600;
-  if (xp < 1000) return 1000;
-  if (xp < 2000) return 2000;
-  return xp;
-};
-
 const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [editData, setEditData] = useState({
@@ -43,7 +25,9 @@ const Profile = () => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
   const [achievements, setAchievements] = useState([]);
-
+  const [currentBadge, setCurrentBadge] = useState(null);
+  const [nextBadge, setNextBadge] = useState(null);
+  
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -85,6 +69,17 @@ const Profile = () => {
       .then((res) => res.json())
       .then((data) => {
         setAchievements(data);
+
+        return fetch("http://localhost:3001/user/badges", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      })
+      .then((res) => res.json())
+      .then((badgeData) => {
+        setCurrentBadge(badgeData.currentBadge);
+        setNextBadge(badgeData.nextBadge);
         setLoading(false);
       })
       .catch(() => {
@@ -203,9 +198,18 @@ const Profile = () => {
   if (error) return <p className="error">Помилка: {error}</p>;
 
   const xp = userData?.xp || 0;
-  const nextXp = getNextXp(xp);
-  const status = getXpStatus(xp);
-  const progress = nextXp === xp ? 100 : Math.min((xp / nextXp) * 100, 100);
+  const status = currentBadge?.name || "Новачок";
+  const nextXp = nextBadge?.min_xp || xp;
+  const currentMinXp = currentBadge?.min_xp || 0;
+
+  const progress = nextBadge
+    ? Math.min(
+        ((xp - currentMinXp) /
+          (nextBadge.min_xp - currentMinXp)) *
+          100,
+        100
+      )
+    : 100;
 
   return (
     <div className="profile-wrapper">
@@ -291,6 +295,12 @@ const Profile = () => {
               Змінити пароль
             </button>
 
+            {message && (
+              <p className={message.type === "error" ? "error" : "success"}>
+                {message.text}
+              </p>
+            )}
+
             <div className="progress-section">
             <h3 className="section-title">Прогрес користувача</h3>
               <div className="xp-card">
@@ -312,9 +322,9 @@ const Profile = () => {
                 </div>
 
                 <p className="xp-text">
-                  {xp >= 2000
-                    ? "Максимальний статус досягнуто"
-                    : `${xp} / ${nextXp} XP до наступного статусу`}
+                  {nextBadge
+                    ? `${xp} / ${nextXp} XP до наступного статусу`
+                    : "Максимальний статус досягнуто"}
                 </p>
               </div>
             </div>
@@ -340,12 +350,6 @@ const Profile = () => {
                 </div>
               ))}
             </div>
-
-            {message && (
-              <p className={message.type === "error" ? "error" : "success"}>
-                {message.text}
-              </p>
-            )}
           </form>
         </div>
 

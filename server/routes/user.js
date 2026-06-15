@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const Achievement = require("../models/Achievement");
 const UserAchievement = require("../models/UserAchievement");
 const UserStatistics = require("../models/UserStatistics");
+const Badge = require("../models/Badge");
 
 router.get("/", authenticate, async (req, res) => {
   try {
@@ -282,10 +283,7 @@ router.post("/listening-correct", authenticate, async (req, res) => {
   }
 });
 
-router.post(
-  "/complete-exercise-type",
-  authenticate,
-  async (req, res) => {
+router.post( "/complete-exercise-type", authenticate, async (req, res) => {
     try {
       const { exerciseType } = req.body;
 
@@ -325,4 +323,28 @@ router.post(
   }
 );
 
+router.get("/badges", authenticate, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+    const badges = await Badge.findAll({
+      order: [["min_xp", "ASC"]],
+    });
+
+    const xp = user.xp || 0;
+
+    const currentBadge =
+      badges.filter((badge) => xp >= badge.min_xp).pop() || badges[0];
+
+    const nextBadge =
+      badges.find((badge) => xp < badge.min_xp) || currentBadge;
+
+    res.json({
+      currentBadge,
+      nextBadge,
+      badges,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Помилка при завантаженні бейджів" });
+  }
+});
 module.exports = router;

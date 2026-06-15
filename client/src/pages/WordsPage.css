@@ -13,39 +13,6 @@
     flex-direction: column;
 }
 
-.app-header-words {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    flex-shrink: 0;
-}
-.header-nav-words {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    font-size: 18px;
-}
-.app-name-header-words {
-    font-weight: 700;
-}
-.nav-link-words {
-    text-decoration: none;
-    color: var(--text-dark);
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.header-profile-words {
-    cursor: pointer;
-}
-.header-profile-words img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-}
-
 .words-home-content {
     text-align: center;
     padding: 30px 20px;
