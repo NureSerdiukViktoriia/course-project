@@ -18,7 +18,7 @@ const TaskList = ({
   const tasks = Array.isArray(section.tasks) ? section.tasks : [];
 
   return (
-    <>
+      <div className="task-list">
       {tasks.length === 0 && <p style={{ opacity: 0.6 }}>Немає завдань</p>}
 
       {tasks.map((task) => {
@@ -96,7 +96,7 @@ const TaskList = ({
           Додати завдання
         </button>
       )}
-    </>
+    </div>
   );
 };
 
