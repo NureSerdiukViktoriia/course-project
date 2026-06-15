@@ -19,54 +19,83 @@ const Analytics = ({ userId }) => {
 
   if (!data) return <p>Завантаження аналітики...</p>;
 
-  return (
-    <div className="analytics">
-      {data.modules.map((m, index) => (
-        <div key={index} className="module-card">
-          <div
-            className="module-header"
-            onClick={() => setOpenIndex(openIndex === index ? null : index)}
-          >
-            <h3>{m.title}</h3>
-            <span>{Math.round(m.avg)}%</span>
-          </div>
+ return (
+  <div className="analytics-page">
+    <h2 className="analytics-title">Аналітика по курсах</h2>
 
-          {openIndex === index && (
-            <div className="module-body">
-              {m.sections.map((s) => (
-                <div key={s.id} className="bar-row">
-                  <span>
-                    {s.type} {s.sectionTitle ? `(${s.sectionTitle})` : ""}
-                  </span>
+    {!data ? (
+      <p>Завантаження...</p>
+    ) : (
+      <>
+        <div className="courses-list">
+          {data.modules.map((m, index) => (
+            <div
+              key={m.moduleId}
+              className="course-card"
+              onClick={() =>
+                setOpenIndex(openIndex === index ? null : index)
+              }
+            >
+              <div className="course-header">
+                <span>{m.title}</span>
+                <span className="percent">{Math.round(m.avg)}%</span>
+              </div>
 
-                  <div className="bar-bg">
-                    <div
-                      className="bar-fill"
-                      style={{ width: `${s.progress}%` }}
-                    />
-                  </div>
-
-                  <span>{s.progress}%</span>
-                </div>
-              ))}
-
-              <div className="recommendations">
-                <h4>Рекомендації</h4>
-
-                {m.sections
-                  ?.filter((s) => s.progress < 50)
-                  ?.map((s) => (
-                    <p key={s.id}>
-                      Рекомендується повторити: {s.sectionTitle || s.type}
-                    </p>
-                  ))}
+              <div className="course-bar">
+                <div
+                  className="course-fill"
+                  style={{ width: `${m.avg}%` }}
+                />
               </div>
             </div>
-          )}
+          ))}
         </div>
-      ))}
-    </div>
-  );
+
+        {openIndex !== null && data.modules[openIndex] && (
+          <div className="course-details">
+            <h3>{data.modules[openIndex].title}</h3>
+
+            {data.modules[openIndex].sections.map((s) => (
+              <div key={s.id} className="section-row">
+                <span>
+                  {s.type} {s.sectionTitle ? `(${s.sectionTitle})` : ""}
+                </span>
+
+                <div className="mini-bar">
+                  <div
+                    className="mini-fill"
+                    style={{ width: `${s.progress}%` }}
+                  />
+                </div>
+
+                <span>{s.progress}%</span>
+              </div>
+            ))}
+
+            <div className="recommendations">
+              {data.modules[openIndex].sections.some(
+                (s) => s.progress < 50
+              ) ? (
+                <>
+                  <h4>Рекомендації</h4>
+                  {data.modules[openIndex].sections
+                    .filter((s) => s.progress < 50)
+                    .map((s) => (
+                      <p key={s.id}>
+                        Рекомендується повторити: {s.sectionTitle || s.type}
+                      </p>
+                    ))}
+                </>
+              ) : (
+                <p className="no-reco">Рекомендацій немає!</p>
+              )}
+            </div>
+          </div>
+        )}
+      </>
+    )}
+  </div>
+);
 };
 
 export default Analytics;
