@@ -32,7 +32,7 @@ router.post("/register", async (req, res) => {
   if (!allowedLevels.includes(level)) {
     return res
       .status(400)
-      .json({ error: "Неправильне значення рівня (level)" });
+      .json({ error: "Неправильне значення рівня" });
   }
 
   try {

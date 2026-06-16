@@ -40,7 +40,7 @@ const TaskList = ({
             {isAdmin && (
               <div className="admin-actions-task">
                 <button
-                  className="edit-button-task"
+                  className="edit-button"
                   onClick={() => {
                     if (typeof openEditTask === "function") {
                       openEditTask(task);
@@ -53,7 +53,7 @@ const TaskList = ({
                 </button>
 
                 <button
-                  className="delete-button-task"
+                  className="delete-button"
                   onClick={() => deleteTask(task.id, section.id)}
                 >
                   <img src={deleteIcon} alt="Delete" />

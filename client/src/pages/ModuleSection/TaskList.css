@@ -36,55 +36,12 @@
   cursor: pointer;
   color: #333;
 }
-.edit-button-task,
-.delete-button-task {
-  width: 34px;
-  height: 34px;
-
-  border: none;
-  border-radius: 10px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  cursor: pointer;
-
-  transition: all 0.2s ease;
-
-  background: white;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-}
-
-.edit-button-task:hover {
-  background: #e8f2ff;
-  transform: translateY(-2px);
-}
-
-.delete-button-task:hover {
-  background: #ffe5e5;
-  transform: translateY(-2px);
-}
-
-.edit-button-task:active,
-.delete-button-task:active {
-  transform: scale(0.95);
-}
-.edit-button-task img,
-.delete-button-task img {
-  width: 18px;
-  height: 18px;
-  display: block;
-  object-fit: contain;
-}
 .admin-actions-task {
   position: absolute;
   top: 10px;
   right: 10px;
-
   display: flex;
   gap: 6px;
-
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(6px);
   padding: 4px;

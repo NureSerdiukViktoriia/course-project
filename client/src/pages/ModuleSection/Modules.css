@@ -175,19 +175,17 @@
 .delete-button {
   width: 32px;
   height: 32px;
-  border: 1px solid #4d4d4d;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background: #c4c4c4;
   opacity: 0.7;
 }
 .edit-button img,
 .delete-button img {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 }
 .preview-img {
   width: 100%;

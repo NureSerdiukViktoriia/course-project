@@ -346,7 +346,7 @@ const ModuleSection = () => {
                 {isAdmin && (
                   <div className="admin-actions">
                     <button
-                      className="edit-button-section"
+                      className="edit-button"
                       onClick={() => {
                         setEditSectionId(section.id);
 
@@ -369,7 +369,7 @@ const ModuleSection = () => {
                       <img src={pencilIcon} alt="Edit" />
                     </button>
                     <button
-                      className="delete-button-section"
+                      className="delete-button"
                       onClick={() => setDeleteSectionId(section.id)}
                     >
                       <img src={deleteIcon} alt="Delete" />
@@ -387,7 +387,7 @@ const ModuleSection = () => {
                         />
                       </audio>
                     ) : (
-                      <img
+                      <img className="card-image"
                         src={`http://localhost:3001/uploads/${section.media}`}
                         alt={section.title}
                       />
@@ -499,11 +499,12 @@ const ModuleSection = () => {
         </div>
       )}
       {taskOpen && (
-        <div className="modal-wrapper">
-          <div className="modal">
+        <div className="modal-wrapper" onClick={() => setTaskOpen(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h3>{editTaskId ? "Редагувати" : "Створити"} завдання</h3>
 
             <input
+              className="input"
               value={taskForm.question}
               onChange={(e) =>
                 setTaskForm({ ...taskForm, question: e.target.value })
@@ -512,9 +513,11 @@ const ModuleSection = () => {
             />
 
             {taskForm.options.map((opt, i) => (
-              <div key={i}>
+              <div className="task-option" key={i}>
                 <input
+                  className="input"
                   value={opt}
+                  placeholder={`Варіант ${i + 1}`}
                   onChange={(e) => {
                     const newOptions = [...taskForm.options];
                     newOptions[i] = e.target.value;
@@ -522,26 +525,37 @@ const ModuleSection = () => {
                   }}
                 />
 
-                <input
-                  type="radio"
-                  checked={taskForm.correct_index === i}
-                  onChange={() =>
-                    setTaskForm({ ...taskForm, correct_index: i })
-                  }
-                />
+                <label className="correct-answer">
+                  <input
+                    type="radio"
+                    checked={taskForm.correct_index === i}
+                    onChange={() =>
+                      setTaskForm({
+                        ...taskForm,
+                        correct_index: i,
+                      })
+                    }
+                  />
+                </label>
               </div>
             ))}
+
             {taskForm.options.length < 4 && (
-              <button type="button" onClick={addOption}>
-                + Додати варіант
+              <button className="save-button" type="button" onClick={addOption}>
+                Додати варіант
               </button>
             )}
 
-            <button onClick={saveTask}>
+            <button className="save-button" onClick={saveTask}>
               {editTaskId ? "Оновити" : "Створити"}
             </button>
 
-            <button onClick={() => setTaskOpen(false)}>Закрити</button>
+            {/* <button
+              className="cancel-button"
+              onClick={() => setTaskOpen(false)}
+            >
+              Закрити
+            </button> */}
           </div>
         </div>
       )}
