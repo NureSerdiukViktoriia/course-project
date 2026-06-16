@@ -114,3 +114,139 @@
 .bottom-row {
     justify-content: center;
 }
+
+.reward-floating-btn {
+    position: fixed;
+    right: 30px;
+    bottom: 30px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    background: #4383c5;
+    color: white;
+    font-size: 32px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+}
+
+.reward-floating-btn:hover {
+    transform: scale(1.08);
+}
+
+.reward-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+}
+
+.reward-modal {
+    position: relative;
+    width: 440px;
+    background: white;
+    border-radius: 24px;
+    padding: 30px 35px 35px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+.reward-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    border: none;
+    background: transparent;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.reward-modal h2 {
+    margin: 0 0 10px;
+    font-size: 28px;
+}
+
+.reward-modal p {
+    font-size: 17px;
+    color: #555;
+    margin: 0 0 22px;
+}
+
+.reward-wheel-wrapper {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: 0 auto 30px;
+}
+
+.reward-pointer {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 13px solid transparent;
+    border-right: 13px solid transparent;
+    border-top: 24px solid #1d1b1b;
+    z-index: 5;
+}
+
+.reward-wheel {
+    position: absolute;
+    top: 20px;
+    left: 15px;
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #4383c5 0deg 51deg,
+        #ef9999 51deg 102deg,
+        #6cbf7d 102deg 153deg,
+        #f2c94c 153deg 204deg,
+        #9b7ede 204deg 255deg,
+        #f2994a 255deg 306deg,
+        #56ccf2 306deg 360deg
+    );
+    border: 8px solid white;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+    transition: transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+}
+
+.wheel-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 58px;
+    margin-left: -29px;
+    margin-top: -9px;
+    font-size: 13px;
+    font-weight: 800;
+    color: white;
+    text-align: center;
+    white-space: nowrap;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+}
+
+.reward-spin-btn {
+    background: #ef9999;
+    color: #1d1b1b;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 46px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.reward-result {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #4383c5;
+}

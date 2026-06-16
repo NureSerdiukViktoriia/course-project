@@ -18,6 +18,7 @@ const analyticsRouter = require("./routes/analytics");
 const moduleSectionProgressRouter = require("./routes/moduleSectionProgress");
 const app = express();
 const PORT = 3001;
+const rewardWheelRouter = require("./routes/rewardWheel");
 
 app.use(cors());
 app.use(express.json());
@@ -34,6 +35,7 @@ app.use("/api/progress", moduleSectionProgressRouter);
 app.use("/api/tasks", taskRouter);
 app.use("/api/analytics", analyticsRouter);
 app.use("/uploads", express.static("uploads"));
+app.use("/api/reward-wheel", rewardWheelRouter);
 
 const start = async () => {
   try {

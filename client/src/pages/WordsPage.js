@@ -1,12 +1,11 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom'; 
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from "../components/Header";
 import Footer from '../components/Footer.js';
 import './WordsPage.css';
 import iconChoice from '../assets/communication.png';
 import iconPuzzle from '../assets/puzzle.png';
-import iconTranslate from '../assets/www.png';
-import iconProfile from '../assets/userr.png'; 
+import iconTranslate from '../assets/www.png'; 
 import iconMatching from '../assets/matching.png';
 import iconListening from '../assets/listening.png';
 import iconFlashcards from '../assets/flashcards.png';
@@ -54,7 +53,75 @@ const WordsPage = () => {
     const navigate = useNavigate();
     const handleProfileNavigation = () => navigate('/profile');
     const startExercise = (path) => navigate(path);
+    const [isWheelOpen, setIsWheelOpen] = useState(false);
+    const [rotation, setRotation] = useState(0);
+    const [rewardResult, setRewardResult] = useState(null);
+    const [wheelRewards, setWheelRewards] = useState([]);
+    const [isSpinning, setIsSpinning] = useState(false);
 
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        fetch("http://localhost:3001/api/reward-wheel/rewards", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((res) => res.json())
+            .then((data) => setWheelRewards(data))
+            .catch((err) => console.error(err));
+    }, []);
+
+    const spinWheel = async () => {
+        if (isSpinning || wheelRewards.length === 0) return;
+
+        setIsSpinning(true);
+        setRewardResult(null);
+
+        const token = localStorage.getItem("token");
+
+        try {
+            const response = await fetch("http://localhost:3001/api/reward-wheel/spin", {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                setRewardResult(data.message);
+                setIsSpinning(false);
+                return;
+            }
+
+            const rewardValue = data.reward.reward_value;
+            const rewardIndex = wheelRewards.findIndex(
+                (reward) => reward.reward_value === rewardValue
+            );
+
+            const sectorSize = 360 / wheelRewards.length;
+            const sectorCenter = rewardIndex * sectorSize + sectorSize / 2;
+            const targetRotation = 360 - sectorCenter;
+
+            setRotation((prev) => {
+                const currentRotation = prev % 360;
+                const correction =
+                    (targetRotation - currentRotation + 360) % 360;
+
+                return prev + 1440 + correction;
+            });
+
+            setTimeout(() => {
+                setRewardResult(`Ви виграли ${rewardValue} XP!`);
+                setIsSpinning(false);
+            }, 4000);
+        } catch (error) {
+            setRewardResult("Помилка при обертанні колеса.");
+            setIsSpinning(false);
+        }
+    };
     return (
         <div className="words-home-page">
             <Header />
@@ -101,6 +168,72 @@ const WordsPage = () => {
 
                 </div>
             </div>
+
+            <button
+                className="reward-floating-btn"
+                onClick={() => setIsWheelOpen(true)}
+            >
+                🎁
+            </button>
+
+            {isWheelOpen && (
+                <div className="reward-modal-overlay">
+                    <div className="reward-modal">
+                        <button
+                            className="reward-close-btn"
+                            onClick={() => setIsWheelOpen(false)}
+                        >
+                            ×
+                        </button>
+
+                        <h2>Щоденна нагорода</h2>
+                        <p>Крути колесо один раз на день та отримуй XP.</p>
+                        
+                        <div className="reward-wheel-wrapper">
+                            <div className="reward-pointer"></div>
+
+                            <div
+                                className="reward-wheel"
+                                style={{
+                                    transform: `rotate(${rotation}deg)`
+                                }}
+                            >
+                                {wheelRewards.map((reward, index) => {
+                                    const angle =
+                                        (360 / wheelRewards.length) * index +
+                                        360 / wheelRewards.length / 2;
+
+                                    return (
+                                        <span
+                                            key={reward.id}
+                                            className="wheel-label"
+                                            style={{
+                                                transform: `rotate(${angle}deg) translateY(-75px) rotate(90deg)`,
+                                            }}
+                                        >
+                                            {reward.reward_value} XP
+                                        </span>
+                                    );
+                                })}
+                            </div>
+                    </div>
+                        <button
+                            className="reward-spin-btn"
+                            onClick={spinWheel}
+                            disabled={isSpinning}
+                        >
+                            {isSpinning ? "Крутиться..." : "Крутити"}
+                        </button>
+                       
+                        {rewardResult && (
+                            <div className="reward-result">
+                                {rewardResult}
+                            </div>
+                        )}
+
+                    </div>
+                </div>
+            )}
             <Footer />
         </div>
     );
