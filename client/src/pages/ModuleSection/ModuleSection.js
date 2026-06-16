@@ -48,6 +48,16 @@ const ModuleSection = () => {
       [taskId]: value,
     }));
   };
+  const resetForm = () => {
+    setEditSectionId(null);
+    setForm({
+      title: "",
+      type: "reading",
+      content: "",
+      media: null,
+    });
+    setPreview(null);
+  };
   const addOption = () => {
     setTaskForm((prev) => {
       if (prev.options.length >= 4) return prev;
@@ -387,7 +397,8 @@ const ModuleSection = () => {
                         />
                       </audio>
                     ) : (
-                      <img className="card-image"
+                      <img
+                        className="card-image"
                         src={`http://localhost:3001/uploads/${section.media}`}
                         alt={section.title}
                       />
@@ -448,13 +459,22 @@ const ModuleSection = () => {
 
       {isAdmin && (
         <>
-          <button className="open-admin-btn" onClick={() => setAdminOpen(true)}>
+          <button
+            className="open-admin-btn"
+            onClick={() => {
+              resetForm();
+              setAdminOpen(true);
+            }}
+          >
             Додати секцію
           </button>
 
           <AdminPanel
             open={adminOpen}
-            onClose={() => setAdminOpen(false)}
+            onClose={() => {
+              resetForm();
+              setAdminOpen(false);
+            }}
             types={types}
             form={form}
             setForm={setForm}
