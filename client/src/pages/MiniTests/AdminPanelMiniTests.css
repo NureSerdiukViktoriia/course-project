@@ -1,0 +1,103 @@
+.mini-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.mini-modal-content {
+  background: white;
+  padding: 20px;
+  width: 550px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10000;
+}
+
+.mini-modal-content h3 {
+  text-align: center;
+}
+
+.mini-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  color: #000;
+}
+
+.mini-input::placeholder {
+  color: #000;
+}
+
+.mini-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mini-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mini-option-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  color: #000;
+}
+
+.mini-option-input::placeholder {
+  color: #000;
+}
+
+.mini-option input[type="radio"] {
+  cursor: pointer;
+}
+
+.mini-select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: white;
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+  color: #000;
+}
+
+.mini-save {
+  background: #4383c5;
+  color: white;
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  border: none;
+}
+
+.mini-save:hover {
+  opacity: 0.9;
+}
+
+.mini-cancel {
+  background: #aaa;
+  color: white;
+  padding: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  border: none;
+}
+
+.mini-cancel:hover {
+  background: #888;
+}

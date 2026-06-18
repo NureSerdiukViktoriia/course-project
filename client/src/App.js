@@ -8,13 +8,13 @@ import ChangePassword from "./pages/ChangePassword.js";
 import TestLevel from "./pages/MiniTests/TestLevel.js";
 import TestPage from "./pages/MiniTests/TestPage.js";
 import LanguageBuddy from "./pages/LanguageBuddy.js";
-import WordsPage from './pages/WordsPage.js';
-import MultipleChoiceTest from './pages/MultipleChoiceTest.js';
-import SentenceBuilder from './pages/SentenceBuilder.js'; 
-import TranslateWord from './pages/TranslateWord.js';
-import Dictionary from './pages/Dictionary.js';
-import Modules from './pages/ModuleSection/Modules.js';
-import ModuleSection from './pages/ModuleSection/ModuleSection.js';
+import WordsPage from "./pages/WordsPage.js";
+import MultipleChoiceTest from "./pages/MultipleChoiceTest.js";
+import SentenceBuilder from "./pages/SentenceBuilder.js";
+import TranslateWord from "./pages/TranslateWord.js";
+import Dictionary from "./pages/Dictionary.js";
+import Modules from "./pages/ModuleSection/Modules.js";
+import ModuleSection from "./pages/ModuleSection/ModuleSection.js";
 import "./style.css";
 import MatchingExercise from "./pages/MatchingExercise";
 import ListeningExercise from "./pages/ListeningExercise";
@@ -33,8 +33,14 @@ function App() {
         <Route path="/test/:level" element={<TestPage />} />
         <Route path="/languageBuddy" element={<LanguageBuddy />} />
         <Route path="/words" element={<WordsPage />} />
-        <Route path="/exercise/multiple-choice" element={<MultipleChoiceTest />} />
-        <Route path="/exercise/sentence-builder" element={<SentenceBuilder />} />
+        <Route
+          path="/exercise/multiple-choice"
+          element={<MultipleChoiceTest />}
+        />
+        <Route
+          path="/exercise/sentence-builder"
+          element={<SentenceBuilder />}
+        />
         <Route path="/exercise/translate-word" element={<TranslateWord />} />
         <Route path="/dictionary" element={<Dictionary />} />
         <Route path="*" element={<Register />} />
