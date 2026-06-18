@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Footer from "../components/Footer.js";
-import iconProfile from "../assets/userr.png";
-import "./EasyTest.css";
+import { useParams } from "react-router-dom";
+import Footer from "../../components/Footer.js";
+import iconProfile from "../../assets/userr.png";
+import "./TestPage.css";
 
-const EasyTest = () => {
-  const [easyTestData, setEasyTestData] = useState([]);
+const TestPage = () => {
+  const { level } = useParams();
+  const [testData, setTestData] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
@@ -14,13 +16,13 @@ const EasyTest = () => {
   const [timeLeft, setTimeLeft] = useState(420);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/miniTest/beginner")
+    fetch(`http://localhost:3001/api/miniTest/${level}`)
       .then((res) => {
         if (!res.ok) throw new Error("Помилка при завантаженні даних");
         return res.json();
       })
       .then((data) => {
-        setEasyTestData(data);
+        setTestData(data);
         setLoading(false);
       })
       .catch((err) => {
@@ -45,10 +47,10 @@ const EasyTest = () => {
   }, [timeLeft, showResult]);
 
   const handleAnswer = (selectedIndex) => {
-    if (selectedIndex === easyTestData[currentQuestion].correctAnswerIndex) {
+    if (selectedIndex === testData[currentQuestion].correctAnswerIndex) {
       setScore(score + 1);
     }
-    if (currentQuestion + 1 < easyTestData.length) {
+    if (currentQuestion + 1 < testData.length) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       setShowResult(true);
@@ -63,7 +65,7 @@ const EasyTest = () => {
 
   if (loading) return <p>Завантаження питань...</p>;
   if (error) return <p>Помилка: {error}</p>;
-  if (easyTestData.length === 0) return <p>Питань немає</p>;
+  if (testData.length === 0) return <p>Питань немає</p>;
 
   return (
     <div className="test-level-wrapper">
@@ -88,14 +90,12 @@ const EasyTest = () => {
           <h2>
             Тест початкового рівня <br />
             <p className="easy-test-question">
-              Питання {currentQuestion + 1} з {easyTestData.length}
+              Питання {currentQuestion + 1} з {testData.length}
             </p>
           </h2>
-          <p className="question-text">
-            {easyTestData[currentQuestion].question}
-          </p>
+          <p className="question-text">{testData[currentQuestion].question}</p>
           <div className="options-container">
-            {easyTestData[currentQuestion].options.map((option, idx) => (
+            {testData[currentQuestion].options.map((option, idx) => (
               <button key={idx} onClick={() => handleAnswer(idx)}>
                 {option}
               </button>
@@ -106,7 +106,7 @@ const EasyTest = () => {
         <div className="result-container">
           <h2>Тест завершено!</h2>
           <p>
-            Ваш результат: {score} з {easyTestData.length}
+            Ваш результат: {score} з {testData.length}
           </p>
           <button
             onClick={() => {
@@ -126,4 +126,4 @@ const EasyTest = () => {
   );
 };
 
-export default EasyTest;
+export default TestPage;

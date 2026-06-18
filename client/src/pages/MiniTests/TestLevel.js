@@ -1,23 +1,23 @@
 import React from "react";
-import Footer from "../components/Footer.js";
-import Header from "../components/Header.js";
+import Footer from "../../components/Footer.js";
+import Header from "../../components/Header.js";
 import { useNavigate } from "react-router-dom";
-import TimeIcon from "../assets/newWords1.png";
-import QuestionIcon from "../assets/newWords2.png";
-import Puzzle from "../assets/puzzle.png";
+import TimeIcon from "../../assets/newWords1.png";
+import QuestionIcon from "../../assets/newWords2.png";
+import Puzzle from "../../assets/puzzle.png";
 import "./TestLevel.css";
 
-const TestPage = () => {
+const TestLevel = () => {
   const navigate = useNavigate();
 
   const easytest = () => {
-    navigate("/easyTest");
+    navigate("/test/beginner");
   };
   const intermediatetest = () => {
-    navigate("/intermediateTest");
+    navigate("/test/intermediate");
   };
   const advancedtest = () => {
-    navigate("/advancedTest");
+    navigate("/test/advanced");
   };
   return (
     <div className="test-level-wrapper">
@@ -67,4 +67,4 @@ const TestPage = () => {
   );
 };
 
-export default TestPage;
+export default TestLevel;
