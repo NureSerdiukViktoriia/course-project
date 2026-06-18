@@ -201,3 +201,26 @@ input[type="radio"] {
 .task-option .input {
   width: 90%;
 }
+.vocab-word {
+  cursor: pointer;
+  padding: 3px 6px;
+  border-radius: 6px;
+  transition: 0.2s;
+}
+
+.vocab-word:hover {
+  background: #4a90e2;
+  color: white;
+}
+.info {
+  color: #2f54eb;
+  font-weight: 600;
+  margin-top: 10px;
+  background: #eef4ff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #adc6ff;
+}
+.vocab-dash {
+  color: #999;
+}

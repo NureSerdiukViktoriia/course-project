@@ -30,7 +30,7 @@ const ModuleSection = () => {
   const [taskOpen, setTaskOpen] = useState(false);
   const [editTaskId, setEditTaskId] = useState(null);
   const [currentSectionId, setCurrentSectionId] = useState(null);
-
+  const [message, setMessage] = useState(null);
   const [taskForm, setTaskForm] = useState({
     question: "",
     options: ["", ""],
@@ -41,7 +41,6 @@ const ModuleSection = () => {
   const isAdmin = user?.role === "admin";
 
   const filtered = sections.filter((s) => s.type === activeTab);
-
   const handleAnswer = (taskId, value) => {
     setAnswers((prev) => ({
       ...prev,
@@ -330,6 +329,43 @@ const ModuleSection = () => {
       ),
     );
   };
+  const showMessage = (type, text) => {
+    setMessage({ type, text });
+    setTimeout(() => setMessage(null), 3000);
+  };
+  const addToDictionary = async (word, translation) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const res = await fetch("http://localhost:3001/api/dictionary/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          word,
+          translation,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.status === 409) {
+        showMessage("info", "Це слово вже є у вашому словнику");
+        return;
+      }
+
+      if (!res.ok) {
+        showMessage("error", "Помилка при додаванні слова");
+        return;
+      }
+
+      showMessage("success", "Слово додано до словника");
+    } catch (err) {
+      showMessage("error", "Помилка при додаванні слова");
+    }
+  };
   return (
     <div className="module-layout">
       <Header />
@@ -405,18 +441,31 @@ const ModuleSection = () => {
                     )}
                   </>
                 )}
+                {message && <div className={message.type}>{message.text}</div>}
                 {section.type === "vocabulary" ? (
                   <div className="vocab-list">
                     {section.content
                       .split("\n")
                       .filter(Boolean)
                       .map((line, i) => {
-                        const [word, translation] = line.split("—");
+                        const parts = line.split("-");
 
+                        const word = parts[0]?.trim();
+                        const translation = parts.slice(1).join("-")?.trim();
+                        if (!word || !translation) return;
                         return (
                           <div className="vocab-item" key={i}>
-                            <span>{word?.trim()}</span>
-                            <span>{translation?.trim()}</span>
+                            <span
+                              className="vocab-word"
+                              onClick={() =>
+                                addToDictionary(
+                                  word?.trim(),
+                                  translation?.trim(),
+                                )
+                              }
+                            >
+                              {word?.trim()} - {translation?.trim()}
+                            </span>
                           </div>
                         );
                       })}
