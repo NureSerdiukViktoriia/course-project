@@ -19,6 +19,8 @@ const Modules = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [moduleMessage, setModuleMessage] = useState(null);
+  const [filterLevels, setFilterLevels] = useState([]);
+  const [sortType, setSortType] = useState("");
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -117,15 +119,68 @@ const Modules = () => {
 
   const isAdmin = user && user.role === "admin";
   const navigate = useNavigate();
+  const filteredModules = modules
+    .filter((m) => {
+      if (filterLevels.length === 0) return true;
+      return filterLevels.includes(m.level);
+    })
+    .sort((a, b) => {
+      if (sortType === "asc") {
+        return a.title.localeCompare(b.title);
+      }
+      if (sortType === "desc") {
+        return b.title.localeCompare(a.title);
+      }
+      return 0;
+    });
+  const hasModules = filteredModules.length > 0;
   return (
     <div className="module-wrapper">
       <Header />
+      <div className="controls">
+        <div className="controls-group">
+          <label>Рівні</label>
 
+          <div className="levels">
+            {["A1", "A2", "B1", "B2", "C1"].map((lvl) => (
+              <button
+                key={lvl}
+                className={`level-btn ${
+                  filterLevels.includes(lvl) ? "active" : ""
+                }`}
+                onClick={() => {
+                  setFilterLevels((prev) =>
+                    prev.includes(lvl)
+                      ? prev.filter((l) => l !== lvl)
+                      : [...prev, lvl],
+                  );
+                }}
+              >
+                {lvl}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="controls-group">
+          <label>Сортування</label>
+          <select
+            value={sortType}
+            onChange={(e) => setSortType(e.target.value)}
+          >
+            <option value="">Без сортування</option>
+            <option value="asc">А → Я</option>
+            <option value="desc">Я → А</option>
+          </select>
+        </div>
+      </div>
       <main className="modules-container">
         {modules.length === 0 ? (
           <p>Курсів немає</p>
+        ) : !hasModules ? (
+          <p>Немає курсів за цим фільтром</p>
         ) : (
-          modules.map((m) => (
+          filteredModules.map((m) => (
             <div className="new-module" key={m.id}>
               <img
                 src={`http://localhost:3001/uploads/${m.image}`}

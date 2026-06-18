@@ -206,3 +206,56 @@
 .cancel-button:hover {
   background: #888;
 }
+.levels {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.level-btn {
+  padding: 8px 14px;
+  border-radius: 20px;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.level-btn:hover {
+  border-color: #4a90e2;
+}
+
+.level-btn.active {
+  background: #4a90e2;
+  color: white;
+  border-color: #4a90e2;
+}
+.controls {
+  display: flex;
+  gap: 80px;
+  align-items: flex-end;
+  margin: 20px 0 40px 0;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+.controls-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.controls-group label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+.controls-group select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  min-width: 160px;
+  font-size: 14px;
+  cursor: pointer;
+}
