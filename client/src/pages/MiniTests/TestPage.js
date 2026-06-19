@@ -45,7 +45,27 @@ const TestPage = () => {
 
     return () => clearTimeout(timerId);
   }, [timeLeft, showResult]);
+  const mapLevel = {
+    beginner: "початковий",
+    intermediate: "середній",
+    advanced: "просунутий",
+  };
+  const saveResult = async (finalScore) => {
+    const token = localStorage.getItem("token");
 
+    await fetch("http://localhost:3001/api/miniTestResult/save", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        mini_test_id: 1,
+        correct_answers: finalScore,
+        level: mapLevel[level]
+      }),
+    });
+  };
   const handleAnswer = (selectedIndex) => {
     if (selectedIndex === testData[currentQuestion].correctAnswerIndex) {
       setScore(score + 1);
@@ -54,6 +74,7 @@ const TestPage = () => {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       setShowResult(true);
+      saveResult(score);
     }
   };
 
