@@ -6,6 +6,7 @@ import emailIcon from "../assets/email.png";
 import passwordIcon from "../assets/password.png";
 import userIcon from "../assets/user.png";
 import phoneIcon from "../assets/phone.png";
+import questionIcon from "../assets/question.png";
 import openIcon from "../assets/OpenEye.png";
 import hideIcon from "../assets/CloseEye.png";
 
@@ -20,6 +21,8 @@ const Register = () => {
     password: "",
     level: "",
     inviteCode: "",
+    secret_question: "",
+    secret_answer: "",
   });
 
   const [error, setError] = useState("");
@@ -64,6 +67,14 @@ const Register = () => {
 
     if (!formData.level) {
       return "Будь ласка, оберіть рівень";
+    }
+
+    if (!formData.secret_question) {
+      return "Оберіть секретне питання";
+    }
+
+    if (!formData.secret_answer.trim()) {
+      return "Введіть відповідь на секретне питання";
     }
 
     return null;
@@ -188,7 +199,42 @@ const Register = () => {
               />
             </div>
           </div>
-
+          <div>
+            <span
+              className="forgot-password-button"
+              onClick={() => navigate("/forgot-password")}
+            >
+              Забули пароль?
+            </span>
+          </div>
+          <div className="input-group">
+            <select
+              className="question-select"
+              name="secret_question"
+              value={formData.secret_question}
+              onChange={handleChange}
+            >
+              <option value="">Оберіть секретне питання</option>
+              <option value="pet">
+                Як звали вашого першого домашнього улюбленця?
+              </option>
+              <option value="book">Яка ваша улюблена книга?</option>
+              <option value="food">Яка ваша улюблена страва?</option>
+              <option value="city">У якому місті ви народилися?</option>
+              <option value="friend">
+                Як звали вашого найкращого друга в дитинстві?
+              </option>
+            </select>
+          </div>
+          <div className="input-group">
+            <input
+              type="text"
+              name="secret_answer"
+              value={formData.secret_answer}
+              onChange={handleChange}
+              placeholder="Введіть відповідь"
+            />
+          </div>
           <div className="input-group">
             <select
               className="level-select"
@@ -206,7 +252,7 @@ const Register = () => {
           <div className="input-group">
             <div
               className="input-code"
-              onClick={() => setShowInvite(true)}
+              onClick={() => setShowInvite((prev) => !prev)}
               style={{ cursor: "pointer" }}
             >
               <p>У мене є код</p>

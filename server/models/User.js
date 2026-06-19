@@ -25,6 +25,14 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    secret_question: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    secret_answer: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     level: {
       type: DataTypes.ENUM("Початковий", "Середній", "Просунутий"),
       allowNull: false,

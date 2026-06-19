@@ -9,8 +9,13 @@
   font-size: 14px;
   margin: 10px 0 0 15px;
 }
+.register-account-password {
+  text-align: left;
+  font-size: 14px;
+  margin: 10px 0 10px 15px;
+}
 .register-container {
-  max-width: 400px;
+  max-width: 450px;
   margin: 40px auto;
   padding: 20px 30px;
   border: 1px solid #ffd5d5;
@@ -26,7 +31,21 @@
   font-weight: 500;
   margin-bottom: 18px;
 }
+.check-question {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 50px;
+  border: none;
+  background-color: #4a90e2;
+  color: white;
+  transition: background-color 0.3s ease;
+}
 
+.check-question:hover {
+  background-color: #3b78c2;
+}
 .register-form {
   display: flex;
   flex-direction: column;
@@ -38,7 +57,6 @@
   align-items: flex-start;
   margin-bottom: 20px;
 }
-
 .input-group.email-group {
   margin-bottom: 20px;
 }
@@ -54,19 +72,35 @@
   width: 20px;
   height: 20px;
 }
-
+.input-code p {
+  text-align: left;
+  margin: 0 0 5px 15px;
+}
+.input-code p:hover {
+  color: #ff6b6b;
+}
+.forgot-password-button {
+  display: block;
+  width: fit-content;
+  margin: 0 0 15px 15px;
+  cursor: pointer;
+  text-align: left;
+}
+.forgot-password-button:hover {
+  color: #ff6b6b;
+}
+.question-select,
 .level-select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   width: 100%;
-  padding: 10px 40px 10px 40px;
+  padding: 10px 40px;
   font-size: 15px;
   background-color: #ffd6d6;
   border: none;
   border-radius: 50px;
   box-sizing: border-box;
-  background-image: url("../assets/level.png"), url("../assets/arrow-down.png");
   background-repeat: no-repeat, no-repeat;
   background-position:
     15px center,
@@ -74,6 +108,16 @@
   background-size: 18px, 12px;
 }
 
+.question-select {
+  background-image:
+    url("../assets/question.png"), url("../assets/arrow-down.png");
+}
+
+.level-select {
+  background-image: url("../assets/level.png"), url("../assets/arrow-down.png");
+}
+
+.question-select:focus,
 .level-select:focus {
   outline: none;
 }
@@ -94,7 +138,8 @@
   outline: none;
 }
 
-.register-form button[type="submit"] {
+.register-form button[type="submit"],
+.register-form button[type="button"] {
   width: 100%;
   padding: 10px;
   font-size: 16px;
@@ -106,7 +151,8 @@
   transition: background-color 0.3s ease;
 }
 
-.register-form button[type="submit"]:hover {
+.register-form button[type="submit"]:hover,
+.register-form button[type="button"]:hover {
   background-color: #e65555;
 }
 .password-wrapper {
