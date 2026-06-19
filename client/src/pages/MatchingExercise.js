@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Notification from "../components/Notification";
 import "./ExercisePage.css";
 import iconProfile from "../assets/userr.png";
 import iconMatching from "../assets/matching.png";
@@ -33,6 +34,12 @@ const MatchingExercise = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [notification, setNotification] = useState({
+    message: "",
+    type: "",
+    onConfirm: null,
+  });
+  
   const handleProfileNavigation = () => navigate("/profile");
 
   useEffect(() => {
@@ -138,11 +145,28 @@ const MatchingExercise = () => {
     }
   };
 
+  const hideNotification = () => {
+    if (notification.onConfirm) {
+      notification.onConfirm();
+    }
+
+    setNotification({
+      message: "",
+      type: "",
+      onConfirm: null,
+    });
+  };
+
   if (isLoading) return <div>Завантаження...</div>;
   if (error) return <div>Помилка: {error}</div>;
 
   return (
     <div className="exercise-page">
+      <Notification
+        message={notification.message}
+        type={notification.type}
+        onClose={hideNotification}
+      />
       <AppHeader onProfileClick={handleProfileNavigation} />
 
       <div className="exercise-content">
@@ -207,15 +231,24 @@ const MatchingExercise = () => {
 
       {matchedPairs.length === tasks.length && (
       <div className="action-buttons" style={{ marginTop: "30px" }}>
-        <button
-          className="next-btn"
-          onClick={async () => {
-            await completeExerciseType();
-            navigate("/words");
-          }}
-        >
-          Завершити
-        </button>
+        {matchedPairs.length === tasks.length && (
+          <div className="action-buttons" style={{ marginTop: "30px" }}>
+            <button
+              className="next-btn"
+              onClick={async () => {
+                await completeExerciseType();
+
+                setNotification({
+                  message: `Тест завершено! Ваш результат: ${score} балів`,
+                  type: "info",
+                  onConfirm: () => navigate("/words"),
+                });
+              }}
+            >
+              Завершити
+            </button>
+          </div>
+        )}
       </div>
       )}
       </div>

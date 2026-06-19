@@ -124,6 +124,48 @@ const ListeningExercise = () => {
     });
   };
 
+  const handleAddToDictionary = async (word, translation) => {
+    const token = localStorage.getItem("token");
+
+    if (!word) {
+      setNotification({
+        message: "Немає слова для додавання.",
+        type: "error",
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3001/api/dictionary/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          word,
+          translation,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Не вдалося додати слово");
+      }
+
+      setNotification({
+        message: `Слово "${word}" успішно додано!`,
+        type: "success",
+      });
+    } catch (err) {
+      setNotification({
+        message: err.message,
+        type: "error",
+      });
+    }
+  };
+
   const handleAnswerSelect = (answer) => {
     if (isAnswered) return;
 
@@ -222,6 +264,23 @@ const ListeningExercise = () => {
         <p className="question-text">
           Прослухай слово та обери правильний переклад.
         </p>
+
+        {isAnswered && (
+          <div className="add-to-dictionary-container">
+            <button
+              className="add-to-dict-btn"
+              onClick={() =>
+                handleAddToDictionary(
+                  currentTask.word_to_learn || currentTask.question_text,
+                  currentTask.translation || currentTask.correct_answer
+                )
+              }
+            >
+              <i className="fas fa-plus-circle"></i>
+              Додати "{currentTask.word_to_learn || currentTask.question_text}" до словника
+            </button>
+          </div>
+        )}
 
         <div className="answer-options">
           {options.map((option, index) => (
