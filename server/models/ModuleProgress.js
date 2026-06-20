@@ -15,9 +15,9 @@ const ModuleProgress = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    completed: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
+    status: {
+      type: DataTypes.ENUM("not_started", "in_progress", "completed"),
+      defaultValue: "not_started",
     },
     user_id: {
       type: DataTypes.INTEGER,

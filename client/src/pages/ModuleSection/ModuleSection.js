@@ -452,7 +452,7 @@ const ModuleSection = () => {
 
                         const word = parts[0]?.trim();
                         const translation = parts.slice(1).join("-")?.trim();
-                        if (!word || !translation) return;
+                        if (!word || !translation) return null;
                         return (
                           <div className="vocab-item" key={i}>
                             <span
