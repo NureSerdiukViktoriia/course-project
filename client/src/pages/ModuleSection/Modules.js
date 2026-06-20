@@ -4,6 +4,10 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import pencilIcon from "../../assets/pencil.png";
 import deleteIcon from "../../assets/delete.png";
+import catalogIcon from "../../assets/catalog.png";
+import magnifierIcon from "../../assets/magnifier.png";
+import targetIcon from "../../assets/target.png";
+
 import "./Modules.css";
 
 const Modules = () => {
@@ -21,6 +25,12 @@ const Modules = () => {
   const [moduleMessage, setModuleMessage] = useState(null);
   const [filterLevels, setFilterLevels] = useState([]);
   const [sortType, setSortType] = useState("");
+  const [recommendedLevel, setRecommendedLevel] = useState(null);
+
+  const recommendedModules = modules.filter(
+    (m) => m.level === recommendedLevel,
+  );
+
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -31,6 +41,20 @@ const Modules = () => {
     })
       .then((res) => res.json())
       .then((data) => setUser(data));
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    fetch("http://localhost:3001/api/miniTestResult/result/latest", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setRecommendedLevel(data?.suggested_level || null);
+      });
   }, []);
 
   const validate = () => {
@@ -137,6 +161,64 @@ const Modules = () => {
   return (
     <div className="module-wrapper">
       <Header />
+      {recommendedLevel && (
+        <div className="recommended-section">
+          <div className="recommended-header">
+            <div className="recommended-icon">
+              <img src={targetIcon} alt="Target" />
+            </div>
+
+            <div>
+              <h2 className="recommended-title">Рекомендовані курси</h2>
+
+              <p className="recommended-subtitle">
+                Відповідно до результатів міні-тесту вам рекомендується рівень
+                <span className="level-badge">{recommendedLevel}</span>
+              </p>
+            </div>
+          </div>
+
+          {recommendedModules.length > 0 ? (
+            <div className="modules-container">
+              {recommendedModules.map((m) => (
+                <div className="new-module" key={m.id}>
+                  <img
+                    src={`http://localhost:3001/uploads/${m.image}`}
+                    alt={m.title}
+                  />
+
+                  <div className="title-row">
+                    <h3>{m.title}</h3>
+                    <p>{m.level}</p>
+                  </div>
+                  <div className="description">
+                    <p>{m.description}</p>
+                  </div>
+                  <button
+                    className="module-learn"
+                    onClick={() => navigate(`/modules/${m.id}`)}
+                  >
+                    Почати вивчати
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="recommended-empty">
+              <div className="recommended-icon">
+                <img src={magnifierIcon} alt="empty" />
+              </div>
+              Для вашого рівня курсів поки що немає
+            </div>
+          )}
+        </div>
+      )}
+      <div className="section-title">
+        <div className="section-icon">
+          <img src={catalogIcon} alt="catalog" />
+        </div>
+        <h3>Усі курси</h3>
+      </div>
       <div className="controls">
         <div className="controls-group">
           <label>Рівні</label>
@@ -174,6 +256,7 @@ const Modules = () => {
           </select>
         </div>
       </div>
+
       <main className="modules-container">
         {modules.length === 0 ? (
           <p>Курсів немає</p>

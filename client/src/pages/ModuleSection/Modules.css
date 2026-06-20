@@ -235,7 +235,7 @@
   display: flex;
   gap: 80px;
   align-items: flex-end;
-  margin: 20px 0 40px 0;
+  margin: 0 0 40px 0;
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
@@ -258,4 +258,103 @@
   min-width: 160px;
   font-size: 14px;
   cursor: pointer;
+}
+.recommended-section {
+  margin: 0 auto 40px auto;
+  max-width: 1100px;
+  padding: 50px 0 0 0;
+}
+.recommended-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.recommended-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.recommended-subtitle {
+  margin: 4px 0 0 0;
+  font-size: 16px;
+  color: #6c757d;
+}
+
+.recommended-subtitle span {
+  color: #4a6cf7;
+  font-weight: 600;
+}
+.recommended-empty {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 18px;
+  margin-top: 10px;
+
+  background: #f8f9fc;
+  border-radius: 12px;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.recommended-empty .recommended-icon {
+  width: 44px;
+  height: 44px;
+}
+.recommended-icon {
+  width: 50px;
+  height: 50px;
+  background: #eef2ff;
+  border-radius: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.recommended-icon img {
+  width: 24px;
+  height: 24px;
+}
+.level-badge {
+  margin-left: 8px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #e8efff;
+  color: #4a6cf7;
+  font-weight: 600;
+  font-size: 12px;
+}
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  margin: 25px 0 15px;
+}
+
+.section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+}
+
+.section-icon img {
+  width: 40px;
+  height: 40px;
+
+  object-fit: contain;
+  display: block;
+}
+
+.section-title h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
 }

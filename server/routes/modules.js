@@ -25,6 +25,23 @@ router.get("/", authenticate, async (req, res) => {
       .json({ error: "Помилка при отриманні модулів", details: error.message });
   }
 });
+router.get("/result/latest", authenticate, async (req, res) => {
+  try {
+    const result = await MiniTestResult.findOne({
+      where: { user_id: req.user.id },
+      order: [["createdAt", "DESC"]],
+    });
+
+    if (!result) {
+      return res.json(null);
+    }
+
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 router.post(
   "/",
