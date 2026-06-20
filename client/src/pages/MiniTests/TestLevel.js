@@ -140,7 +140,7 @@ const TestLevel = () => {
           <button onClick={intermediatetest}>Почати</button>
         </div>
         <div className="difficulty-card">
-          <h4>Просунутий (C1–C2)</h4>
+          <h4>Просунутий (C1)</h4>
           <p>Складні граматичні структури, синоніми/антоніми</p>
           <button onClick={advancedtest}>Почати</button>
         </div>
