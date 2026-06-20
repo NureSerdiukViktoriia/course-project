@@ -1,0 +1,49 @@
+.notif-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: flex-end;
+  z-index: 1000;
+}
+
+.notif-panel {
+  width: 360px;
+  height: 100%;
+  background: #fff;
+  padding: 20px;
+  overflow-y: auto;
+  animation: slideIn 0.2s ease;
+  box-shadow: -5px 0 20px rgba(0,0,0,0.15);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.notif-panel img {
+  width: 40px;
+  height: 40px;
+  display: block;
+  margin: 0 auto 10px auto;
+  opacity: 0.8;
+}
+.notif-item {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.notif-item:hover {
+  background: #f8f8f8;
+}
+
+.notif-item.read {
+  opacity: 0.6;
+}

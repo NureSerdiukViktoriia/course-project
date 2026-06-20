@@ -16,6 +16,7 @@ const moduleSectionRouter = require("./routes/moduleSection");
 const moduleProgressRouter = require("./routes/moduleProgress");
 const taskRouter = require("./routes/task");
 const analyticsRouter = require("./routes/analytics");
+const notificationRouter = require("./routes/notification");
 const moduleSectionProgressRouter = require("./routes/moduleSectionProgress");
 const app = express();
 const PORT = 3001;
@@ -36,6 +37,7 @@ app.use("/api/modules", moduleSectionRouter);
 app.use("/api/progress", moduleSectionProgressRouter);
 app.use("/api/tasks", taskRouter);
 app.use("/api/analytics", analyticsRouter);
+app.use("/api/notification", notificationRouter);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/reward-wheel", rewardWheelRouter);
 

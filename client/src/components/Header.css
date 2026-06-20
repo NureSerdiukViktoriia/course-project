@@ -35,3 +35,37 @@
   border-radius: 50%;
   cursor: pointer;
 }
+.notif-btn {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notif-btn img {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.15s ease;
+}
+
+.notif-btn:hover img {
+  transform: scale(1.1);
+}
+.notif-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: red;
+  color: white;
+  font-size: 11px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
