@@ -12,13 +12,14 @@ const TaskList = ({
   openCreateTask,
   openEditTask,
   deleteTask,
+  isLocked,
 }) => {
   if (!section) return null;
 
   const tasks = Array.isArray(section.tasks) ? section.tasks : [];
-
+  
   return (
-      <div className="task-list">
+    <div className="task-list">
       {tasks.length === 0 && <p style={{ opacity: 0.6 }}>Немає завдань</p>}
 
       {tasks.map((task) => {
@@ -79,7 +80,7 @@ const TaskList = ({
                         handleAnswer(task.id, i);
                       }
                     }}
-                    disabled={!!results?.[section.id]}
+                    disabled={isLocked}
                   />
                   {opt}
                 </label>

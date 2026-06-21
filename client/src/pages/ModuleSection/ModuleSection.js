@@ -107,7 +107,7 @@ const ModuleSection = () => {
 
     setProgressMap((prev) => ({
       ...prev,
-      [sectionId]: true,
+      [sectionId]: score,
     }));
 
     setResults((prev) => ({
@@ -386,121 +386,127 @@ const ModuleSection = () => {
           {filtered.length === 0 ? (
             <p>Немає матеріалів</p>
           ) : (
-            filtered.map((section) => (
-              <div className="card" key={section.id}>
-                {isAdmin && (
-                  <div className="admin-actions">
-                    <button
-                      className="edit-button"
-                      onClick={() => {
-                        setEditSectionId(section.id);
+            filtered.map((section) => {
+              const isLocked = (progressMap?.[section.id] || 0) >= 80;
+              return (
+                <div className="card" key={section.id}>
+                  {isAdmin && (
+                    <div className="admin-actions">
+                      <button
+                        className="edit-button"
+                        onClick={() => {
+                          setEditSectionId(section.id);
 
-                        setForm({
-                          title: section.title,
-                          type: section.type,
-                          content: section.content,
-                          media: section.media,
-                        });
+                          setForm({
+                            title: section.title,
+                            type: section.type,
+                            content: section.content,
+                            media: section.media,
+                          });
 
-                        setPreview(
-                          section.media
-                            ? `http://localhost:3001/uploads/${section.media}`
-                            : null,
-                        );
+                          setPreview(
+                            section.media
+                              ? `http://localhost:3001/uploads/${section.media}`
+                              : null,
+                          );
 
-                        setAdminOpen(true);
-                      }}
-                    >
-                      <img src={pencilIcon} alt="Edit" />
-                    </button>
-                    <button
-                      className="delete-button"
-                      onClick={() => setDeleteSectionId(section.id)}
-                    >
-                      <img src={deleteIcon} alt="Delete" />
-                    </button>
-                  </div>
-                )}
-                <h3>{section.title}</h3>
-                {section.media && (
-                  <>
-                    {section.media.endsWith(".mp3") ||
-                    section.media.endsWith(".wav") ? (
-                      <audio controls>
-                        <source
+                          setAdminOpen(true);
+                        }}
+                      >
+                        <img src={pencilIcon} alt="Edit" />
+                      </button>
+                      <button
+                        className="delete-button"
+                        onClick={() => setDeleteSectionId(section.id)}
+                      >
+                        <img src={deleteIcon} alt="Delete" />
+                      </button>
+                    </div>
+                  )}
+                  <h3>{section.title}</h3>
+                  {section.media && (
+                    <>
+                      {section.media.endsWith(".mp3") ||
+                      section.media.endsWith(".wav") ? (
+                        <audio controls>
+                          <source
+                            src={`http://localhost:3001/uploads/${section.media}`}
+                          />
+                        </audio>
+                      ) : (
+                        <img
+                          className="card-image"
                           src={`http://localhost:3001/uploads/${section.media}`}
+                          alt={section.title}
                         />
-                      </audio>
-                    ) : (
-                      <img
-                        className="card-image"
-                        src={`http://localhost:3001/uploads/${section.media}`}
-                        alt={section.title}
-                      />
-                    )}
-                  </>
-                )}
-                {message && <div className={message.type}>{message.text}</div>}
-                {section.type === "vocabulary" ? (
-                  <div className="vocab-list">
-                    {section.content
-                      .split("\n")
-                      .filter(Boolean)
-                      .map((line, i) => {
-                        const parts = line.split("-");
+                      )}
+                    </>
+                  )}
+                  {message && (
+                    <div className={message.type}>{message.text}</div>
+                  )}
+                  {section.type === "vocabulary" ? (
+                    <div className="vocab-list">
+                      {section.content
+                        .split("\n")
+                        .filter(Boolean)
+                        .map((line, i) => {
+                          const parts = line.split("-");
 
-                        const word = parts[0]?.trim();
-                        const translation = parts.slice(1).join("-")?.trim();
-                        if (!word || !translation) return null;
-                        return (
-                          <div className="vocab-item" key={i}>
-                            <span
-                              className="vocab-word"
-                              onClick={() =>
-                                addToDictionary(
-                                  word?.trim(),
-                                  translation?.trim(),
-                                )
-                              }
-                            >
-                              {word?.trim()} - {translation?.trim()}
-                            </span>
-                          </div>
-                        );
-                      })}
-                  </div>
-                ) : (
-                  <p className="text">{section.content}</p>
-                )}
+                          const word = parts[0]?.trim();
+                          const translation = parts.slice(1).join("-")?.trim();
+                          if (!word || !translation) return null;
+                          return (
+                            <div className="vocab-item" key={i}>
+                              <span
+                                className="vocab-word"
+                                onClick={() =>
+                                  addToDictionary(
+                                    word?.trim(),
+                                    translation?.trim(),
+                                  )
+                                }
+                              >
+                                {word?.trim()} - {translation?.trim()}
+                              </span>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  ) : (
+                    <p className="text">{section.content}</p>
+                  )}
 
-                <TaskList
-                  section={section}
-                  handleAnswer={handleAnswer}
-                  answers={answers}
-                  results={results}
-                  isAdmin={isAdmin}
-                  openCreateTask={openCreateTask}
-                  openEditTask={openEditTask}
-                  deleteTask={deleteTask}
-                />
-                {(section.tasks?.length ?? 0) > 0 && (
-                  <button
-                    className="save-button-tasks"
-                    onClick={() => handleCheck(section.id)}
-                    disabled={progressMap[section.id]}
-                  >
-                    {progressMap[section.id] ? "Вже пройдено" : "Перевірити"}
-                  </button>
-                )}
-                {results[section.id] && (
-                  <div className="results-box">
-                    <p>Правильних: {results[section.id].correct}</p>
-                    <p>Неправильних: {results[section.id].wrong}</p>
-                    <p>Результат: {results[section.id].score}%</p>
-                  </div>
-                )}
-              </div>
-            ))
+                  <TaskList
+                    section={section}
+                    handleAnswer={handleAnswer}
+                    answers={answers}
+                    results={results}
+                    isAdmin={isAdmin}
+                    openCreateTask={openCreateTask}
+                    openEditTask={openEditTask}
+                    deleteTask={deleteTask}
+                    isLocked={isLocked}
+                  />
+                  {(section.tasks?.length ?? 0) > 0 && (
+                    <button
+                      className="save-button-tasks"
+                      onClick={() => handleCheck(section.id)}
+                      disabled={isLocked}
+                    >
+                      {isLocked ? "Вже пройдено" : "Перевірити"}
+                    </button>
+                  )}
+                  {results[section.id] && (
+                    <div className="results-box">
+                      <p>Правильних: {results[section.id].correct}</p>
+                      <p>Неправильних: {results[section.id].wrong}</p>
+                      <p>Результат: {results[section.id].score}%</p>
+                    </div>
+                  )}
+                </div>
+              );
+            })
           )}
         </div>
       </div>

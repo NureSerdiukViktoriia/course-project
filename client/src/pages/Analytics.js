@@ -69,12 +69,12 @@ const Analytics = ({ userId }) => {
 
               <div className="recommendations">
                 {data.modules[openIndex].sections.some(
-                  (s) => s.progress < 50,
+                  (s) => s.progress < 80,
                 ) ? (
                   <>
                     <h4>Рекомендації</h4>
                     {data.modules[openIndex].sections
-                      .filter((s) => s.progress < 50)
+                      .filter((s) => s.progress < 80)
                       .map((s) => (
                         <p key={s.id}>
                           Рекомендується повторити:{" "}

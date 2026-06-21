@@ -78,12 +78,18 @@ router.get("/module/:moduleId", authenticate, async (req, res) => {
 
     const progresses = await ModuleSectionProgress.findAll({
       where: { user_id: userId },
+      include: [
+        {
+          model: ModuleSection,
+          where: { module_id: moduleId },
+        },
+      ],
     });
 
     const result = {};
 
-    progress.forEach((p) => {
-      result[p.module_section_id] = true;
+    progresses.forEach((p) => {
+      result[p.module_section_id] = p.progress;
     });
 
     res.json(result);
