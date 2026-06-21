@@ -60,13 +60,24 @@ router.get("/profile/:userId", async (req, res) => {
     });
 
     const progressMap = new Map(
-      moduleProgress.map((m) => [m.module_id, m.progress]),
+      moduleProgress.map((m) => [
+        m.module_id,
+        {
+          progress: m.progress,
+          status: m.status,
+        },
+      ]),
     );
 
-    const modules = [...modulesMap.values()].map((m) => ({
-      ...m,
-      avg: progressMap.get(m.moduleId) || 0,
-    }));
+    const modules = [...modulesMap.values()].map((m) => {
+      const data = progressMap.get(m.moduleId);
+
+      return {
+        ...m,
+        avg: data?.progress || 0,
+        status: data?.status || "not_started",
+      };
+    });
 
     res.json({
       modules,

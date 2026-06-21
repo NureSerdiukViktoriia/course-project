@@ -9,7 +9,34 @@ const Analytics = ({ userId }) => {
   });
   const [loading, setLoading] = useState(true);
   const [openModuleId, setOpenModuleId] = useState(null);
+  const [recommendedLevel, setRecommendedLevel] = useState(null);
+  const module = data.modules?.find((m) => m.moduleId === openModuleId);
+  const moduleWeakSections =
+    module?.sections?.filter((s) => s.progress < 80) || [];
+
+  const hasWeakSections = moduleWeakSections.length > 0;
+
+  const recommendedModules =
+    data.modules?.filter((m) => m.level === recommendedLevel) || [];
+  const statusLabel = {
+    not_started: "Не розпочато",
+    in_progress: "У процесі",
+    completed: "Завершено",
+  };
   const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    fetch("http://localhost:3001/api/miniTestResult/result/latest", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setRecommendedLevel(data?.suggested_level || null);
+      });
+  }, []);
   useEffect(() => {
     if (!userId) return;
 
@@ -29,11 +56,28 @@ const Analytics = ({ userId }) => {
       })
       .finally(() => setLoading(false));
   }, [userId]);
-  const module = data.modules?.find((m) => m.moduleId === openModuleId);
   if (loading) return <p>Завантаження аналітики...</p>;
 
   return (
     <div className="analytics-page">
+      <div>
+        {recommendedLevel && (
+          <div className="recommended-block">
+            <h2 className="recommended-title">Результат міні-тесту</h2>
+
+            <p className="recommended-subtitle">
+              Вам визначено рівень
+              <span className="level-badge">{recommendedLevel}</span>
+            </p>
+
+            <p className="recommended-hint">
+              Спробуйте пройти курси цього рівня. Якщо відчуєте, що складно або
+              легко - ви можете змінити рівень у профілі!
+            </p>
+          </div>
+        )}
+      </div>
+
       <h2 className="analytics-title">Аналітика по курсах</h2>
 
       {!data ? (
@@ -59,7 +103,12 @@ const Analytics = ({ userId }) => {
                     </small>
                   </div>
 
-                  <span className="percent">{Math.round(m.avg)}%</span>
+                  <div className="percent-block">
+                    <span className="percent">{Math.round(m.avg)}%</span>
+                    <span className={`status ${m.status}`}>
+                      {statusLabel[m.status] || ""}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="course-bar">
@@ -93,18 +142,17 @@ const Analytics = ({ userId }) => {
                 </div>
               ))}
 
-              <div className="recommendations">
-                {module.sections?.some((s) => s.progress < 80) ? (
+              <div>
+                {hasWeakSections ? (
                   <>
-                    <h4>Рекомендації</h4>
-
-                    {module.sections
-                      .filter((s) => s.progress < 80)
-                      .map((s) => (
-                        <p key={`${s.sectionId}-${s.moduleId}`}>
-                          Рекомендується повторити: {s.sectionTitle} ({s.type})
-                        </p>
-                      ))}
+                    <h4>
+                      Для успішного завершення курсу необхідно перепройти:
+                    </h4>
+                    {moduleWeakSections.map((s) => (
+                      <p key={`${s.sectionId}-${s.moduleId}`}>
+                        {s.sectionTitle} ({s.type})
+                      </p>
+                    ))}
 
                     <button
                       className="go-to-section-btn"

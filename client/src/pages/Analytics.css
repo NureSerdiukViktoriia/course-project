@@ -108,3 +108,26 @@
   background: #4a6cf7;
   color: white;
 }
+.percent-block {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.status {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.status.completed {
+  color: green;
+}
+
+.status.in_progress {
+  color: orange;
+}
+
+.status.not_started {
+  color: gray;
+}
