@@ -102,7 +102,6 @@ const ModuleSection = () => {
       body: JSON.stringify({
         sectionId,
         progress: score,
-        completed: score >= 80,
       }),
     });
 

@@ -16,11 +16,6 @@ const ModuleSectionProgress = sequelize.define(
       allowNull: true,
       defaultValue: 0,
     },
-    completed: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,

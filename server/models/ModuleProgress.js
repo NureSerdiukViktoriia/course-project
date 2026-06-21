@@ -41,6 +41,12 @@ const ModuleProgress = sequelize.define(
   {
     tableName: "module_progress",
     timestamps: false,
+    indexes: [
+      {
+        unique: true,
+        fields: ["user_id", "module_id"],
+      },
+    ],
   },
 );
 Modules.hasMany(ModuleProgress, { foreignKey: "module_id" });
