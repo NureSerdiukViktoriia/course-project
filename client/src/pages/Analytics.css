@@ -91,3 +91,20 @@
   color: green;
   font-weight: 600;
 }
+.go-to-section-btn {
+  margin: 12px auto 0;
+  display: block;
+  padding: 10px 16px;
+  border: 1px solid #4a6cf7;
+  border-radius: 10px;
+  background: transparent;
+  color: #4a6cf7;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.go-to-section-btn:hover {
+  background: #4a6cf7;
+  color: white;
+}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Analytics.css";
 
 const Analytics = ({ userId }) => {
@@ -8,7 +9,7 @@ const Analytics = ({ userId }) => {
   });
   const [loading, setLoading] = useState(true);
   const [openModuleId, setOpenModuleId] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (!userId) return;
 
@@ -104,6 +105,13 @@ const Analytics = ({ userId }) => {
                           Рекомендується повторити: {s.sectionTitle} ({s.type})
                         </p>
                       ))}
+
+                    <button
+                      className="go-to-section-btn"
+                      onClick={() => navigate(`/modules/${module.moduleId}`)}
+                    >
+                      Перейти до курсу
+                    </button>
                   </>
                 ) : (
                   <p className="no-reco">Рекомендацій немає!</p>
