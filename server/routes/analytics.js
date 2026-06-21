@@ -10,142 +10,72 @@ router.get("/profile/:userId", async (req, res) => {
   try {
     const { userId } = req.params;
 
-    const rows = await ModuleSectionProgress.findAll({
+    const sectionRows = await ModuleSectionProgress.findAll({
       where: { user_id: userId },
-      include: [
-        {
-          model: ModuleSection,
-          attributes: ["id", "title", "type", "module_id"],
-          include: [
-            {
-              model: Modules,
-              attributes: ["id", "title"],
-            },
-          ],
+      include: {
+        model: ModuleSection,
+        attributes: ["id", "title", "type", "module_id"],
+        include: {
+          model: Modules,
+          attributes: ["id", "title", "level"],
         },
-      ],
+      },
+      order: [["id", "DESC"]],
     });
 
-    const formatted = rows.map((r) => ({
-      id: r.id,
-      progress: r.progress,
+    const latest = new Map();
+
+    for (const r of sectionRows) {
+      const id = r.ModuleSection?.id;
+      if (id && !latest.has(id)) latest.set(id, r);
+    }
+
+    const sections = [...latest.values()].map((r) => ({
+      progress: Number(r.progress),
+      sectionId: r.ModuleSection?.id,
       sectionTitle: r.ModuleSection?.title,
       type: r.ModuleSection?.type,
-      moduleTitle: r.ModuleSection?.Module?.title,
       moduleId: r.ModuleSection?.module_id,
+      moduleTitle: r.ModuleSection?.Module?.title,
+      moduleLevel: r.ModuleSection?.Module?.level,
     }));
 
-    const grouped = {};
+    const modulesMap = new Map();
 
-    formatted.forEach((item) => {
-      if (!grouped[item.moduleId]) {
-        grouped[item.moduleId] = {
-          title: item.moduleTitle,
+    for (const s of sections) {
+      if (!modulesMap.has(s.moduleId)) {
+        modulesMap.set(s.moduleId, {
+          moduleId: s.moduleId,
+          title: s.moduleTitle,
+          level: s.moduleLevel,
           sections: [],
-        };
+        });
       }
 
-      grouped[item.moduleId].sections.push(item);
+      modulesMap.get(s.moduleId).sections.push(s);
+    }
+
+    const moduleProgress = await require("../models/ModuleProgress").findAll({
+      where: { user_id: userId },
     });
 
-    const result = Object.values(grouped).map((m) => {
-      const avg = m.sections.length
-        ? m.sections.reduce((s, i) => s + i.progress, 0) / m.sections.length
-        : 0;
+    const progressMap = new Map(
+      moduleProgress.map((m) => [m.module_id, m.progress]),
+    );
 
-      return { ...m, avg };
-    });
-
-    const weak = formatted.filter((s) => s.progress < 50);
+    const modules = [...modulesMap.values()].map((m) => ({
+      ...m,
+      avg: progressMap.get(m.moduleId) || 0,
+    }));
 
     res.json({
-      modules: result,
-      weakSections: weak,
+      modules,
+      weakSections: sections.filter((s) => s.progress < 80),
     });
   } catch (e) {
     console.error(e);
     res.status(500).json({ message: "Помилка аналітики" });
   }
 });
-// router.get("/profile/:userId", async (req, res) => {
-//   try {
-//     const { userId } = req.params;
 
-//     const rows = await ModuleSectionProgress.findAll({
-//       where: { user_id: userId },
-//       include: [
-//         {
-//           model: ModuleSection,
-//           attributes: ["id", "title", "type", "module_id"],
-//           include: [
-//             {
-//               model: Modules,
-//               attributes: ["id", "title"],
-//             },
-//           ],
-//         },
-//       ],
-//     });
-
-//     const formatted = rows.map((r) => ({
-//       id: r.id,
-//       progress: r.progress,
-//       sectionTitle: r.ModuleSection?.title,
-//       type: r.ModuleSection?.type,
-//       moduleTitle: r.ModuleSection?.Module?.title,
-//       moduleId: r.ModuleSection?.module_id,
-//     }));
-
-//     const grouped = {};
-
-//     formatted.forEach((item) => {
-//       if (!grouped[item.moduleId]) {
-//         grouped[item.moduleId] = {
-//           title: item.moduleTitle,
-//           sections: [],
-//         };
-//       }
-
-//       grouped[item.moduleId].sections.push(item);
-//     });
-
-//     const modules = Object.values(grouped).map((m) => {
-//       const avg = m.sections.length
-//         ? m.sections.reduce((s, i) => s + i.progress, 0) / m.sections.length
-//         : 0;
-
-//       return { ...m, avg };
-//     });
-
-//     const weakSections = formatted.filter((s) => s.progress < 50);
-
-//     const testRows = await MiniTestResult.findAll({
-//       where: { user_id: userId },
-//       include: [
-//         {
-//           model: MiniTest,
-//           attributes: ["level"],
-//         },
-//       ],
-//       order: [["createdAt", "ASC"]],
-//     });
-
-//     const tests = testRows.map((t) => ({
-//       id: t.id,
-//       score: t.correct_answers,
-//       level: t.suggested_level,
-//       testLevel: t.MiniTest?.level,
-//       date: t.createdAt,
-//     }));
-
-//     res.json({
-//       modules,
-//       weakSections,
-//       tests,
-//     });
-//   } catch (e) {
-//     console.error(e);
-//     res.status(500).json({ message: "Помилка аналітики" });
-//   }
-// });
 module.exports = router;

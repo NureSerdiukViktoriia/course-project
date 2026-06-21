@@ -2,11 +2,17 @@ import React, { useEffect, useState } from "react";
 import "./Analytics.css";
 
 const Analytics = ({ userId }) => {
-  const [data, setData] = useState(null);
-  const [openIndex, setOpenIndex] = useState(null);
+  const [data, setData] = useState({
+    modules: [],
+    weakSections: [],
+  });
+  const [loading, setLoading] = useState(true);
+  const [openModuleId, setOpenModuleId] = useState(null);
 
   useEffect(() => {
     if (!userId) return;
+
+    setLoading(true);
 
     fetch(`http://localhost:3001/api/analytics/profile/${userId}`, {
       headers: {
@@ -14,10 +20,16 @@ const Analytics = ({ userId }) => {
       },
     })
       .then((res) => res.json())
-      .then((data) => setData(data));
+      .then((data) => {
+        setData({
+          modules: data.modules || [],
+          weakSections: data.weakSections || [],
+        });
+      })
+      .finally(() => setLoading(false));
   }, [userId]);
-
-  if (!data) return <p>Завантаження аналітики...</p>;
+  const module = data.modules?.find((m) => m.moduleId === openModuleId);
+  if (loading) return <p>Завантаження аналітики...</p>;
 
   return (
     <div className="analytics-page">
@@ -28,14 +40,24 @@ const Analytics = ({ userId }) => {
       ) : (
         <>
           <div className="courses-list">
-            {data.modules.map((m, index) => (
+            {data.modules?.map((m) => (
               <div
                 key={m.moduleId}
                 className="course-card"
-                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                onClick={() =>
+                  setOpenModuleId(
+                    openModuleId === m.moduleId ? null : m.moduleId,
+                  )
+                }
               >
                 <div className="course-header">
-                  <span>{m.title}</span>
+                  <div>
+                    <span>{m.title}</span>
+                    <small style={{ marginLeft: "8px", opacity: 0.7 }}>
+                      ({m.level})
+                    </small>
+                  </div>
+
                   <span className="percent">{Math.round(m.avg)}%</span>
                 </div>
 
@@ -46,12 +68,15 @@ const Analytics = ({ userId }) => {
             ))}
           </div>
 
-          {openIndex !== null && data.modules[openIndex] && (
+          {module && (
             <div className="course-details">
-              <h3>{data.modules[openIndex].title}</h3>
+              <h3>{module.title}</h3>
 
-              {data.modules[openIndex].sections.map((s) => (
-                <div key={s.id} className="section-row">
+              {module.sections?.map((s) => (
+                <div
+                  key={`${s.sectionId}-${s.moduleId}`}
+                  className="section-row"
+                >
                   <span>
                     {s.type} {s.sectionTitle ? `(${s.sectionTitle})` : ""}
                   </span>
@@ -68,17 +93,15 @@ const Analytics = ({ userId }) => {
               ))}
 
               <div className="recommendations">
-                {data.modules[openIndex].sections.some(
-                  (s) => s.progress < 80,
-                ) ? (
+                {module.sections?.some((s) => s.progress < 80) ? (
                   <>
                     <h4>Рекомендації</h4>
-                    {data.modules[openIndex].sections
+
+                    {module.sections
                       .filter((s) => s.progress < 80)
                       .map((s) => (
-                        <p key={s.id}>
-                          Рекомендується повторити:{" "}
-                          {s.sectionTitle || "Без назви"} ({s.type})
+                        <p key={`${s.sectionId}-${s.moduleId}`}>
+                          Рекомендується повторити: {s.sectionTitle} ({s.type})
                         </p>
                       ))}
                   </>
