@@ -31,6 +31,10 @@ const FlashCards = () => {
     const [isFlipped, setIsFlipped] = useState(false);
     const [score, setScore] = useState(0);
 
+    const [exerciseSetting, setExerciseSetting] = useState({
+        xp_amount: 10,
+    });
+    
     const [notification, setNotification] = useState({
         message: "",
         type: "",
@@ -57,6 +61,25 @@ const FlashCards = () => {
             }
 
             try {
+                const settingsResponse = await fetch(
+                    "http://localhost:3001/api/exercise-settings",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                const settingsData = await settingsResponse.json();
+
+                const currentSetting = settingsData.find(
+                    (item) => item.exercise_type === "flashcards"
+                );
+
+                if (currentSetting) {
+                    setExerciseSetting(currentSetting);
+                }
+
                 const response = await fetch('http://localhost:3001/api/exercises/flashcards', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -117,7 +140,9 @@ const FlashCards = () => {
     };
 
     const handleKnow = async () => {
-        setScore(prev => prev + 10);
+        const newScore = score + exerciseSetting.xp_amount;
+
+        setScore(newScore);
 
         const token = localStorage.getItem("token");
 
@@ -128,20 +153,18 @@ const FlashCards = () => {
             },
         });
 
-        handleNextCard();
+        handleNextCard(newScore);
     };
 
     const handleDontKnow = () => {
-        handleNextCard();
+        handleNextCard(score);
     };
 
-    const handleNextCard = async () => {
+    const handleNextCard = async (finalScore) => {
         if (currentIndex < cards.length - 1) {
             setCurrentIndex(prev => prev + 1);
             setIsFlipped(false);
         } else {
-            const finalScore = score + 10;
-
             await addXp(finalScore);
             await completeExerciseType();
 

@@ -36,7 +36,11 @@ const ListeningExercise = () => {
     type: "",
     onConfirm: null,
   });
-  
+
+  const [exerciseSetting, setExerciseSetting] = useState({
+    xp_amount: 10,
+  });
+
   const handleProfileNavigation = () => navigate("/profile");
 
   useEffect(() => {
@@ -52,6 +56,24 @@ const ListeningExercise = () => {
       }
 
       try {
+        const settingsResponse = await fetch(
+          "http://localhost:3001/api/exercise-settings",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const settingsData = await settingsResponse.json();
+
+        const currentSetting = settingsData.find(
+          (item) => item.exercise_type === "listening"
+        );
+
+        if (currentSetting) {
+          setExerciseSetting(currentSetting);
+        }
         const response = await fetch("http://localhost:3001/api/exercises/listening", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -183,7 +205,7 @@ const ListeningExercise = () => {
 
     if (answer === tasks[currentIndex].correct_answer) {
       setIsCorrect(true);
-      setScore((prev) => prev + 10);
+      setScore((prev) => prev + exerciseSetting.xp_amount);
 
       const token = localStorage.getItem("token");
 

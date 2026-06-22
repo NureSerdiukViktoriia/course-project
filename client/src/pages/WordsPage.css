@@ -257,3 +257,22 @@
 .reward-result.error {
     color: #e74c3c;
 }
+
+.exercise-admin-btn {
+    background: #7A99D0;
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 14px 28px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+
+    margin-top: -5px;
+    margin-bottom: 20px;
+}
+
+.exercise-admin-btn:hover {
+    background: #5F8BC3;
+    transform: scale(1.03);
+}

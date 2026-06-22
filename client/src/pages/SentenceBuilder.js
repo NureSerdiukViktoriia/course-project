@@ -33,6 +33,10 @@ const AppHeader = ({ onProfileClick }) => (
     const [isCorrect, setIsCorrect] = useState(null);
     const [score, setScore] = useState(0);
 
+    const [exerciseSetting, setExerciseSetting] = useState({
+        xp_amount: 10,
+    });
+
     const [notification, setNotification] = useState({
         message: "",
         type: "",
@@ -49,6 +53,25 @@ const AppHeader = ({ onProfileClick }) => (
                 return;
             }
             try {
+                const settingsResponse = await fetch(
+                    "http://localhost:3001/api/exercise-settings",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+                const settingsData = await settingsResponse.json();
+
+                const currentSetting = settingsData.find(
+                    (item) => item.exercise_type === "sentence-builder"
+                );
+
+                if (currentSetting) {
+                    setExerciseSetting(currentSetting);
+                }
+                
                 const response = await fetch('http://localhost:3001/api/exercises/sentence-builder', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
@@ -120,7 +143,7 @@ const AppHeader = ({ onProfileClick }) => (
 
         if (formattedInput.toLowerCase() === formattedAnswer.toLowerCase()) {
             setIsCorrect(true);
-            setScore(prev => prev + 10);
+            setScore(prev => prev + exerciseSetting.xp_amount);
         } else {
             setIsCorrect(false);
         }

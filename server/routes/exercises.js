@@ -3,8 +3,16 @@ const router = express.Router();
 const { Sequelize } = require('sequelize');
 const Question = require('../models/Question');
 const User = require('../models/User'); 
-
+const ExerciseSetting = require('../models/ExerciseSetting');
 const authenticate = require('../middleware/auth');
+
+const getQuestionLimit = async (exerciseType) => {
+    const setting = await ExerciseSetting.findOne({
+        where: { exercise_type: exerciseType }
+    });
+
+    return setting ? setting.question_limit : 10;
+};
 
 router.get('/multiple-choice', authenticate, async (req, res) => {
     try {
@@ -16,7 +24,7 @@ router.get('/multiple-choice', authenticate, async (req, res) => {
         }
 
         const userLevel = user.level;
-        const limit = parseInt(req.query.limit, 10) || 10;
+        const limit = await getQuestionLimit("multiple-choice");
 
         const questions = await Question.findAll({
             where: {
@@ -45,7 +53,7 @@ router.get('/sentence-builder', authenticate, async (req, res) => {
         }
         
         const userLevel = user.level;
-        const limit = 10;
+        const limit = await getQuestionLimit("sentence-builder");
 
         const tasks = await Question.findAll({
             where: {
@@ -72,7 +80,7 @@ router.get('/translate-word', authenticate, async (req, res) => {
         }
         
         const userLevel = user.level;
-        const limit = 10;
+        const limit = await getQuestionLimit("translate-word");
 
         const tasks = await Question.findAll({
             where: {
@@ -99,7 +107,7 @@ router.get('/listening', authenticate, async (req, res) => {
         }
 
         const userLevel = user.level;
-        const limit = 10;
+        const limit = await getQuestionLimit("listening");
 
         const tasks = await Question.findAll({
             where: {
@@ -125,7 +133,7 @@ router.get('/matching', authenticate, async (req, res) => {
         }
 
         const userLevel = user.level;
-        const limit = 10;
+        const limit = await getQuestionLimit("matching");
 
         const tasks = await Question.findAll({
             where: {
@@ -153,7 +161,7 @@ router.get('/flashcards', authenticate, async (req, res) => {
                 difficulty_level: user.level
             },
             order: [Sequelize.fn('RANDOM')],
-            limit: 10
+            limit: await getQuestionLimit("flashcards")
         });
 
         res.json({ tasks });

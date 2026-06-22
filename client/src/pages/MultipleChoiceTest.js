@@ -32,6 +32,11 @@ const MultipleChoiceTest = () => {
   const [isCorrect, setIsCorrect] = useState(null);
   const [score, setScore] = useState(0);
 
+  const [exerciseSetting, setExerciseSetting] = useState({
+    xp_amount: 10,
+    question_limit: 10,
+  });
+
   const [notification, setNotification] = useState({
     message: "",
     type: "",
@@ -68,12 +73,36 @@ const MultipleChoiceTest = () => {
         if (!response.ok) {
           throw new Error("Не вдалося завантажити питання.");
         }
+        const settingsResponse = await fetch(
+          "http://localhost:3001/api/exercise-settings",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const settingsData = await settingsResponse.json();
+
+        const currentSetting = settingsData.find(
+          (item) => item.exercise_type === "multiple-choice"
+        );
+
+        if (currentSetting) {
+          setExerciseSetting(currentSetting);
+        }
+
         const data = await response.json();
+
         if (data.questions && data.questions.length > 0) {
-          const shuffledQuestions = data.questions.map((question) => ({
-            ...question,
-            options: [...question.options].sort(() => Math.random() - 0.5),
-          }));
+          const questionLimit = currentSetting?.question_limit || 10;
+
+          const shuffledQuestions = data.questions
+            .slice(0, questionLimit)
+            .map((question) => ({
+              ...question,
+              options: [...question.options].sort(() => Math.random() - 0.5),
+            }));
 
           setQuestions(shuffledQuestions);
         } else {
@@ -127,7 +156,7 @@ const MultipleChoiceTest = () => {
     setSelectedAnswer(option);
     if (option === currentQuestion.correct_answer) {
       setIsCorrect(true);
-      setScore((prev) => prev + 10);
+      setScore((prev) => prev + exerciseSetting.xp_amount);
     } else {
       setIsCorrect(false);
     }

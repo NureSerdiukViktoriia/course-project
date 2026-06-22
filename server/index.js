@@ -21,6 +21,7 @@ const app = express();
 const PORT = 3001;
 const rewardWheelRouter = require("./routes/rewardWheel");
 const aiContentRouter = require("./routes/aiContent");
+const exerciseSettingsRouter = require("./routes/exerciseSettings");
 
 app.use(cors());
 app.use(express.json());
@@ -40,6 +41,7 @@ app.use("/api/analytics", analyticsRouter);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/reward-wheel", rewardWheelRouter);
 app.use("/api/ai-content", aiContentRouter);
+app.use("/api/exercise-settings", exerciseSettingsRouter);
 
 const start = async () => {
   try {

@@ -9,6 +9,7 @@ import iconTranslate from '../assets/www.png';
 import iconMatching from '../assets/matching.png';
 import iconListening from '../assets/listening.png';
 import iconFlashcards from '../assets/flashcards.png';
+import AdminExerciseSettings from "./AdminExerciseSettings";
 
 const exercises = [
     { 
@@ -51,7 +52,6 @@ const exercises = [
 
 const WordsPage = () => {
     const navigate = useNavigate();
-    const handleProfileNavigation = () => navigate('/profile');
     const startExercise = (path) => navigate(path);
     const [isWheelOpen, setIsWheelOpen] = useState(false);
     const [rotation, setRotation] = useState(0);
@@ -59,10 +59,16 @@ const WordsPage = () => {
     const [rewardResultType, setRewardResultType] = useState("");
     const [wheelRewards, setWheelRewards] = useState([]);
     const [isSpinning, setIsSpinning] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
 
+        if (token) {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            setIsAdmin(payload.role === "admin");
+}
         fetch("http://localhost:3001/api/reward-wheel/rewards", {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -132,6 +138,14 @@ const WordsPage = () => {
             <Header />
             <div className="words-home-content">
                 <h1 className="main-title">Вивчення Нових Слів</h1>
+                {isAdmin && (
+                    <button
+                        className="exercise-admin-btn"
+                        onClick={() => setIsSettingsOpen(true)}
+                    >
+                        Налаштування вправ
+                    </button>
+                )}
                 <p className="subtitle">
                     Обери тип вправи, проходь тести та збирай бали! Кожне завдання — це крок до вільного мовлення.
                 </p>
@@ -239,6 +253,10 @@ const WordsPage = () => {
                     </div>
                 </div>
             )}
+            <AdminExerciseSettings
+                open={isSettingsOpen}
+                onClose={() => setIsSettingsOpen(false)}
+            />
             <Footer />
         </div>
     );

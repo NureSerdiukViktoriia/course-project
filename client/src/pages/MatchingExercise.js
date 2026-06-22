@@ -34,6 +34,10 @@ const MatchingExercise = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [exerciseSetting, setExerciseSetting] = useState({
+    xp_amount: 10,
+  });
+
   const [notification, setNotification] = useState({
     message: "",
     type: "",
@@ -55,6 +59,25 @@ const MatchingExercise = () => {
       }
 
       try {
+        const settingsResponse = await fetch(
+          "http://localhost:3001/api/exercise-settings",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const settingsData = await settingsResponse.json();
+
+        const currentSetting = settingsData.find(
+          (item) => item.exercise_type === "matching"
+        );
+
+        if (currentSetting) {
+          setExerciseSetting(currentSetting);
+        }
+
         const response = await fetch("http://localhost:3001/api/exercises/matching", {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -140,7 +163,7 @@ const MatchingExercise = () => {
         ...prev,
         { left: selectedLeft, right: translation },
       ]);
-      setScore((prev) => prev + 10);
+      setScore((prev) => prev + exerciseSetting.xp_amount);
       setSelectedLeft(null);
       setWrongPair(false);
     } else {

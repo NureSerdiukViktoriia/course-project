@@ -1,0 +1,114 @@
+.exercise-settings-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+}
+
+.exercise-settings-modal {
+    width: 760px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: white;
+    border-radius: 24px;
+    padding: 30px 34px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+}
+
+.exercise-settings-modal h2 {
+    text-align: center;
+    margin: 0 0 10px;
+    font-size: 32px;
+}
+
+.exercise-settings-subtitle {
+    text-align: center;
+    margin: 0 0 24px;
+    font-size: 16px;
+    color: #555;
+}
+
+.exercise-settings-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    align-items: center;
+    gap: 18px;
+    background: #f5f7fb;
+    border-radius: 18px;
+    padding: 14px 22px;
+    margin-bottom: 12px;
+}
+
+.exercise-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1d1b1b;
+}
+
+.setting-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.setting-field label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.setting-field input {
+    width: 82px;
+    height: 42px;
+    border-radius: 12px;
+    border: 2px solid #d7dbe8;
+    text-align: center;
+    padding: 0;
+    font-size: 18px;
+    font-weight: 700;
+    background: white;
+}
+
+.setting-field input:focus {
+    outline: none;
+    border-color: #6d8fc5;
+    box-shadow: 0 0 10px rgba(109, 143, 197, 0.3);
+}
+
+.exercise-save-btn,
+.exercise-close-btn {
+    width: 100%;
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.exercise-save-btn {
+    background: #5f8bc3;
+    color: white;
+}
+
+.exercise-close-btn {
+    background: #ef9999;
+    color: #1d1b1b;
+}
+
+.setting-field input::-webkit-inner-spin-button,
+.setting-field input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.setting-field input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
