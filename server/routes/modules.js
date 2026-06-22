@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Modules = require("../models/Modules.js");
+const MiniTestResult = require("../models/MiniTestResult.js");
 const { Sequelize } = require("sequelize");
 const authenticate = require("../middleware/auth");
 const isAdmin = require("../middleware/isAdmin");

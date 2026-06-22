@@ -371,5 +371,4 @@ router.get("/leaderboard", authenticate, async (req, res) => {
     res.status(500).json({ error: "Помилка при завантаженні рейтингу" });
   }
 });
-
 module.exports = router;

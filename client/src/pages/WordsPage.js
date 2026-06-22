@@ -56,6 +56,7 @@ const WordsPage = () => {
     const [isWheelOpen, setIsWheelOpen] = useState(false);
     const [rotation, setRotation] = useState(0);
     const [rewardResult, setRewardResult] = useState(null);
+    const [rewardResultType, setRewardResultType] = useState("");
     const [wheelRewards, setWheelRewards] = useState([]);
     const [isSpinning, setIsSpinning] = useState(false);
 
@@ -77,6 +78,7 @@ const WordsPage = () => {
 
         setIsSpinning(true);
         setRewardResult(null);
+        setRewardResultType("");
 
         const token = localStorage.getItem("token");
 
@@ -92,6 +94,7 @@ const WordsPage = () => {
 
             if (!response.ok) {
                 setRewardResult(data.message);
+                setRewardResultType("error");
                 setIsSpinning(false);
                 return;
             }
@@ -115,10 +118,12 @@ const WordsPage = () => {
 
             setTimeout(() => {
                 setRewardResult(`Ви виграли ${rewardValue} XP!`);
+                setRewardResultType("success");
                 setIsSpinning(false);
             }, 4000);
         } catch (error) {
             setRewardResult("Помилка при обертанні колеса.");
+            setRewardResultType("error");
             setIsSpinning(false);
         }
     };
@@ -224,9 +229,9 @@ const WordsPage = () => {
                         >
                             {isSpinning ? "Крутиться..." : "Крутити"}
                         </button>
-                       
+                                            
                         {rewardResult && (
-                            <div className="reward-result">
+                            <div className={`reward-result ${rewardResultType}`}>
                                 {rewardResult}
                             </div>
                         )}

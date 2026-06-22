@@ -248,5 +248,12 @@
     margin-top: 20px;
     font-size: 20px;
     font-weight: 700;
+}
+
+.reward-result.success {
+    color: #4383c5;
+}
+
+.reward-result.error {
     color: #e74c3c;
 }
