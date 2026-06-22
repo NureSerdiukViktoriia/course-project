@@ -1,0 +1,207 @@
+.ai-admin-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.ai-admin-modal {
+    width: 760px;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 22px;
+    padding: 30px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    font-family: 'Sofia Sans', sans-serif;
+}
+
+.ai-admin-modal h2 {
+    text-align: center;
+    margin: 0 0 25px;
+    font-size: 30px;
+}
+
+.ai-admin-section {
+    margin-bottom: 30px;
+}
+
+.ai-admin-section h3 {
+    font-size: 22px;
+    margin-bottom: 14px;
+}
+
+.ai-form-box {
+    background: #f5f7fb;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.ai-form-box input,
+.ai-form-box textarea {
+    width: 100%;
+    border: 2px solid #d8dce8;
+    border-radius: 12px;
+    padding: 13px 15px;
+    font-size: 16px;
+    font-family: 'Sofia Sans', sans-serif;
+    outline: none;
+    box-sizing: border-box;
+    margin-bottom: 14px;
+}
+
+.ai-form-box textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.ai-form-box input:focus,
+.ai-form-box textarea:focus {
+    border-color: #5f8bc3;
+}
+
+.emoji-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.emoji-picker button {
+    width: 44px;
+    height: 44px;
+    border: 2px solid transparent;
+    background: #fff;
+    border-radius: 12px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.emoji-picker button.selected {
+    border-color: #5f8bc3;
+    background: #eaf1fb;
+}
+
+.ai-save-btn,
+.ai-cancel-btn,
+.ai-admin-item button,
+.ai-admin-close {
+    border: none;
+    border-radius: 12px;
+    padding: 11px 16px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Sofia Sans', sans-serif;
+    cursor: pointer;
+}
+
+.ai-save-btn {
+    width: 100%;
+    background: #5f8bc3;
+    color: white;
+}
+
+.ai-cancel-btn {
+    width: 100%;
+    margin-top: 10px;
+    background: #eadfea;
+    color: #1d1b1b;
+}
+
+.ai-admin-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f3f5fa;
+    padding: 14px 16px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+    gap: 15px;
+}
+
+.ai-admin-item span {
+    font-size: 17px;
+}
+
+.ai-admin-item div {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.ai-admin-item button:first-child {
+    background: #5f8bc3;
+    color: white;
+}
+
+.ai-admin-item button:last-child {
+    background: #ef9999;
+    color: #1d1b1b;
+}
+
+.ai-admin-close {
+    width: 100%;
+    background: #ef9999;
+    color: #1d1b1b;
+    margin-top: 5px;
+}
+
+.ai-delete-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 360px;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    z-index: 3000;
+}
+
+.ai-delete-box h3 {
+    margin: 0 0 10px;
+    font-size: 24px;
+}
+
+.ai-delete-box p {
+    font-size: 17px;
+    margin-bottom: 22px;
+}
+
+.ai-delete-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.ai-delete-confirm,
+.ai-delete-cancel {
+    flex: 1;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.ai-delete-confirm {
+    background: #ef9999;
+    color: #1d1b1b;
+}
+
+.ai-delete-cancel {
+    background: #5f8bc3;
+    color: white;
+}
+
+.ai-delete-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 2999;
+}

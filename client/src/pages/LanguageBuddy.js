@@ -2,34 +2,31 @@ import React, { useState, useEffect, useRef } from 'react';
 import './LanguageBuddy.css';
 import Header from "../components/Header";
 import Footer from "../components/Footer.js";
-import iconAeroport from '../assets/aeroport.png';
-import iconRestoran from '../assets/restoran.png';
-import iconPobachennya from '../assets/pobachennya.png';
-import iconLikarnya from '../assets/likarnya.png';
-import iconProfile from '../assets/userr.png';
-import { Link, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import AdminAIContent from "./AdminAIContent";
 
-const topics = [
-    { name: 'Аеропорт', icon: iconAeroport },
-    { name: 'Ресторан', icon: iconRestoran },
-    { name: 'Побачення', icon: iconPobachennya },
-    { name: 'Лікарня', icon: iconLikarnya },
-];
-
-const ChatSidebar = ({ onTopicSelect, onDifficultyChange, onRequestTask, currentTopic, currentDifficulty }) => (
+const ChatSidebar = ({
+    topics,
+    onTopicSelect,
+    onDifficultyChange,
+    onRequestTask,
+    currentTopic,
+    currentDifficulty,
+    isAdmin,
+    onOpenAdmin,
+}) => (
     <aside className="chat-sidebar">
         <div className="sidebar-section">
             <h2>Теми</h2>
             <div className="topics-list">
                 {topics.map(topic => (
                     <button 
-                        key={topic.name} 
+                        key={topic.id} 
                         className={`topic-btn ${currentTopic === topic.name ? 'active' : ''}`}
                         onClick={() => onTopicSelect(topic.name)}
                     >
-                        <img src={topic.icon} alt={topic.name} className="topic-icon"/>
+                        <span className="topic-emoji">{topic.icon}</span>
                         {topic.name}
                     </button>
                 ))}
@@ -43,14 +40,22 @@ const ChatSidebar = ({ onTopicSelect, onDifficultyChange, onRequestTask, current
         >
             Запросити завдання
         </button>
+                {isAdmin && (
+                    <button
+                        className="ai-admin-open-btn"
+                        onClick={onOpenAdmin}
+                    >
+                        Керування AI
+                    </button>
+                )}
                 {currentTopic && (
-            <button 
-                className="reset-topic-btn" 
-                onClick={() => onTopicSelect(null)} 
-            >
-                Скинути тему
-            </button>
-        )}
+                    <button 
+                        className="reset-topic-btn" 
+                        onClick={() => onTopicSelect(null)} 
+                    >
+                        Скинути тему
+                    </button>
+                )}
 
         <div className="sidebar-section difficulty-section">
             <h2>Рівень складності</h2>
@@ -93,14 +98,7 @@ const MessageList = ({ messages }) => {
     );
 };
 
-const prompts = [
-    'Translate "яблуко" to English',
-    'How do I use Present Perfect?',
-    'What does "flabbergasted" mean?',
-    'Is it correct to say "I goed to school"?'
-];
-
-const ChatInput = ({ onSendMessage, isBotTyping, chatLanguage }) => {
+const ChatInput = ({ onSendMessage, isBotTyping, chatLanguage, prompts }) => {
     const [inputValue, setInputValue] = useState('');
     const [isListening, setIsListening] = useState(false);
     const recognitionRef = useRef(null);
@@ -164,8 +162,8 @@ const ChatInput = ({ onSendMessage, isBotTyping, chatLanguage }) => {
         <div className="chat-input-area">
             <div className="prompt-suggestions">
                 {prompts.map(prompt => (
-                    <button key={prompt} className="prompt-btn" onClick={() => setInputValue(prompt)}>
-                        {prompt}
+                    <button key={prompt.id} className="prompt-btn" onClick={() => setInputValue(prompt.text)}>
+                        {prompt.text}
                     </button>
                 ))}
             </div>
@@ -199,9 +197,6 @@ const ChatInput = ({ onSendMessage, isBotTyping, chatLanguage }) => {
 };
 
 const LanguageBuddy = () => {
-    const navigate = useNavigate();
-    const handleProfileNavigation = () => navigate('/profile');
-
     const [messages, setMessages] = useState([
         { id: Date.now(), text: 'Привіт! Обери тему та рівень і натисни "Запросити завдання", або просто спитай мене.', sender: 'bot' }
     ]);
@@ -210,6 +205,43 @@ const LanguageBuddy = () => {
     const [isBotTyping, setIsBotTyping] = useState(false);
     const [chatLanguage, setChatLanguage] = useState("english");
     const [isSpeaking, setIsSpeaking] = useState(false);
+    const [topics, setTopics] = useState([]);
+    const [prompts, setPrompts] = useState([]);
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            setIsAdmin(payload.role === "admin");
+        }
+
+        fetchAIContent();
+    }, []);
+
+    const fetchAIContent = async () => {
+        const token = localStorage.getItem("token");
+
+        const topicsResponse = await fetch("http://localhost:3001/api/ai-content/topics", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        const suggestionsResponse = await fetch("http://localhost:3001/api/ai-content/suggestions", {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        const topicsData = await topicsResponse.json();
+        const suggestionsData = await suggestionsResponse.json();
+
+        setTopics(Array.isArray(topicsData) ? topicsData : []);
+        setPrompts(Array.isArray(suggestionsData) ? suggestionsData : []);
+    };
 
     const handleSendMessage = async (text, isTaskRequest = false, isVoiceRequest = false) => {
         if (!text.trim() || isBotTyping) return;
@@ -306,13 +338,23 @@ const LanguageBuddy = () => {
         <div className="language-buddy-page">
             <Header />
             <h1 className="page-title">AI Learning Assistant</h1>
+            <AdminAIContent
+                open={isAdminModalOpen}
+                onClose={() => setIsAdminModalOpen(false)}
+                topics={topics}
+                suggestions={prompts}
+                refreshData={fetchAIContent}
+            />
             <main className="main-container">
                 <ChatSidebar 
+                    topics={topics}
                     onTopicSelect={setSelectedTopic}
                     onDifficultyChange={setDifficulty}
                     onRequestTask={handleRequestTask}
                     currentTopic={selectedTopic}
                     currentDifficulty={difficulty}
+                    isAdmin={isAdmin}
+                    onOpenAdmin={() => setIsAdminModalOpen(true)}
                 />
                 <section className="chat-panel">
                     <MessageList messages={messages} />
@@ -321,6 +363,7 @@ const LanguageBuddy = () => {
                         onSendMessage={handleSendMessage}
                         isBotTyping={isBotTyping}
                         chatLanguage={chatLanguage}
+                        prompts={prompts}
                     />
                     {isSpeaking && (
                         <button
