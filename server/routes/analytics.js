@@ -89,4 +89,27 @@ router.get("/profile/:userId", async (req, res) => {
   }
 });
 
+router.get("/mini-tests/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const results = await MiniTestResult.findAll({
+      where: { user_id: userId },
+      order: [["createdAt", "ASC"]],
+    });
+
+    const timeline = results.map((r) => ({
+      id: r.id,
+      date: r.createdAt,
+      correct: r.correct_answers,
+      level: r.suggested_level,
+    }));
+
+    res.json({ timeline });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ message: "Помилка міні-тестів" });
+  }
+});
+
 module.exports = router;
