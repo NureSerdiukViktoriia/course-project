@@ -78,14 +78,18 @@ const TranslateWord = () => {
        };
     }, []);
 
-    const addXp = async () => {
+    const addXp = async (xpAmount) => {
         const token = localStorage.getItem("token");
 
         await fetch("http://localhost:3001/user/add-xp", {
             method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
             },
+            body: JSON.stringify({
+                xp: xpAmount,
+            }),
         });
     };
 
@@ -106,25 +110,34 @@ const TranslateWord = () => {
 
     const handleCheckAnswer = () => {
         const currentTask = tasks[currentIndex];
-        if (inputValue.trim().toLowerCase() === currentTask.correct_answer.toLowerCase()) {
-            setIsCorrect(true);
+
+        const correct =
+            inputValue.trim().toLowerCase() ===
+            currentTask.correct_answer.toLowerCase();
+
+        setIsCorrect(correct);
+
+        if (correct) {
             setScore(prev => prev + 10);
-            addXp();
-        } else {
-            setIsCorrect(false);
         }
+
         setIsChecked(true);
     };
 
     const handleNextTask = async () => {
         if (currentIndex < tasks.length - 1) {
             setCurrentIndex(prev => prev + 1);
-            setInputValue(''); setIsChecked(false); setIsCorrect(null);
+            setInputValue('');
+            setIsChecked(false);
+            setIsCorrect(null);
         } else {
+            const finalScore = score;
+
+            await addXp(finalScore);
             await completeExerciseType();
 
             setNotification({
-                message: `Вправа завершена! Ваш результат: ${score} балів`,
+                message: `Вправа завершена! Ваш результат: ${finalScore} балів`,
                 type: 'info',
                 onConfirm: () => navigate('/words'),
             });

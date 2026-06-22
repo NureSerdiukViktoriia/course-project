@@ -88,14 +88,18 @@ const MatchingExercise = () => {
     };
   }, []);
 
-  const addXp = async () => {
+  const addXp = async (xpAmount) => {
     const token = localStorage.getItem("token");
 
     await fetch("http://localhost:3001/user/add-xp", {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({
+        xp: xpAmount,
+      }),
     });
   };
 
@@ -137,7 +141,6 @@ const MatchingExercise = () => {
         { left: selectedLeft, right: translation },
       ]);
       setScore((prev) => prev + 10);
-      addXp();
       setSelectedLeft(null);
       setWrongPair(false);
     } else {
@@ -229,17 +232,18 @@ const MatchingExercise = () => {
           </div>
         </div>
 
-      {matchedPairs.length === tasks.length && (
-      <div className="action-buttons" style={{ marginTop: "30px" }}>
         {matchedPairs.length === tasks.length && (
           <div className="action-buttons" style={{ marginTop: "30px" }}>
             <button
               className="next-btn"
               onClick={async () => {
+                const finalScore = score;
+
+                await addXp(finalScore);
                 await completeExerciseType();
 
                 setNotification({
-                  message: `Тест завершено! Ваш результат: ${score} балів`,
+                  message: `Тест завершено! Ваш результат: ${finalScore} балів`,
                   type: "info",
                   onConfirm: () => navigate("/words"),
                 });
@@ -250,9 +254,7 @@ const MatchingExercise = () => {
           </div>
         )}
       </div>
-      )}
       </div>
-    </div>
   );
 };
 

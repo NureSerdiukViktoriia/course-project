@@ -70,7 +70,12 @@ const MultipleChoiceTest = () => {
         }
         const data = await response.json();
         if (data.questions && data.questions.length > 0) {
-          setQuestions(data.questions);
+          const shuffledQuestions = data.questions.map((question) => ({
+            ...question,
+            options: [...question.options].sort(() => Math.random() - 0.5),
+          }));
+
+          setQuestions(shuffledQuestions);
         } else {
           throw new Error("Для вашого рівня ще немає питань цього типу.");
         }
@@ -86,31 +91,35 @@ const MultipleChoiceTest = () => {
        };
   }, []);
 
-  const addXp = async () => {
+  const addXp = async (xpAmount) => {
     const token = localStorage.getItem("token");
 
     await fetch("http://localhost:3001/user/add-xp", {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({
+        xp: xpAmount,
+      }),
     });
   };
 
-const completeExerciseType = async () => {
-    const token = localStorage.getItem("token");
+  const completeExerciseType = async () => {
+      const token = localStorage.getItem("token");
 
-    await fetch("http://localhost:3001/user/complete-exercise-type", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-            exerciseType: "multiple-choice",
-        }),
-    });
-};
+      await fetch("http://localhost:3001/user/complete-exercise-type", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+              exerciseType: "multiple-choice",
+          }),
+      });
+  };
 
   const handleAnswerSelect = (option) => {
     if (selectedAnswer) return;
@@ -119,7 +128,6 @@ const completeExerciseType = async () => {
     if (option === currentQuestion.correct_answer) {
       setIsCorrect(true);
       setScore((prev) => prev + 10);
-      addXp();
     } else {
       setIsCorrect(false);
     }
@@ -131,10 +139,13 @@ const completeExerciseType = async () => {
       setSelectedAnswer(null);
       setIsCorrect(null);
     } else {
+      const finalScore = score;
+
+      await addXp(finalScore);
       await completeExerciseType();
 
       setNotification({
-        message: `Тест завершен! Ваш результат: ${score} балів`,
+        message: `Тест завершен! Ваш результат: ${finalScore} балів`,
         type: "info",
         onConfirm: () => navigate("/words"),
       });

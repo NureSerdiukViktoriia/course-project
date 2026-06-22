@@ -20,6 +20,7 @@ import "./style.css";
 import MatchingExercise from "./pages/MatchingExercise";
 import ListeningExercise from "./pages/ListeningExercise";
 import FlashCards from "./pages/FlashCards";
+import Leaderboard from "./pages/Leaderboard";
 
 function App() {
   return (
@@ -35,14 +36,8 @@ function App() {
         <Route path="/test/:level" element={<TestPage />} />
         <Route path="/languageBuddy" element={<LanguageBuddy />} />
         <Route path="/words" element={<WordsPage />} />
-        <Route
-          path="/exercise/multiple-choice"
-          element={<MultipleChoiceTest />}
-        />
-        <Route
-          path="/exercise/sentence-builder"
-          element={<SentenceBuilder />}
-        />
+        <Route path="/exercise/multiple-choice" element={<MultipleChoiceTest />} />
+        <Route path="/exercise/sentence-builder" element={<SentenceBuilder />} />
         <Route path="/exercise/translate-word" element={<TranslateWord />} />
         <Route path="/dictionary" element={<Dictionary />} />
         <Route path="*" element={<Register />} />
@@ -51,6 +46,7 @@ function App() {
         <Route path="/exercise/matching" element={<MatchingExercise />} />
         <Route path="/exercise/listening" element={<ListeningExercise />} />
         <Route path="/exercise/flashcards" element={<FlashCards />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
       </Routes>
     </Router>
   );

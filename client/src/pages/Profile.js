@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/Header";
 import Analytics from "./Analytics";
-import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import "./Profile.css";
 
@@ -219,6 +217,7 @@ const Profile = () => {
             <a href="/home">Головна</a>
             <a href="/words">Вивчення слів</a>
             <a href="/dictionary">Словник</a>
+            <a href="/leaderboard">Рейтинг</a>
           </div>
         </nav>
       </header>

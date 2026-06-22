@@ -1,0 +1,146 @@
+.leaderboard-page {
+    min-height: 100vh;
+    background: rgba(222, 103, 103, 0.47);
+    display: flex;
+    flex-direction: column;
+    font-family: 'Sofia Sans', sans-serif;
+}
+
+.leaderboard-content {
+    flex: 1;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 45px 20px;
+    text-align: center;
+}
+
+.leaderboard-content h1 {
+    font-size: 35px;
+    font-weight: 800;
+    color: #1d1b1b;
+    margin-bottom: 10px;
+}
+
+.leaderboard-subtitle {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.leaderboard-card {
+    background: #ffffff;
+    border-radius: 26px;
+    padding: 22px;
+    box-shadow: 0 14px 35px rgba(93, 62, 62, 0.14);
+}
+
+.leaderboard-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 125px;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 22px;
+    min-height: 72px;
+    border-bottom: 1px solid #eeeeee;
+    border-radius: 18px;
+    text-align: left;
+}
+
+.leaderboard-row:last-child {
+    border-bottom: none;
+}
+
+.leaderboard-row:hover {
+    background: rgba(67, 131, 197, 0.08);
+}
+
+.leaderboard-first,
+.leaderboard-second,
+.leaderboard-third {
+    background: rgba(67, 131, 197, 0.06);
+}
+
+.leaderboard-place {
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.place-number {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #e8e8e8;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.leaderboard-user strong {
+    display: block;
+    font-size: 22px;
+    font-weight: 800;
+    color: #111111;
+}
+
+.leaderboard-xp {
+    justify-self: end;
+    min-width: 120px;
+    padding: 12px 20px;
+    font-size: 18px;
+    background: linear-gradient(135deg, #4383c5, #6c9ed4);
+    color: #ffffff;
+    border-radius: 999px;
+    font-weight: 800;
+    text-align: center;
+    box-shadow: 0 8px 18px rgba(67, 131, 197, 0.22);
+}
+
+.leaderboard-message {
+    margin-top: 80px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.leaderboard-message.error {
+    color: #d9534f;
+}
+
+@media (max-width: 768px) {
+    .leaderboard-content {
+        padding: 35px 15px;
+    }
+
+    .leaderboard-content h1 {
+        font-size: 32px;
+    }
+
+    .leaderboard-card {
+        padding: 16px;
+    }
+
+    .leaderboard-row {
+        grid-template-columns: 55px 1fr auto;
+        gap: 12px;
+        padding: 12px 24px;
+    }
+
+    .leaderboard-xp {
+        grid-column: 2;
+        justify-self: start;
+        margin-top: 6px;
+    }
+
+    .leaderboard-user strong {
+        font-size: 19px;
+    }
+}

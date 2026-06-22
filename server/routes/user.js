@@ -204,19 +204,28 @@ const checkAchievements = async (user) => {
 
 router.post("/add-xp", authenticate, async (req, res) => {
   try {
+    const { xp } = req.body;
+
     const user = await User.findByPk(req.user.id);
 
     if (!user) {
       return res.status(404).json({ error: "Користувача не знайдено" });
     }
 
-    user.xp = (user.xp || 0) + 10;
-    await user.save();
+    const xpToAdd = Number(xp) || 0;
 
+    if (xpToAdd <= 0) {
+      return res.status(400).json({ error: "Некоректна кількість XP" });
+    }
+
+    user.xp = (user.xp || 0) + xpToAdd;
+
+    await user.save();
     await checkAchievements(user);
 
-    res.json({ xp: user.xp });
+    res.json({ xp: user.xp, added: xpToAdd });
   } catch (error) {
+    console.error("Add XP error:", error);
     res.status(500).json({ error: "Помилка сервера" });
   }
 });
@@ -345,6 +354,21 @@ router.get("/badges", authenticate, async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ error: "Помилка при завантаженні бейджів" });
+  }
+});
+
+router.get("/leaderboard", authenticate, async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: ["id", "first_name", "second_name", "xp"],
+      order: [["xp", "DESC"]],
+      limit: 5,
+    });
+
+    res.json(users);
+  } catch (error) {
+    console.error("Leaderboard error:", error);
+    res.status(500).json({ error: "Помилка при завантаженні рейтингу" });
   }
 });
 module.exports = router;

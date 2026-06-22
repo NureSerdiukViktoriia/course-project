@@ -68,7 +68,12 @@ const ListeningExercise = () => {
           throw new Error("Для вашого рівня ще немає завдань цього типу.");
         }
 
-        setTasks(data.tasks);
+        const shuffledTasks = data.tasks.map((task) => ({
+          ...task,
+          options: [...task.options].sort(() => Math.random() - 0.5),
+        }));
+
+        setTasks(shuffledTasks);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -98,14 +103,18 @@ const ListeningExercise = () => {
     window.speechSynthesis.speak(utterance);
   };
   
-  const addXp = async () => {
+  const addXp = async (xpAmount) => {
     const token = localStorage.getItem("token");
 
     await fetch("http://localhost:3001/user/add-xp", {
       method: "POST",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({
+        xp: xpAmount,
+      }),
     });
   };
 
@@ -185,23 +194,25 @@ const ListeningExercise = () => {
         },
       });
 
-      addXp();
     } else {
       setIsCorrect(false);
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentIndex < tasks.length - 1) {
       setCurrentIndex((prev) => prev + 1);
       setSelectedAnswer("");
       setIsAnswered(false);
       setIsCorrect(null);
     } else {
-      completeExerciseType();
+      const finalScore = score;
+
+      await addXp(finalScore);
+      await completeExerciseType();
 
       setNotification({
-        message: `Тест завершено! Ваш результат: ${score} балів`,
+        message: `Тест завершено! Ваш результат: ${finalScore} балів`,
         type: "info",
         onConfirm: () => navigate("/words"),
       });

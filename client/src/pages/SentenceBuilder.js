@@ -55,7 +55,19 @@ const AppHeader = ({ onProfileClick }) => (
                 if (!response.ok) throw new Error('Не вдалося завантажити завдання.');
                 const data = await response.json();
                 if (data.tasks && data.tasks.length > 0) {
-                    setTasks(data.tasks);
+                    const shuffledTasks = data.tasks.map(task => {
+                        const words = task.question_text
+                            .split("/")
+                            .map(word => word.trim())
+                            .sort(() => Math.random() - 0.5);
+
+                        return {
+                            ...task,
+                            question_text: words.join(" / ")
+                        };
+                    });
+
+                    setTasks(shuffledTasks);
                 } else {
                     throw new Error('Для вашого рівня ще немає завдань цього типу.');
                 }
@@ -71,14 +83,18 @@ const AppHeader = ({ onProfileClick }) => (
        };
     }, []);
 
-    const addXp = async () => {
+    const addXp = async (xpAmount) => {
         const token = localStorage.getItem("token");
 
         await fetch("http://localhost:3001/user/add-xp", {
             method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
             },
+            body: JSON.stringify({
+                xp: xpAmount,
+            }),
         });
     };
 
@@ -105,7 +121,6 @@ const AppHeader = ({ onProfileClick }) => (
         if (formattedInput.toLowerCase() === formattedAnswer.toLowerCase()) {
             setIsCorrect(true);
             setScore(prev => prev + 10);
-            addXp();
         } else {
             setIsCorrect(false);
         }
@@ -119,10 +134,13 @@ const AppHeader = ({ onProfileClick }) => (
             setIsChecked(false);
             setIsCorrect(null);
         } else {
+            const finalScore = score;
+
+            await addXp(finalScore);
             await completeExerciseType();
 
             setNotification({
-                message: `Вправа завершена! Ваш результат: ${score} балів`,
+                message: `Вправа завершена! Ваш результат: ${finalScore} балів`,
                 type: "info",
                 onConfirm: () => navigate('/words'),
             });
@@ -171,7 +189,13 @@ const AppHeader = ({ onProfileClick }) => (
                 <div className="word-display-box">
                     {currentTask.question_text}
                 </div>
-
+                {isChecked && !isCorrect && (
+                    <div className="correct-answer-box">
+                        <strong>Правильна відповідь:</strong>
+                        <br />
+                        {currentTask.correct_answer}
+                    </div>
+                )}
                 <input
                     type="text"
                     className={`input-field ${isChecked ? (isCorrect ? 'correct-input' : 'incorrect-input') : ''}`}
@@ -180,7 +204,6 @@ const AppHeader = ({ onProfileClick }) => (
                     onChange={(e) => setInputValue(e.target.value)}
                     disabled={isChecked}
                 />
-
                 <div className="action-buttons">
                     <button className="check-btn" onClick={handleCheckAnswer} disabled={!inputValue || isChecked}>
                         Перевірити

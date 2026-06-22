@@ -86,14 +86,18 @@ const FlashCards = () => {
         };
     }, []);
 
-    const addXp = async () => {
+    const addXp = async (xpAmount) => {
         const token = localStorage.getItem("token");
 
         await fetch("http://localhost:3001/user/add-xp", {
             method: "POST",
             headers: {
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
             },
+            body: JSON.stringify({
+                xp: xpAmount,
+            }),
         });
     };
 
@@ -124,8 +128,6 @@ const FlashCards = () => {
             },
         });
 
-        await addXp();
-
         handleNextCard();
     };
 
@@ -138,10 +140,13 @@ const FlashCards = () => {
             setCurrentIndex(prev => prev + 1);
             setIsFlipped(false);
         } else {
+            const finalScore = score + 10;
+
+            await addXp(finalScore);
             await completeExerciseType();
 
             setNotification({
-                message: `Вправа завершена! Ваш результат: ${score} балів`,
+                message: `Вправа завершена! Ваш результат: ${finalScore} балів`,
                 type: 'info',
                 onConfirm: () => navigate('/words'),
             });
