@@ -42,9 +42,13 @@ const ModuleSectionProgress = sequelize.define(
 );
 ModuleSection.hasMany(ModuleSectionProgress, {
   foreignKey: "module_section_id",
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
 });
 ModuleSectionProgress.belongsTo(ModuleSection, {
   foreignKey: "module_section_id",
+  onDelete: "NO ACTION",
+  onUpdate: "CASCADE",
 });
 
 User.hasMany(ModuleSectionProgress, { foreignKey: "user_id" });

@@ -15,12 +15,7 @@ const ModuleSection = sequelize.define(
       allowNull: false,
     },
     type: {
-      type: DataTypes.ENUM(
-        "vocabulary",
-        "listening",
-        "reading",
-        "grammar",
-      ),
+      type: DataTypes.ENUM("vocabulary", "listening", "reading", "grammar"),
       allowNull: false,
     },
     content: {
@@ -30,6 +25,10 @@ const ModuleSection = sequelize.define(
     media: {
       type: DataTypes.STRING,
       allowNull: true,
+    },
+    deleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
     module_id: {
       type: DataTypes.INTEGER,

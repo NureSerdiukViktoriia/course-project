@@ -17,6 +17,8 @@ const Task = sequelize.define(
       references: {
         model: ModuleSection,
         key: "id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
       },
     },
 

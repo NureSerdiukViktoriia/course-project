@@ -2,6 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Modules = require("../models/Modules.js");
 const MiniTestResult = require("../models/MiniTestResult.js");
+const ModuleSection = require("../models/ModuleSection");
+const Task = require("../models/Task");
+const ModuleSectionProgress = require("../models/ModuleSectionProgress");
+const ModuleProgress = require("../models/ModuleProgress");
 const { Sequelize } = require("sequelize");
 const authenticate = require("../middleware/auth");
 const isAdmin = require("../middleware/isAdmin");
@@ -18,7 +22,9 @@ const upload = multer({ storage });
 
 router.get("/", authenticate, async (req, res) => {
   try {
-    const modules = await Modules.findAll();
+    const modules = await Modules.findAll({
+      where: { deleted: false },
+    });
     res.json(modules);
   } catch (error) {
     res
@@ -104,12 +110,12 @@ router.delete("/:id", authenticate, isAdmin, async (req, res) => {
       return res.status(404).json({ error: "Модуль не знайдено" });
     }
 
-    await module.destroy();
+    await module.update({ deleted: true });
 
-    res.json({ message: "Модуль видалено" });
+    res.json({ message: "Модуль приховано" });
   } catch (err) {
-    res.status(500).json({ error: "Помилка видалення модуля" });
+    console.error(err);
+    res.status(500).json({ error: err.message });
   }
 });
-
 module.exports = router;

@@ -19,7 +19,7 @@ router.get("/:moduleId/sections", async (req, res) => {
     const { moduleId } = req.params;
 
     const sections = await ModuleSection.findAll({
-      where: { module_id: moduleId },
+      where: { module_id: moduleId, deleted: false },
     });
 
     res.json(sections);
@@ -67,9 +67,10 @@ router.delete(
     try {
       const { sectionId } = req.params;
 
-      await ModuleSection.destroy({
-        where: { id: sectionId },
-      });
+      await ModuleSection.update(
+        { deleted: true },
+        { where: { id: sectionId } },
+      );
 
       res.json({ success: true });
     } catch (err) {
@@ -78,7 +79,6 @@ router.delete(
     }
   },
 );
-
 router.put(
   "/:moduleId/sections/:sectionId",
   authenticate,
@@ -88,8 +88,12 @@ router.put(
     try {
       const { sectionId } = req.params;
       const { title, type, content } = req.body;
-
-      const section = await ModuleSection.findByPk(sectionId);
+      const section = await ModuleSection.findOne({
+        where: {
+          id: sectionId,
+          deleted: false,
+        },
+      });
       if (!section) {
         return res.status(404).json({ error: "Не знайдено" });
       }

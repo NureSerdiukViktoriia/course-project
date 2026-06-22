@@ -25,6 +25,10 @@ const Modules = sequelize.define(
       type: DataTypes.ENUM("A1", "A2", "B1", "B2", "C1"),
       allowNull: false,
     },
+    deleted: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     tableName: "modules",
