@@ -49,11 +49,12 @@ const AdminPanel = ({ open, onClose, types, form, setForm, saveSection }) => {
             onChange={(e) => setForm({ ...form, media: e.target.files[0] })}
           />
         </label>
-
         {preview && (
           <div className="preview-wrapper">
-            {form.media?.type?.startsWith("audio") ||
-            form.media?.name?.match(/mp3|wav/i) ? (
+            {(typeof form.media === "string" &&
+              /\.(mp3|wav)$/i.test(form.media)) ||
+            (form.media instanceof File &&
+              form.media.type.startsWith("audio")) ? (
               <audio controls>
                 <source src={preview} />
               </audio>
