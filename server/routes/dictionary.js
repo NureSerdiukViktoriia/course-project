@@ -56,4 +56,33 @@ router.post("/add", authenticate, async (req, res) => {
   }
 });
 
+router.delete("/:id", authenticate, async (req, res) => {
+  try {
+    const user_id = req.user.id;
+    const { id } = req.params;
+
+    const deleted = await UserDictionary.destroy({
+      where: {
+        id,
+        user_id,
+      },
+    });
+
+    if (!deleted) {
+      return res.status(404).json({
+        error: "Слово не знайдено",
+      });
+    }
+
+    res.json({
+      message: "Слово видалено",
+    });
+  } catch (err) {
+    console.error("Поилка видалення слова:", err);
+    res.status(500).json({
+      error: "Помилка сервера при видаленні слова",
+    });
+  }
+});
+
 module.exports = router;

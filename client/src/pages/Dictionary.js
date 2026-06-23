@@ -3,6 +3,7 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import tick from "../assets/tick.png";
 import cross from "../assets/cross.png";
+import deleteIcon from "../assets/delete.png";
 import audio from "../assets/audio.png";
 import "./Dictionary.css";
 
@@ -68,6 +69,23 @@ const Dictionary = () => {
     }
   };
 
+  const deleteWord = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await fetch(`http://localhost:3001/api/dictionary/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setWords((prev) => prev.filter((word) => word.id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   if (loading) return <p>Завантаження...</p>;
 
   if (error) return <p className="error">Помилка: {error}</p>;
@@ -96,6 +114,17 @@ const Dictionary = () => {
                     title="Озвучити слово"
                   >
                     <img src={audio} alt="Audio icon" className="audio-icon" />
+                  </button>
+                  <button
+                    onClick={() => deleteWord(entry.id)}
+                    className="delete-dictionary-word-button"
+                    title="Видалити слово"
+                  >
+                    <img
+                      src={deleteIcon}
+                      alt="Delete"
+                      className="delete-dictionary-icon"
+                    />
                   </button>
                   <input
                     className="dictionary-input"

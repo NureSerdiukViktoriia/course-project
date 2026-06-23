@@ -117,3 +117,14 @@
   height: 30px;
   user-select: none;
 }
+
+.delete-dictionary-word-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.delete-dictionary-icon {
+  width: 20px;
+  height: 20px;
+}
