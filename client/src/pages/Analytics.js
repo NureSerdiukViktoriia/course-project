@@ -222,8 +222,21 @@ const Analytics = ({ userId }) => {
       <div className="analytics-section">
         <h2 className="analytics-title">Аналітика по курсах</h2>
 
-        {!data ? (
+        {loading ? (
           <p>Завантаження...</p>
+        ) : !data?.modules || data.modules.length === 0 ? (
+          <div className="chart-empty">
+            <p>
+              У вас ще немає пройдених курсів. Пройдіть хоча б один курс, щоб побачити аналітику прогресу!
+            </p>
+
+            <button
+              className="go-to-section-btn"
+              onClick={() => navigate("/modules")}
+            >
+              Перейти до курсів
+            </button>
+          </div>
         ) : (
           <>
             <div className="courses-list">
