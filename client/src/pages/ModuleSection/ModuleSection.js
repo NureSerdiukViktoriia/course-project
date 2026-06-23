@@ -30,7 +30,12 @@ const ModuleSection = () => {
   const [taskOpen, setTaskOpen] = useState(false);
   const [editTaskId, setEditTaskId] = useState(null);
   const [currentSectionId, setCurrentSectionId] = useState(null);
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState({
+    text: "",
+    type: "",
+    sectionId: null,
+  });
+  const [pageMessage, setPageMessage] = useState(null);
   const [taskForm, setTaskForm] = useState({
     question: "",
     options: ["", ""],
@@ -214,8 +219,26 @@ const ModuleSection = () => {
         }))
       : [];
   };
+  const validateSection = () => {
+    if (!form.title.trim()) {
+      setPageMessage({ type: "error", text: "Назва не може бути порожньою" });
+      return false;
+    }
 
+    if (!form.content.trim()) {
+      setPageMessage({ type: "error", text: "Контент не може бути порожнім" });
+      return false;
+    }
+
+    if (!form.type) {
+      setPageMessage({ type: "error", text: "Оберіть тип секції" });
+      return false;
+    }
+    setPageMessage(null);
+    return true;
+  };
   const saveSection = async () => {
+    if (!validateSection()) return;
     const formData = new FormData();
 
     formData.append("title", form.title);
@@ -328,11 +351,11 @@ const ModuleSection = () => {
       ),
     );
   };
-  const showMessage = (type, text) => {
-    setMessage({ type, text });
+  const showMessage = (type, text, sectionId) => {
+    setMessage({ type, text, sectionId });
     setTimeout(() => setMessage(null), 3000);
   };
-  const addToDictionary = async (word, translation) => {
+  const addToDictionary = async (word, translation, sectionId) => {
     const token = localStorage.getItem("token");
 
     try {
@@ -351,16 +374,16 @@ const ModuleSection = () => {
       const data = await res.json();
 
       if (res.status === 409) {
-        showMessage("info", "Це слово вже є у вашому словнику");
+        showMessage("info", "Це слово вже є у вашому словнику", sectionId);
         return;
       }
 
       if (!res.ok) {
-        showMessage("error", "Помилка при додаванні слова");
+        showMessage("error", "Помилка при додаванні слова", sectionId);
         return;
       }
 
-      showMessage("success", "Слово додано до словника");
+      showMessage("success", "Слово додано до словника", sectionId);
     } catch (err) {
       showMessage("error", "Помилка при додаванні слова");
     }
@@ -442,7 +465,7 @@ const ModuleSection = () => {
                       )}
                     </>
                   )}
-                  {message && (
+                  {message?.sectionId === section.id && (
                     <div className={message.type}>{message.text}</div>
                   )}
                   {section.type === "vocabulary" ? (
@@ -464,6 +487,7 @@ const ModuleSection = () => {
                                   addToDictionary(
                                     word?.trim(),
                                     translation?.trim(),
+                                    section.id,
                                   )
                                 }
                               >
@@ -533,6 +557,7 @@ const ModuleSection = () => {
             form={form}
             setForm={setForm}
             saveSection={saveSection}
+            pageMessage={pageMessage}
           />
         </>
       )}

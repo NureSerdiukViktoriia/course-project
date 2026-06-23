@@ -1,7 +1,15 @@
 import React from "react";
 import "./AdminPanel.css";
 
-const AdminPanel = ({ open, onClose, types, form, setForm, saveSection }) => {
+const AdminPanel = ({
+  open,
+  onClose,
+  types,
+  form,
+  setForm,
+  saveSection,
+  pageMessage,
+}) => {
   if (!open) return null;
   const preview =
     form.media && typeof form.media === "object"
@@ -14,7 +22,9 @@ const AdminPanel = ({ open, onClose, types, form, setForm, saveSection }) => {
     <div className="modal-wrapper" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <h3>Нова секція</h3>
-
+        {pageMessage && (
+          <div className={`message ${pageMessage.type}`}>{pageMessage.text}</div>
+        )}
         <input
           className="input"
           placeholder="Назва"
@@ -49,6 +59,7 @@ const AdminPanel = ({ open, onClose, types, form, setForm, saveSection }) => {
             onChange={(e) => setForm({ ...form, media: e.target.files[0] })}
           />
         </label>
+
         {preview && (
           <div className="preview-wrapper">
             {(typeof form.media === "string" &&
