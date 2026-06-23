@@ -10,9 +10,6 @@ const AdminPanel = ({ open, onClose, types, form, setForm, saveSection }) => {
         ? `http://localhost:3001/uploads/${form.media}`
         : null;
 
-  const isAudio =
-    form.media?.name?.match(/\.(mp3|wav)$/i) ||
-    (typeof form.media === "string" && form.media.endsWith(".mp3"));
   return (
     <div className="modal-wrapper" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -45,7 +42,7 @@ const AdminPanel = ({ open, onClose, types, form, setForm, saveSection }) => {
         />
 
         <label className="new-file">
-          Завантажити зображення
+          Завантажити зображення/аудіо
           <input
             type="file"
             accept="image/*,audio/*"
