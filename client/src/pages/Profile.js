@@ -301,7 +301,7 @@ const Profile = () => {
             )}
 
             <div className="progress-section">
-            <h3 className="section-title">Прогрес користувача</h3>
+            <h3 className="progress-title">Прогрес користувача</h3>
               <div className="xp-card">
                 <div className="xp-row">
                   <span>XP:</span>
