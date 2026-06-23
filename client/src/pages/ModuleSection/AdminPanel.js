@@ -23,7 +23,7 @@ const AdminPanel = ({
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <h3>Нова секція</h3>
         {pageMessage && (
-          <div className={`message ${pageMessage.type}`}>{pageMessage.text}</div>
+          <div className={`message-section ${pageMessage.type}`}>{pageMessage.text}</div>
         )}
         <input
           className="input"
