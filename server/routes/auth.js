@@ -150,7 +150,7 @@ router.post("/forgot/verify-answer", async (req, res) => {
     }
     res.json({ success: true });
   } catch (err) {
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: "Помилка сервера" });
   }
 });
 
@@ -166,7 +166,7 @@ router.post("/forgot/reset-password", async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({
-      error: "Server error",
+      error: "Помилка сервера",
       details: err.message,
     });
   }
