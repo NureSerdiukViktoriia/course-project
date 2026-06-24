@@ -180,7 +180,8 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  opacity: 0.7;
+   background: white;
+     border: 2px solid #EFB7B7;
 }
 .edit-button img,
 .delete-button img {
