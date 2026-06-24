@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "set NODE_ENV=test&& jest",
+    "test:unit": "set NODE_ENV=test&& jest tests/system.test.js",
+    "test:integration": "set NODE_ENV=test&& jest tests/exercises.integration.test.js"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +27,8 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "jest": "^30.4.2",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.2.2"
   }
 }
