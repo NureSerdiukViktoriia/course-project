@@ -96,7 +96,7 @@
   display: block;
   padding: 10px 16px;
   border: 1px solid #4a6cf7;
-  border-radius: 10px;
+   border-radius: 30px;
   background: transparent;
   color: #4a6cf7;
   cursor: pointer;
@@ -105,7 +105,7 @@
 }
 
 .go-to-section-btn:hover {
-  background: #4a6cf7;
+  background: #4383C5;
   color: white;
 }
 .percent-block {
