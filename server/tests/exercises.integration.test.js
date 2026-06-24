@@ -22,13 +22,13 @@ describe("Інтеграційне тестування API", () => {
 
   test("маршрут AI-асистента обробляє запит", async () => {
     const response = await request(app)
-      .post("/api/chat")
-      .send({
-        message: "Hello",
+        .post("/api/chat")
+        .send({
+        message: "How can I order food in a restaurant?",
         topic: "Restaurant",
-        level: "початковий",
+        level: "beginner",
         language: "english",
-      });
+        });
 
     expect([200, 401]).toContain(response.statusCode);
   });
