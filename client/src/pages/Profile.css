@@ -31,7 +31,7 @@
   flex: 1.4;
   min-width: 420px;
 
-  max-height: 1000px;
+  min-height: 100%;
   overflow-y: auto;
 
   background: white;
