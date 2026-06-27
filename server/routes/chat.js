@@ -61,7 +61,7 @@ router.post('/', authenticate, async (req, res) => {
         const user = await User.findByPk(req.user.id);
 
         if (!user) {
-            return res.status(404).json({ error: "Пользователь не найден" });
+            return res.status(404).json({ error: "Користувача не знайдено" });
         }
         
         const conversation = await AiConversation.create({

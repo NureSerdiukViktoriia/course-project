@@ -20,7 +20,7 @@ router.get('/multiple-choice', authenticate, async (req, res) => {
         const user = await User.findByPk(userId);
 
         if (!user) {
-            return res.status(404).json({ error: "Пользователь не найден" });
+            return res.status(404).json({ error: "Користувача не знайдено" });
         }
 
         const userLevel = user.level;
@@ -41,7 +41,7 @@ router.get('/multiple-choice', authenticate, async (req, res) => {
 
     } catch (err) {
         console.error("Error fetching questions:", err);
-        res.status(500).json({ error: "Ошибка сервера при получении вопросов" });
+        res.status(500).json({ error: "Помилка сервера" });
     }
 });
 
@@ -49,7 +49,7 @@ router.get('/sentence-builder', authenticate, async (req, res) => {
     try {
         const user = await User.findByPk(req.user.id);
         if (!user) {
-            return res.status(404).json({ error: "Пользователь не найден" });
+            return res.status(404).json({ error: "Користувача не знайдено" });
         }
         
         const userLevel = user.level;
@@ -68,7 +68,7 @@ router.get('/sentence-builder', authenticate, async (req, res) => {
 
     } catch (err) {
         console.error("Error fetching sentence builder tasks:", err);
-        res.status(500).json({ error: "Ошибка сервера" });
+        res.status(500).json({ error: "Помилка сервера" });
     }
 });
 
@@ -76,7 +76,7 @@ router.get('/translate-word', authenticate, async (req, res) => {
     try {
         const user = await User.findByPk(req.user.id);
         if (!user) {
-            return res.status(404).json({ error: "Пользователь не найден" });
+            return res.status(404).json({ error: "Користувача не знайдено" });
         }
         
         const userLevel = user.level;
@@ -95,7 +95,7 @@ router.get('/translate-word', authenticate, async (req, res) => {
 
     } catch (err) {
         console.error("Error fetching translate word tasks:", err);
-        res.status(500).json({ error: "Ошибка сервера" });
+        res.status(500).json({ error: "Помилка сервера" });
     }
 });
 
@@ -103,7 +103,7 @@ router.get('/listening', authenticate, async (req, res) => {
     try {
         const user = await User.findByPk(req.user.id);
         if (!user) {
-            return res.status(404).json({ error: "Пользователь не найден" });
+            return res.status(404).json({ error: "Користувача не знайдено" });
         }
 
         const userLevel = user.level;
@@ -121,7 +121,7 @@ router.get('/listening', authenticate, async (req, res) => {
         res.json({ tasks });
     } catch (err) {
         console.error("Error fetching listening tasks:", err);
-        res.status(500).json({ error: "Ошибка сервера" });
+        res.status(500).json({ error: "Помилка сервера" });
     }
 });
 
@@ -129,7 +129,7 @@ router.get('/matching', authenticate, async (req, res) => {
     try {
         const user = await User.findByPk(req.user.id);
         if (!user) {
-            return res.status(404).json({ error: "Пользователь не найден" });
+            return res.status(404).json({ error: "Користувача не знайдено" });
         }
 
         const userLevel = user.level;
@@ -147,7 +147,7 @@ router.get('/matching', authenticate, async (req, res) => {
         res.json({ tasks });
     } catch (err) {
         console.error("Error fetching matching tasks:", err);
-        res.status(500).json({ error: "Ошибка сервера" });
+        res.status(500).json({ error: "Помилка сервера" });
     }
 });
 
@@ -168,7 +168,7 @@ router.get('/flashcards', authenticate, async (req, res) => {
 
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Ошибка сервера' });
+        res.status(500).json({ error: 'Помилка сервера' });
     }
 });
 
