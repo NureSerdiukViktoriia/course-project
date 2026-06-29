@@ -116,7 +116,7 @@ const TestLevel = () => {
       <div className="test-info">
         <div className="test-detail">
           <img src={TimeIcon} alt="time" />
-          <span>10 питань</span>
+          <span>15 питань</span>
         </div>
         <div className="test-detail">
           <img src={QuestionIcon} alt="questions" />

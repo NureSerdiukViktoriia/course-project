@@ -32,15 +32,23 @@ router.post("/save", authenticate, async (req, res) => {
     let suggested_level = null;
 
     if (level === "початковий") {
-      suggested_level = score <= 5 ? "A1" : "A2";
+      if (score <= 9) suggested_level = "A1";
+      else suggested_level = "A2";
     }
 
     if (level === "середній") {
-      suggested_level = score <= 5 ? "B1" : "B2";
+      if (score <= 2) suggested_level = "A1";
+      else if (score <= 5) suggested_level = "A2";
+      else if (score <= 9) suggested_level = "B1";
+      else suggested_level = "B2";
     }
 
     if (level === "просунутий") {
-      suggested_level = score <= 5 ? "B2" : "C1";
+      if (score <= 3) suggested_level = "A1";
+      else if (score <= 6) suggested_level = "A2";
+      else if (score <= 9) suggested_level = "B1";
+      else if (score <= 12) suggested_level = "B2";
+      else suggested_level = "C1";
     }
 
     const result = await MiniTestResult.create({

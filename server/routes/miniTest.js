@@ -23,7 +23,7 @@ router.get("/:level", async (req, res) => {
       where: { level: dbLevel },
       attributes: ["question", "options", "correctAnswerIndex"],
       order: Sequelize.literal("RANDOM()"),
-      limit: 10,
+      limit: 15,
     });
 
     return res.json(questions);

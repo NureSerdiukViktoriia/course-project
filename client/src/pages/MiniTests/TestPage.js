@@ -62,7 +62,7 @@ const TestPage = () => {
       body: JSON.stringify({
         mini_test_id: 1,
         correct_answers: finalScore,
-        level: mapLevel[level]
+        level: mapLevel[level],
       }),
     });
   };

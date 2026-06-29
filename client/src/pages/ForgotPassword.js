@@ -223,8 +223,8 @@ const ForgotPassword = () => {
           {error && <p style={{ color: "red" }}>{error}</p>}
           {success && <p style={{ color: "green" }}>{success}</p>}
           <p className="register-account-password">Згадали пароль?</p>
-          <button onClick={() => navigate("/register")} type="submit">
-            Зареєструватися
+          <button onClick={() => navigate("/login")} type="submit">
+            Увійти
           </button>
         </form>
       </div>

@@ -199,14 +199,7 @@ const Register = () => {
               />
             </div>
           </div>
-          <div>
-            <span
-              className="forgot-password-button"
-              onClick={() => navigate("/forgot-password")}
-            >
-              Забули пароль?
-            </span>
-          </div>
+  
           <div className="input-group">
             <select
               className="question-select"

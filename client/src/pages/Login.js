@@ -91,6 +91,14 @@ const Login = () => {
               />
             </div>
           </div>
+          <div>
+            <span
+              className="forgot-password-button"
+              onClick={() => navigate("/forgot-password")}
+            >
+              Забули пароль?
+            </span>
+          </div>
 
           {error && (
             <p
