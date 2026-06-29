@@ -12,26 +12,23 @@ router.get("/:level", async (req, res) => {
       intermediate: "середній",
       advanced: "просунутий",
     };
-
     const dbLevel = map[req.params.level];
-
     if (!dbLevel) {
       return res.status(400).json({ error: "Невірний рівень" });
     }
-
     const questions = await MiniTest.findAll({
       where: { level: dbLevel },
       attributes: ["question", "options", "correctAnswerIndex"],
       order: Sequelize.literal("RANDOM()"),
       limit: 15,
     });
-
     return res.json(questions);
   } catch (error) {
     console.error("Помилка MiniTest:", error);
     return res.status(500).json({ error: "Помилка сервера" });
   }
 });
+
 router.get("/", authenticate, isAdmin, async (req, res) => {
   try {
     const questions = await MiniTest.findAll({
