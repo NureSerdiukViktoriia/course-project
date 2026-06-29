@@ -75,7 +75,6 @@
   gap: 20px;
 }
 
-
 .row-fields {
   display: flex;
   gap: 20px;
@@ -103,6 +102,8 @@
 
 .profile-form input,
 .profile-form select {
+  width: 100%;
+  box-sizing: border-box;
   padding: 10px 15px;
   font-size: 1rem;
   border: 2px solid #4383c5;
