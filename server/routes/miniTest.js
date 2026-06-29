@@ -29,7 +29,7 @@ router.get("/:level", async (req, res) => {
     return res.json(questions);
   } catch (error) {
     console.error("Помилка MiniTest:", error);
-    return res.status(500).json({ error: "Поилка сервера" });
+    return res.status(500).json({ error: "Помилка сервера" });
   }
 });
 router.get("/", authenticate, isAdmin, async (req, res) => {
