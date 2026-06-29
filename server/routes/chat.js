@@ -124,7 +124,7 @@ router.post('/', authenticate, async (req, res) => {
             instruction += ` The current topic is "${topic}".`;
         }
 
-        if (message.includes("Please give me a simple language exercise")) {
+        if (message.includes("Please give me a language exercise")) {
             instruction += `
                 The user requested an exercise.
                 Do NOT use Correction / Explanation / Answer format.
