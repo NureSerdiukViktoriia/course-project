@@ -24,7 +24,6 @@ router.get("/:moduleId/sections", async (req, res) => {
 
     res.json(sections);
   } catch (err) {
-    console.error("GET sections error:", err);
     res.status(500).json({ error: err.message });
   }
 });
@@ -53,7 +52,6 @@ router.post(
 
       res.json(section);
     } catch (err) {
-      console.error("CREATE ERROR:", err);
       res.status(500).json({ error: err.message });
     }
   },

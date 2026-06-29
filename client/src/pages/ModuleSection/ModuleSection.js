@@ -558,6 +558,7 @@ const ModuleSection = () => {
             setForm={setForm}
             saveSection={saveSection}
             pageMessage={pageMessage}
+            editSectionId={editSectionId}
           />
         </>
       )}

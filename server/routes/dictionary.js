@@ -51,7 +51,6 @@ router.post("/add", authenticate, async (req, res) => {
 
     res.status(201).json({ message: "Слово успішно додано!", word: newWord });
   } catch (err) {
-    console.error("Error adding to dictionary:", err);
     res.status(500).json({ error: "Помилка сервера при додаванні слова" });
   }
 });

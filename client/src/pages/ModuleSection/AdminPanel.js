@@ -9,6 +9,7 @@ const AdminPanel = ({
   setForm,
   saveSection,
   pageMessage,
+  editSectionId,
 }) => {
   if (!open) return null;
   const preview =
@@ -21,9 +22,11 @@ const AdminPanel = ({
   return (
     <div className="modal-wrapper" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()}>
-        <h3>Нова секція</h3>
+        <h3>{editSectionId ? "Редагувати секцію" : "Нова секція"}</h3>
         {pageMessage && (
-          <div className={`message-section ${pageMessage.type}`}>{pageMessage.text}</div>
+          <div className={`message-section ${pageMessage.type}`}>
+            {pageMessage.text}
+          </div>
         )}
         <input
           className="input"
@@ -76,7 +79,7 @@ const AdminPanel = ({
         )}
 
         <button className="save-button" onClick={saveSection}>
-          Додати секцію
+          {editSectionId ? "Оновити секцію" : "Додати секцію"}
         </button>
 
         <button className="cancel-button" onClick={onClose}>

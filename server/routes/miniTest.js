@@ -40,13 +40,10 @@ router.get("/", authenticate, isAdmin, async (req, res) => {
 
     res.json(questions);
   } catch (error) {
-    res.status(500).json({ error: "Fetch error" });
+    res.status(500).json({ error: "Помилка запиту" });
   }
 });
 router.post("/", authenticate, isAdmin, async (req, res) => {
-  console.log("HIT POST MINI TEST");
-  console.log(req.body);
-  console.log(req.user);
   try {
     const {
       question,
@@ -67,7 +64,7 @@ router.post("/", authenticate, isAdmin, async (req, res) => {
 
     res.status(201).json(newQuestion);
   } catch (error) {
-    res.status(500).json({ error: "Create error" });
+    res.status(500).json({ error: "Помилка створення" });
   }
 });
 router.put("/:id", authenticate, isAdmin, async (req, res) => {
@@ -93,12 +90,12 @@ router.put("/:id", authenticate, isAdmin, async (req, res) => {
     );
 
     if (!updated) {
-      return res.status(404).json({ error: "Not found" });
+      return res.status(404).json({ error: "Не знайдено" });
     }
 
-    res.json({ message: "Updated" });
+    res.json({ message: "Оновлено" });
   } catch (error) {
-    res.status(500).json({ error: "Update error" });
+    res.status(500).json({ error: "Помилка оновлення" });
   }
 });
 
@@ -109,12 +106,12 @@ router.delete("/:id", authenticate, isAdmin, async (req, res) => {
     });
 
     if (!deleted) {
-      return res.status(404).json({ error: "Not found" });
+      return res.status(404).json({ error: "Не знайдено" });
     }
 
-    res.json({ message: "Deleted" });
+    res.json({ message: "Видалено" });
   } catch (error) {
-    res.status(500).json({ error: "Delete error" });
+    res.status(500).json({ error: "Помилка видалення" });
   }
 });
 

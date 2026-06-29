@@ -7,8 +7,6 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 
 router.post("/register", async (req, res) => {
-  console.log("Received /register request with body:", req.body);
-
   const {
     first_name,
     second_name,
@@ -80,11 +78,9 @@ router.post("/register", async (req, res) => {
       level,
       role,
     });
-
-    console.log("User registered successfully:", user.id);
     res.status(201).json({ id: user.id, role: user.role });
   } catch (err) {
-    console.error("Register error details:", err);
+    console.error("Помилка реєстрації:", err);
     res.status(500).json({
       error: "Помилка сервера при реєстрації користувача",
       details: err.message,
@@ -106,7 +102,7 @@ router.post("/login", async (req, res) => {
       { id: user.id, role: user.role },
       process.env.SECRET_KEY,
       {
-        expiresIn: "4h",
+        expiresIn: "7h",
       },
     );
 
@@ -121,7 +117,7 @@ router.post("/login", async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("Login error:", err);
+    console.error("Login помилка:", err);
     res.status(500).json({ error: "Помилка сервера під час входу" });
   }
 });

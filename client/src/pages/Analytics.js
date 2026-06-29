@@ -227,7 +227,8 @@ const Analytics = ({ userId }) => {
         ) : !data?.modules || data.modules.length === 0 ? (
           <div className="chart-empty">
             <p>
-              У вас ще немає пройдених курсів. Пройдіть хоча б один курс, щоб побачити аналітику прогресу!
+              У вас ще немає пройдених курсів. Пройдіть хоча б один курс, щоб
+              побачити аналітику прогресу!
             </p>
 
             <button
@@ -272,59 +273,62 @@ const Analytics = ({ userId }) => {
                       style={{ width: `${m.avg}%` }}
                     />
                   </div>
+                  {module?.moduleId === m.moduleId && (
+                    <div className="course-details">
+                      <h3>{module.title}</h3>
+
+                      {module.sections?.map((s) => (
+                        <div
+                          key={`${s.sectionId}-${s.moduleId}`}
+                          className="section-row"
+                        >
+                          <span>
+                            {s.type}{" "}
+                            {s.sectionTitle ? `(${s.sectionTitle})` : ""}
+                          </span>
+
+                          <div className="mini-bar">
+                            <div
+                              className="mini-fill"
+                              style={{ width: `${s.progress}%` }}
+                            />
+                          </div>
+
+                          <span>{s.progress}%</span>
+                        </div>
+                      ))}
+
+                      <div>
+                        {hasWeakSections ? (
+                          <>
+                            <h4>
+                              Для успішного завершення курсу необхідно
+                              перепройти:
+                            </h4>
+                            {moduleWeakSections.map((s) => (
+                              <p key={`${s.sectionId}-${s.moduleId}`}>
+                                {s.sectionTitle} ({s.type})
+                              </p>
+                            ))}
+
+                            <button
+                              className="go-to-section-btn"
+                              onClick={() =>
+                                navigate(`/modules/${module.moduleId}`)
+                              }
+                            >
+                              Перейти до курсу
+                            </button>
+                          </>
+                        ) : (
+                          <p className="no-reco">Рекомендацій немає!</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
-
-            {module && (
-              <div className="course-details">
-                <h3>{module.title}</h3>
-
-                {module.sections?.map((s) => (
-                  <div
-                    key={`${s.sectionId}-${s.moduleId}`}
-                    className="section-row"
-                  >
-                    <span>
-                      {s.type} {s.sectionTitle ? `(${s.sectionTitle})` : ""}
-                    </span>
-
-                    <div className="mini-bar">
-                      <div
-                        className="mini-fill"
-                        style={{ width: `${s.progress}%` }}
-                      />
-                    </div>
-
-                    <span>{s.progress}%</span>
-                  </div>
-                ))}
-
-                <div>
-                  {hasWeakSections ? (
-                    <>
-                      <h4>
-                        Для успішного завершення курсу необхідно перепройти:
-                      </h4>
-                      {moduleWeakSections.map((s) => (
-                        <p key={`${s.sectionId}-${s.moduleId}`}>
-                          {s.sectionTitle} ({s.type})
-                        </p>
-                      ))}
-
-                      <button
-                        className="go-to-section-btn"
-                        onClick={() => navigate(`/modules/${module.moduleId}`)}
-                      >
-                        Перейти до курсу
-                      </button>
-                    </>
-                  ) : (
-                    <p className="no-reco">Рекомендацій немає!</p>
-                  )}
-                </div>
-              </div>
-            )}
           </>
         )}
       </div>

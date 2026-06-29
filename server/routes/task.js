@@ -17,7 +17,7 @@ router.get("/:sectionId", authenticate, async (req, res) => {
     res.json(tasks);
   } catch (e) {
     console.log(e);
-    res.status(500).json({ error: "server error" });
+    res.status(500).json({ error: "Помилка сервера" });
   }
 });
 
@@ -41,7 +41,7 @@ router.post("/:sectionId", authenticate, isAdmin, async (req, res) => {
     res.json(task);
   } catch (e) {
     console.log(e);
-    res.status(500).json({ error: "server error" });
+    res.status(500).json({ error: "Помилка сервера" });
   }
 });
 router.put("/:taskId", authenticate, isAdmin, async (req, res) => {
@@ -56,7 +56,7 @@ router.put("/:taskId", authenticate, isAdmin, async (req, res) => {
     const task = await Task.findByPk(req.params.taskId);
 
     if (!task) {
-      return res.status(404).json({ error: "Task not found" });
+      return res.status(404).json({ error: "Завдання не знайдено" });
     }
 
     await task.update({
@@ -69,7 +69,7 @@ router.put("/:taskId", authenticate, isAdmin, async (req, res) => {
     res.json(task);
   } catch (e) {
     console.log(e);
-    res.status(500).json({ error: "server error" });
+    res.status(500).json({ error: "Помилка сервера" });
   }
 });
 
@@ -84,7 +84,7 @@ router.delete("/:taskId", authenticate, isAdmin, async (req, res) => {
     res.json({ success: true });
   } catch (e) {
     console.log(e);
-    res.status(500).json({ error: "server error" });
+    res.status(500).json({ error: "Помилка сервера" });
   }
 });
 module.exports = router;

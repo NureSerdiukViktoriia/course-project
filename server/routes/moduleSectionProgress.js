@@ -18,7 +18,7 @@ router.post("/section", authenticate, async (req, res) => {
     });
     const section = await ModuleSection.findByPk(sectionId);
     if (!section) {
-      return res.status(404).json({ error: "Section not found" });
+      return res.status(404).json({ error: "Секція не знайдена" });
     }
 
     const moduleId = section.module_id;
@@ -67,7 +67,7 @@ router.post("/section", authenticate, async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "save error" });
+    res.status(500).json({ error: "Помилка сервера" });
   }
 });
 
@@ -94,7 +94,7 @@ router.get("/module/:moduleId", authenticate, async (req, res) => {
 
     res.json(result);
   } catch (err) {
-    res.status(500).json({ error: "get progress error" });
+    res.status(500).json({ error: "Помилка отримання прогресу" });
   }
 });
 module.exports = router;

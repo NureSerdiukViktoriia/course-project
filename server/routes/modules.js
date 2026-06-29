@@ -46,7 +46,7 @@ router.get("/result/latest", authenticate, async (req, res) => {
     res.json(result);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Помилка сервера" });
   }
 });
 
