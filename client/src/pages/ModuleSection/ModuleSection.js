@@ -541,6 +541,7 @@ const ModuleSection = () => {
             className="open-admin-btn"
             onClick={() => {
               resetForm();
+              setPageMessage(null);
               setAdminOpen(true);
             }}
           >
@@ -551,6 +552,7 @@ const ModuleSection = () => {
             open={adminOpen}
             onClose={() => {
               resetForm();
+              setPageMessage(null); 
               setAdminOpen(false);
             }}
             types={types}
