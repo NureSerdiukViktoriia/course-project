@@ -72,6 +72,9 @@ router.post('/', authenticate, async (req, res) => {
 
         let instruction = `
             You are a friendly AI language tutor.
+            You teach English language only.
+            All exercises must be created for learning English, not Ukrainian.
+            Ukrainian can be used only as the interface/explanation language.
 
             Current conversation language: ${language || "english"}.
             Current user level: ${level || "beginner"}.
@@ -127,8 +130,17 @@ router.post('/', authenticate, async (req, res) => {
         if (message.includes("Please give me a language exercise")) {
             instruction += `
                 The user requested an exercise.
+
+                IMPORTANT:
+                The exercise must be for learning ENGLISH only.
+                Do NOT create exercises for Ukrainian language.
+                Ukrainian may be used only for short instructions or explanations.
+
+                Create an English language exercise according to the selected topic and level.
+                Use English words, English sentences and English grammar.
+                The answer options, sentences or tasks must focus on English.
+
                 Do NOT use Correction / Explanation / Answer format.
-                Create only a language exercise according to the selected topic and level.
                 Make the exercise harder if the level is advanced.
             `;
         } else {
