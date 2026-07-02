@@ -6,6 +6,12 @@ const bcrypt = require("bcrypt");
 const Achievement = require("../models/Achievement");
 const UserAchievement = require("../models/UserAchievement");
 const UserStatistics = require("../models/UserStatistics");
+const UserDictionary = require("../models/UserDictionary");
+const MiniTestResult = require("../models/MiniTestResult");
+const ModuleProgress = require("../models/ModuleProgress");
+const ModuleSectionProgress = require("../models/ModuleSectionProgress");
+const RewardWheel = require("../models/RewardWheel");
+const AiConversation = require("../models/AiConversation");
 const Badge = require("../models/Badge");
 
 router.get("/", authenticate, async (req, res) => {
@@ -64,10 +70,43 @@ router.delete("/", authenticate, async (req, res) => {
       return res.status(404).json({ error: "Користувача не знайдено" });
     }
 
+    await UserAchievement.destroy({
+      where: { user_id: user.id },
+    });
+
+    await UserStatistics.destroy({
+      where: { user_id: user.id },
+    });
+
+    await UserDictionary.destroy({
+      where: { user_id: user.id },
+    });
+
+    await MiniTestResult.destroy({
+      where: { user_id: user.id },
+    });
+
+    await ModuleProgress.destroy({
+      where: { user_id: user.id },
+    });
+
+    await ModuleSectionProgress.destroy({
+      where: { user_id: user.id },
+    });
+
+    await RewardWheel.destroy({
+      where: { user_id: user.id },
+    });
+
+    await AiConversation.destroy({
+      where: { user_id: user.id },
+    });
+
     await user.destroy();
 
     res.status(200).json({ message: "Акаунт успішно видалено" });
-  } catch (err) {
+  } 
+  catch (err) {
     console.error("Помилка видалення акаунту:", err);
     res.status(500).json({ error: "Помилка сервера" });
   }

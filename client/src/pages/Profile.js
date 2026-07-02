@@ -14,7 +14,7 @@ const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [editData, setEditData] = useState({
     first_name: "",
-    last_name: "",
+    second_name: "",
     email: "",
     phone: "",
     level: "",
@@ -52,7 +52,7 @@ const Profile = () => {
 
         setEditData({
           first_name: data.first_name || "",
-          last_name: data.second_name || "",
+          second_name: data.second_name || "",
           email: data.email || "",
           phone: data.phone || "",
           level: normalizedLevel,
@@ -96,11 +96,11 @@ const Profile = () => {
       return false;
     }
 
-    if (!editData.last_name.trim()) {
+    if (!editData.second_name.trim()) {
       setMessage({ type: "error", text: "Прізвище не може бути порожнім" });
       return false;
     }
-    if (!/^[a-zA-Zа-яА-ЯіїІЇєЄґҐ'’ -]+$/.test(editData.last_name)) {
+    if (!/^[a-zA-Zа-яА-ЯіїІЇєЄґҐ'’ -]+$/.test(editData.second_name)) {
       setMessage({
         type: "error",
         text: "Прізвище містить недопустимі символи",
@@ -239,8 +239,8 @@ const Profile = () => {
                 Прізвище:
                 <input
                   type="text"
-                  name="last_name"
-                  value={editData.last_name}
+                  name="second_name"
+                  value={editData.second_name}
                   onChange={handleChange}
                 />
               </label>

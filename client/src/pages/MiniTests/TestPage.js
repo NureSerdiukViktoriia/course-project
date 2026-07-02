@@ -67,14 +67,17 @@ const TestPage = () => {
     });
   };
   const handleAnswer = (selectedIndex) => {
-    if (selectedIndex === testData[currentQuestion].correctAnswerIndex) {
-      setScore(score + 1);
+    const isCorrect =
+      selectedIndex === testData[currentQuestion].correctAnswerIndex;
+    const newScore = isCorrect ? score + 1 : score;
+    if (isCorrect) {
+      setScore(newScore);
     }
     if (currentQuestion + 1 < testData.length) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       setShowResult(true);
-      saveResult(score);
+      saveResult(newScore);
     }
   };
 
